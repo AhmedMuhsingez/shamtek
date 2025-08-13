@@ -20,7 +20,7 @@
 	--color-background: #101320;
 	--color-background-onBg: #171c2f;
 
-	--color-text: #b8c0cc;
+	--color-text: white;
 
 	--color-primary: #5939c7;
 	--color-primary-hover: #462ba0;
@@ -47,6 +47,6 @@
 }
 
 * {
-	transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-out;
 	direction: rtl;
 }

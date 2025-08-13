@@ -28,11 +28,9 @@ function ChangeLanguage({}: Props) {
 			<MenuItem key={index}>
 				<a
 					href={item.link}
-					className="group flex w-full items-center justify-between gap-4 rounded-lg py-1.5 px-3 data-[focus]:bg-white/20	dark:data-[focus]:bg-white/40 transition-colors duration-300"
+					className="group flex w-full items-center justify-between gap-4 rounded-lg py-1.5 px-3 data-[focus]:bg-white/20	dark:data-[focus]:bg-white/40 "
 				>
-					<span className="text-white dark:text-black transition duration-300">
-						{item.name}
-					</span>
+					<span className="text-white dark:text-black ">{item.name}</span>
 
 					<img
 						src={item.icon}
@@ -46,7 +44,7 @@ function ChangeLanguage({}: Props) {
 
 	return (
 		<Menu>
-			<MenuButton className="flex gap-2 justify-center items-center transition-all duration-300 text-lg cursor-pointer focus:outline-none group">
+			<MenuButton className="flex gap-2 justify-center items-center tran text-lg cursor-pointer focus:outline-none group">
 				<div className="mt-1 mx-1">
 					<Language />
 				</div>
@@ -55,7 +53,7 @@ function ChangeLanguage({}: Props) {
 			<MenuItems
 				transition
 				anchor="bottom end"
-				className="z-50 flex flex-col gap-y-2 mt-2 ml-4 backdrop-blur-sm origin-top-right rounded-xl p-1 text-sm/6 dark:bg-white/70 bg-black/80 transition duration-300 ease-out focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+				className="z-50 flex flex-col gap-y-2 mt-2 ml-4 backdrop-blur-sm origin-top-right rounded-xl p-1 text-sm/6 dark:bg-white/70 bg-black/80  ease-out focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
 			>
 				{menu_item}
 			</MenuItems>

@@ -1,58 +1,29 @@
 ---
-import CategorySlide from "../swipers/CategorySlide.astro";
+import type { Brand } from "../../../types/types";
+import BrandsSlide from "../swipers/BrandsSlide.astro";
 
 const categoryDescription = "";
 
-const DUMMY_CATEGORIES = [
-	{
-		title: "Category 1",
-		image: "/dummy_img.jpg",
-		link: "/categories/category1",
-		items_count: 10,
-	},
-	{
-		title: "Category 2",
-		image: "/dummy_img.jpg",
-		link: "/categories/category1",
-		items_count: 10,
-	},
-	{
-		title: "Category 3",
-		image: "/dummy_img.jpg",
-		link: "/categories/category1",
-		items_count: 10,
-	},
-	{
-		title: "Category 4",
-		image: "/dummy_img.jpg",
-		link: "/categories/category1",
-		items_count: 10,
-	},
-	{
-		title: "Category 5",
-		image: "/dummy_img.jpg",
-		link: "/categories/category1",
-		items_count: 10,
-	},
-];
+const brands = await fetch(`${import.meta.env.BASE_API}/brands`);
+const data = await brands.json();
 ---
 
 <div class="mt-20 mb-10">
-	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">Categories</span>
+	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">الماركات</span>
 
 	{categoryDescription && <p>{categoryDescription}</p>}
 
 	<div class="swiper myCategoriesSwiper">
 		<div class="swiper-wrapper">
 			{
-				DUMMY_CATEGORIES.map((category) => (
-					<CategorySlide
-						key={category.title}
-						title={category.title}
-						image={category.image}
-						link={category.link}
-						items_count={category.items_count}
-						alt={category.title}
+				data.map((brand: Brand) => (
+					<BrandsSlide
+						key={brand.id}
+						title={brand.name}
+						image={brand.image}
+						link={brand.id}
+						alt={brand.name}
+						items_count={brand._count.products}
 					/>
 				))
 			}

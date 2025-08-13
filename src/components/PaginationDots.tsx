@@ -15,7 +15,7 @@ export default function PaginationDots({ containerId, imageCount }: PaginationDo
 		pagination.innerHTML = "";
 		for (let i = 0; i < imageCount; i++) {
 			const dot = document.createElement("span");
-			dot.className = "w-2 h-2 rounded-full bg-gray-300 transition-all";
+			dot.className = "w-2 h-2 rounded-full bg-gray-300";
 			if (i === 0) dot.classList.add("bg-gray-800");
 			pagination.appendChild(dot);
 		}

@@ -1,38 +1,26 @@
 ---
-import ChangeLanguage from "./ChangeLanguage.tsx"
-import ToggleTheme from "./ToggleTheme.astro"
-import navbar from "../data/navbar.json"
-import NavbarProducts from "../components/custom/NavbarProducts.tsx"
+import ChangeLanguage from "./ChangeLanguage.tsx";
+import ToggleTheme from "./ToggleTheme.astro";
+import navbar from "../data/navbar.json";
+import NavbarProducts from "../components/custom/NavbarProducts.tsx";
 
-const DUMMY_CATEGORIES = [
-	{
-		name: "Category 1",
-		link: "#",
-	},
-	{
-		name: "Category 2",
-		link: "#",
-	},
-	{
-		name: "Category 3",
-		link: "#",
-	},
-]
+const categories = await fetch(`${import.meta.env.BASE_API}/categories`);
+const data = await categories.json();
 ---
 
 <div
-	class="hidden md:flex rounded-3xl py-2 px-4 gap-10 bg-black/5 dark:bg-white/10 place-items-center backdrop-blur-md"
+	class="hidden md:flex rounded-3xl py-2 px-4 gap-10 text-black dark:text-white bg-black/10 dark:bg-white/10 place-items-center backdrop-blur-xl"
 >
 	<ToggleTheme />
-	<NavbarProducts client:load dummy={DUMMY_CATEGORIES} />
+	<NavbarProducts client:load categories={data} />
 
 	{
 		navbar.map((item) => {
 			return (
-				<a href={item.link} class="transition-all duration-300 text-lg flex gap-2">
+				<a href={item.link} class="text-lg flex gap-2">
 					{item.name}
 				</a>
-			)
+			);
 		})
 	}
 	<ChangeLanguage client:load />
