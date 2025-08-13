@@ -1,0 +1,99 @@
+---
+import Chevron from "../icons/Chevron";
+const { containerID } = Astro.props;
+---
+
+<scroll-buttons data-id={containerID} class="">
+	<button
+		id={`scroll-right-${containerID}`}
+		class="absolute right-1 top-1/2 -translate-y-1/2 z-10 pb-8 px-2"
+	>
+		<Chevron
+			direction="right"
+			className="backdrop-blur-lg rounded-full w-5 md:w-6 bg-white dark:bg-action-active-dark"
+			client:load
+		/>
+		<button
+			id={`scroll-left-${containerID}`}
+			class="absolute left-1 top-1/2 -translate-y-1/2 z-10 pb-8 px-2"
+		>
+			<Chevron
+				direction="left"
+				className="backdrop-blur-lg rounded-full  w-5 md:w-6 bg-white dark:bg-action-active-dark"
+				client:load
+			/>
+		</button>
+	</button>
+</scroll-buttons>
+
+<script>
+	class Scroll extends HTMLElement {
+		connectedCallback() {
+			const id = this.dataset.id;
+			if (!id) return;
+
+			const scrollContainer = document.getElementById(id);
+			const scrollLeftBtn = document.getElementById(`scroll-left-${id}`);
+			const scrollRightBtn = document.getElementById(`scroll-right-${id}`);
+
+			if (!scrollContainer || !scrollLeftBtn || !scrollRightBtn) {
+				console.warn("Scroll component couldn't find one or more elements:", {
+					scrollContainer,
+					scrollLeftBtn,
+					scrollRightBtn,
+				});
+				return;
+			}
+
+			scrollLeftBtn.addEventListener("click", () => {
+				const children = Array.from(scrollContainer.children);
+				const containerLeft = scrollContainer.scrollLeft;
+
+				let target = null;
+				for (let i = children.length - 1; i >= 0; i--) {
+					const child = children[i];
+					//@ts-ignore
+					const childRight = child.offsetLeft + child.offsetWidth;
+					if (childRight < containerLeft - 5) {
+						target = child;
+						break;
+					}
+				}
+
+				if (target) {
+					scrollContainer.scrollTo({
+						//@ts-ignore
+
+						left: target.offsetLeft,
+						behavior: "smooth",
+					});
+				}
+			});
+
+			scrollRightBtn.addEventListener("click", () => {
+				const children = Array.from(scrollContainer.children);
+				const containerLeft = scrollContainer.scrollLeft;
+				const containerWidth = scrollContainer.clientWidth;
+
+				let target = null;
+				for (const child of children) {
+					//@ts-ignore
+					if (child.offsetLeft > containerLeft + 5) {
+						// add some tolerance
+						target = child;
+						break;
+					}
+				}
+
+				if (target) {
+					scrollContainer.scrollTo({
+						//@ts-ignore
+						left: target.offsetLeft,
+						behavior: "smooth",
+					});
+				}
+			});
+		}
+	}
+	customElements.define("scroll-buttons", Scroll);
+</script>

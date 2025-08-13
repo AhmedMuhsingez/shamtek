@@ -1,0 +1,37 @@
+---
+import { cn } from "../utils/utils";
+import SliderButtons from "./custom/SliderButtons.astro";
+import PaginationDots from "./PaginationDots";
+
+const { title, image, link, isFeaturedProduct } = Astro.props;
+
+const moreThanOnePhoto = image.length > 1;
+---
+
+<div class="relative justify-items-center">
+	<div
+		id={link}
+		class={cn(
+			"overflow-x-auto flex items-center rounded-b-lg transition-shadow hover:shadow-md no-scrollbar gap-3 scroll-smooth snap-x snap-mandator",
+			isFeaturedProduct ? "lg:w-auto lg:min-w-[19rem] lg:max-w-[19rem]" : "w-full "
+		)}
+	>
+		{
+			image.map((img: string) => (
+				<img
+					src={img}
+					alt={title}
+					class="object-cover duration-300 ease-in-out h-64 md:h-auto snap-start shrink-0 w-full"
+				/>
+			))
+		}
+	</div>
+
+	<a href={link} class="my-4 block">
+		<h3 class="text-lg font-semibold text-center group">
+			{title}
+		</h3>
+	</a>
+
+	{moreThanOnePhoto && <SliderButtons containerID={link} />}
+</div>

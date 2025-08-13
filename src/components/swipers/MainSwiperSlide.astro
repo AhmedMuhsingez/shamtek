@@ -1,0 +1,18 @@
+---
+const { text, image } = Astro.props;
+---
+
+<div class="swiper-slide rounded-2xl">
+	<div
+		class="flex justify-center items-center gap-4 p-3 lg:p-6 border-black text-white bg-action-active/20 dark:bg-action-active-dark/10 rounded-2xl"
+	>
+		<div id="text" class="text-2xl font-bold max-w-[50%] text-black/80 dark:text-white">
+			{text}
+		</div>
+		<img src={image.src} alt={image.altText} />
+	</div>
+</div>
+<!-- 
+
+		class="flex justify-center items-center gap-4 p-3 lg:p-6 border-black text-white bg-[#2a2d34]/70 dark:bg-[#2a2d34]/70 dark:border-white rounded-2xl"
+-->

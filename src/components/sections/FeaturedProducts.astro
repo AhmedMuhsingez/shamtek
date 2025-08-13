@@ -1,0 +1,68 @@
+---
+import ProductCard from "../ProductCard.astro";
+
+const DUMMY_PRODUCTS = [
+	{
+		title: "Product 1",
+		image: ["/dummy_img.jpg", "/dummy_img.jpg", "/dummy_img.jpg", "/dummy_img.jpg"],
+		link: "/categories/Product1",
+	},
+	{
+		title: "Product 2",
+		image: ["/dummy_img.jpg"],
+		link: "/categories/Product2",
+	},
+	{
+		title: "Product 3",
+		image: ["/dummy_img.jpg"],
+		link: "/categories/Product3",
+	},
+	{
+		title: "Product 4",
+		image: ["/dummy_img.jpg"],
+		link: "/categories/Product4",
+	},
+	{
+		title: "Product 5",
+		image: ["/dummy_img.jpg"],
+		link: "/categories/Product5",
+	},
+	{
+		title: "Product 6",
+		image: ["/dummy_img.jpg"],
+		link: "/categories/Product6",
+	},
+	{
+		title: "Product 7",
+		image: ["/dummy_img.jpg"],
+		link: "/categories/Product7",
+	},
+	{
+		title: "Product 8",
+		image: ["/dummy_img.jpg"],
+		link: "/categories/Product8",
+	},
+];
+
+// const amountOfProductsToShow = DUMMY_PRODUCTS.length >= 8 ? 8 : 4;
+const amountOfProductsToShow = 4;
+---
+
+<div class="mt-20 mb-10">
+	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">Featured Products</span>
+
+	<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-2 justify-between">
+		{
+			DUMMY_PRODUCTS.slice(0, amountOfProductsToShow).map((category) => {
+				return (
+					<ProductCard
+						title={category.title}
+						image={category.image}
+						link={category.link}
+						isFeaturedProduct
+					/>
+				);
+			})
+		}
+	</div>
+</div>

@@ -1,0 +1,99 @@
+---
+import CategorySlide from "../swipers/CategorySlide.astro";
+
+const categoryDescription = "";
+
+const DUMMY_CATEGORIES = [
+	{
+		title: "Category 1",
+		image: "/dummy_img.jpg",
+		link: "/categories/category1",
+		items_count: 10,
+	},
+	{
+		title: "Category 2",
+		image: "/dummy_img.jpg",
+		link: "/categories/category1",
+		items_count: 10,
+	},
+	{
+		title: "Category 3",
+		image: "/dummy_img.jpg",
+		link: "/categories/category1",
+		items_count: 10,
+	},
+	{
+		title: "Category 4",
+		image: "/dummy_img.jpg",
+		link: "/categories/category1",
+		items_count: 10,
+	},
+	{
+		title: "Category 5",
+		image: "/dummy_img.jpg",
+		link: "/categories/category1",
+		items_count: 10,
+	},
+];
+---
+
+<div class="mt-20 mb-10">
+	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">Categories</span>
+
+	{categoryDescription && <p>{categoryDescription}</p>}
+
+	<div class="swiper myCategoriesSwiper">
+		<div class="swiper-wrapper">
+			{
+				DUMMY_CATEGORIES.map((category) => (
+					<CategorySlide
+						key={category.title}
+						title={category.title}
+						image={category.image}
+						link={category.link}
+						items_count={category.items_count}
+						alt={category.title}
+					/>
+				))
+			}
+		</div>
+		<div class="swiper-button-next"></div>
+		<div class="swiper-button-prev"></div>
+	</div>
+
+	<script>
+		import Swiper from "swiper";
+		import { Navigation } from "swiper/modules";
+		import "swiper/css";
+		import "swiper/css/navigation";
+
+		document.addEventListener("astro:page-load", () => {
+			new Swiper(".myCategoriesSwiper", {
+				modules: [Navigation],
+				navigation: {
+					enabled: true,
+					nextEl: ".swiper-button-next",
+					prevEl: ".swiper-button-prev",
+				},
+				spaceBetween: 30,
+				loop: true,
+				breakpoints: {
+					0: {
+						slidesPerView: 1,
+					},
+					640: {
+						slidesPerView: 2,
+					},
+					1024: {
+						slidesPerView: 3,
+					},
+				},
+				pagination: {
+					el: ".swiper-pagination",
+					dynamicBullets: true,
+					clickable: true,
+				},
+			});
+		});
+	</script>
+</div>

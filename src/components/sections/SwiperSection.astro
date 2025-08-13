@@ -1,0 +1,42 @@
+---
+import MainSwiperSlide from "../swipers/MainSwiperSlide.astro";
+import img1 from "../../assets/main-slider/1.webp";
+import img2 from "../../assets/main-slider/2.webp";
+const texts = [
+	"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	"Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+];
+---
+
+<div class="swiper mySwiper rounded-2xl">
+	<div class="swiper-wrapper">
+		<MainSwiperSlide text={texts[0]} image={img1} />
+		<!-- <MainSwiperSlide text={texts[1]} image={img2} />
+		<MainSwiperSlide text={texts[0]} image={img1} /> -->
+	</div>
+	<!-- <div class="swiper-pagination"></div> -->
+</div>
+
+<!-- <script>
+	import "swiper/css"
+	import "swiper/css/pagination"
+	import Swiper from "swiper"
+	import { Autoplay, Pagination } from "swiper/modules"
+
+	document.addEventListener("astro:page-load", () => {
+		new Swiper(".mySwiper", {
+			modules: [Pagination, Autoplay],
+			spaceBetween: 30,
+			loop: true,
+			autoplay: {
+				delay: 3500,
+				disableOnInteraction: false,
+			},
+			pagination: {
+				el: ".swiper-pagination",
+				dynamicBullets: true,
+				clickable: true,
+			},
+		})
+	})
+</script> -->

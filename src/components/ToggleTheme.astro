@@ -1,0 +1,97 @@
+---
+import MoonIcon from "./Icons/MoonIcon.astro"
+import SunIcon from "./Icons/SunIcon.astro"
+---
+
+<theme-toggle class="relative h-6 w-6 self-center">
+	<button id="toggle-theme" class="group cursor-pointer">
+		<span class="absolute left-0 right-0 top-0 opacity-0 group-aria-pressed:opacity-100">
+			<SunIcon />
+		</span>
+
+		<span
+			class="absolute left-0 right-0 top-0 opacity-0 group-aria-[pressed=false]:opacity-100"
+		>
+			<MoonIcon />
+		</span>
+	</button>
+</theme-toggle>
+
+<script>
+	class themeToggle extends HTMLElement {
+		constructor() {
+			super()
+			const button = this.querySelector("button") as HTMLButtonElement
+
+			if (button) {
+				button.addEventListener("click", (e) => {
+					if (e.currentTarget instanceof HTMLButtonElement) {
+						let isPressed = e.currentTarget.getAttribute("aria-pressed") === "true"
+						let themeChangeEvent = new CustomEvent("theme-change", {
+							detail: {
+								theme: isPressed ? "light" : "dark",
+							},
+						})
+						// dispatch event -> ThemeProvider.astro
+						document.dispatchEvent(themeChangeEvent)
+						button.setAttribute("aria-pressed", String(!isPressed))
+					}
+				})
+			}
+		}
+	}
+
+	if ("customElements" in window) {
+		customElements.define("theme-toggle", themeToggle)
+	}
+</script>
+
+<script is:inline>
+	document.addEventListener("DOMContentLoaded", () => {
+		const button = document.getElementById("toggle-theme")
+		if (button) {
+			const isDark = document.documentElement.classList.contains("dark")
+			button.setAttribute("aria-pressed", String(isDark))
+		}
+	})
+
+	function getTheme() {
+		const storedTheme = typeof localStorage !== "undefined" && localStorage.getItem("theme")
+
+		return (
+			storedTheme ||
+			(window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+		)
+	}
+
+	function setTheme(newTheme) {
+		const html = document.documentElement
+		const isDark = newTheme === "dark"
+
+		html.classList.toggle("dark", isDark)
+		html.classList.toggle("light", !isDark)
+
+		localStorage.setItem("theme", newTheme)
+	}
+
+	document.addEventListener("astro:after-swap", () => {
+		setTheme(getTheme())
+
+		const button = document.getElementById("toggle-theme")
+		if (button) {
+			const isDark = document.documentElement.classList.contains("dark")
+			button.setAttribute("aria-pressed", String(isDark))
+		}
+
+		if (!customElements.get("theme-toggle")) {
+			customElements.define("theme-toggle", themeToggle)
+		}
+	})
+	// set initial theme
+	setTheme(getTheme())
+	document.addEventListener("DOMContentLoaded", () => setTheme(getTheme()))
+
+	document.addEventListener("theme-change", (e) => {
+		setTheme(e.detail.theme)
+	})
+</script>

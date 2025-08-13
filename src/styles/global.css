@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+	--color-background-dark: #181a21;
+	/* 181a21 بجوز */
+	--color-background-light: #fff;
+	/* fefbe6 شغال */
+
+	--shadow-light-card: 0px 4px 16px -8px rgba(0, 0, 0, 0.5);
+	--shadow-dark-card: 2px 4px 6px 0px rgba(0, 0, 0, 0.6);
+
+	--font-ard: "Ard", sans-serif;
+	--font-cairo: "Cairo", sans-serif;
+
+	--color-action-active: #171a08;
+	--color-action-active-dark: #474e18;
+}
+
+@utility no-scrollbar {
+	&::-webkit-scrollbar {
+		display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+	}
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+/* Swiper styles */
+.swiper-pagination-bullet-active {
+	background-color: #fff;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+	color: black;
+	font-size: 2rem;
+	padding-bottom: 4.5rem;
+}
+
+* {
+	transition: all 0.2s ease-in-out;
+}

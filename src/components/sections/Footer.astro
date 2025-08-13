@@ -1,0 +1,41 @@
+---
+import socialButtons from "../../data/social-buttons.json";
+import { IconBrandFacebook, IconBrandInstagram, IconUserCircle } from "@tabler/icons-react";
+const iconMap = {
+	instagram: IconBrandInstagram,
+	facebook: IconBrandFacebook,
+	personal: IconUserCircle,
+};
+---
+
+<footer
+	class="w-full p-10 rounded-t-3xl dark:bg-[#ffffff15] backdrop-blur-xl flex-col justify-start items-center gap-8 inline-flex relative text-black dark:text-white z-20"
+>
+	<div class="flex flex-col gap-y-3 lg:flex-row justify-between items-center w-full">
+		<span id="logo" class="text-3xl md:text-4xl text-center md:text-left w-full"
+			>Brand Name</span
+		>
+
+		<div id="social" class="flex gap-3 w-full justify-center">
+			{
+				socialButtons.map((item) => {
+					const IconComponent =
+						iconMap[item.name.toLowerCase() as keyof typeof iconMap];
+
+					return (
+						<a href={item.href} target="_blank" class="p-2">
+							<IconComponent className="" />
+						</a>
+					);
+				})
+			}
+		</div>
+		<span id="logo" class="lg:font-bold w-full text-right"
+			>Copyrights Reserved by Brand Name 2025.
+		</span>
+	</div>
+	<div
+		class="w-full h-28 opacity-10 dark:opacity-10 bg-action-active dark:bg-action-active-dark rounded-full blur-2xl blur-[12px] absolute top-10 lg:top-0 -z-10"
+	>
+	</div>
+</footer>
