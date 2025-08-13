@@ -3,19 +3,27 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-	--color-background-dark: #181a21;
-	/* 181a21 بجوز */
 	--color-background-light: #fff;
-	/* fefbe6 شغال */
-
-	--shadow-light-card: 0px 4px 16px -8px rgba(0, 0, 0, 0.5);
-	--shadow-dark-card: 2px 4px 6px 0px rgba(0, 0, 0, 0.6);
-
 	--font-ard: "Ard", sans-serif;
 	--font-cairo: "Cairo", sans-serif;
 
-	--color-action-active: #171a08;
-	--color-action-active-dark: #474e18;
+	--color-background: #fff;
+	--color-background-onBg: #171c2f;
+
+	--color-text: #171c2f;
+
+	--color-primary: #5939c7;
+	--color-primary-hover: #462ba0;
+}
+
+.dark {
+	--color-background: #101320;
+	--color-background-onBg: #171c2f;
+
+	--color-text: #b8c0cc;
+
+	--color-primary: #5939c7;
+	--color-primary-hover: #462ba0;
 }
 
 @utility no-scrollbar {
@@ -40,4 +48,5 @@
 
 * {
 	transition: all 0.2s ease-in-out;
+	direction: rtl;
 }
