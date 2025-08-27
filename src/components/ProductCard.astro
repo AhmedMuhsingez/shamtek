@@ -8,12 +8,12 @@ const { title, image, link, isFeaturedProduct } = Astro.props;
 const moreThanOnePhoto = image.length > 1;
 ---
 
-<div class="relative justify-items-center">
+<div class="relative justify-items-center group transition-all duration-300 hover:transform hover:scale-[1.02]">
 	<div
 		id={link}
 		class={cn(
-			"overflow-x-auto flex items-center rounded-b-lg shadow hover:shadow-md no-scrollbar gap-3 scroll-smooth snap-x snap-mandator",
-			isFeaturedProduct ? "lg:w-auto lg:min-w-[19rem] lg:max-w-[19rem]" : "w-full "
+			"overflow-x-auto flex items-center rounded-lg shadow-md hover:shadow-lg no-scrollbar gap-3 scroll-smooth snap-x snap-mandatory transition-all duration-300",
+			isFeaturedProduct ? "lg:w-auto lg:min-w-[19rem] lg:max-w-[19rem]" : "w-full"
 		)}
 	>
 		{
@@ -21,14 +21,15 @@ const moreThanOnePhoto = image.length > 1;
 				<img
 					src={img}
 					alt={title}
-					class="object-cover ease-in-out h-64 md:h-auto snap-start shrink-0 w-full"
+					class="object-cover transition-all duration-300 h-64 md:h-auto snap-start shrink-0 w-full rounded-lg group-hover:brightness-105"
+					loading="lazy"
 				/>
 			))
 		}
 	</div>
 
-	<a href={link} class="my-4 block">
-		<h3 class="text-lg font-semibold text-center group">
+	<a href={link} class="my-4 block transition-colors duration-300 hover:text-primary">
+		<h3 class="text-lg font-semibold text-center transition-colors duration-300">
 			{title}
 		</h3>
 	</a>

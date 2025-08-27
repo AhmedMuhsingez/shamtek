@@ -18,7 +18,7 @@ const translatePath = useTranslatedPath(
 	<div class="relative z-10 text-center animate-fadeInUp">
 		<h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
 			{t.home.welcome}
-			{data.name}
+			{lang != "tr" && data.name}
 		</h1>
 		<p class="text-xl md:text-2xl text-white max-w-4xl mx-auto mb-8">
 			{t.home.subtitle}
@@ -34,13 +34,13 @@ const translatePath = useTranslatedPath(
 		<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
 			<a
 				href={translatePath("/all-products")}
-				class="bg-gradient-primary text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-vibrant-md hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-pulse-custom"
+				class="bg-gradient-primary text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-vibrant-md hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-pulse-custom"
 			>
 				{t.nav.allProducts}
 			</a>
 			<a
 				href={translatePath("/contact")}
-				class="glass px-8 py-4 rounded-2xl font-semibold text-lg text-text hover:text-primary transition-all duration-300 transform hover:scale-105"
+				class="glass px-8 py-4 !rounded-lg font-semibold text-lg text-text hover:text-primary transition-all duration-300 transform hover:scale-105"
 			>
 				{t.nav.contact}
 			</a>

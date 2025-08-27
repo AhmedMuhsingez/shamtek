@@ -7,37 +7,38 @@ type Props = {
 	currentLang?: string;
 };
 
-function ChangeLanguage({ currentLang = 'ar' }: Props) {
+function ChangeLanguage({ currentLang = "ar" }: Props) {
 	// State to track the actual current language
 	const [detectedLang, setDetectedLang] = useState(currentLang);
 
 	// Get current path without language prefix
 	const getCurrentPath = () => {
-		if (typeof window === 'undefined') return '/';
+		if (typeof window === "undefined") return "/";
 		const path = window.location.pathname;
 		// Remove language prefix from path
-		const pathWithoutLang = path.replace(/^\/(ar|en|tr)/, '') || '/';
+		const pathWithoutLang = path.replace(/^\/(ar|en|tr)/, "") || "/";
 		return pathWithoutLang;
 	};
 
 	// Detect language from URL on client side
 	useEffect(() => {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			const path = window.location.pathname;
 			const langMatch = path.match(/^\/(ar|en|tr)/);
-			const urlLang = langMatch ? langMatch[1] : 'ar'; // Default to 'ar' if no language in URL
+			const urlLang = langMatch ? langMatch[1] : "ar"; // Default to 'ar' if no language in URL
 			setDetectedLang(urlLang);
 		}
 	}, []);
 
 	const currentPath = getCurrentPath();
+
 	const activeLang = detectedLang || currentLang;
 
 	const LANGUAGES = Object.entries(languages).map(([code, name]) => ({
 		code,
 		name,
 		icon: getLanguageFlag(code as keyof typeof languages),
-		link: code === 'ar' ? currentPath : `/${code}${currentPath}`,
+		link: code === "ar" ? `/ar${currentPath}` : `/${code}${currentPath}`,
 	}));
 
 	const menu_item = LANGUAGES.map((item, index) => {
@@ -47,9 +48,9 @@ function ChangeLanguage({ currentLang = 'ar' }: Props) {
 				<a
 					href={item.link}
 					className={`group flex w-full items-center justify-between gap-4 rounded-lg py-2 px-3 transition-all duration-200 hover:scale-105 ${
-						isActive 
-							? 'bg-primary/20 text-primary border border-primary/30' 
-							: 'text-white dark:text-black hover:bg-white/20 dark:hover:bg-white/40'
+						isActive
+							? "bg-primary/20 text-primary border border-primary/30"
+							: "text-white dark:text-black hover:bg-white/20 dark:hover:bg-white/40"
 					}`}
 				>
 					<span className="font-medium">{item.name}</span>

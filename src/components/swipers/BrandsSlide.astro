@@ -1,5 +1,5 @@
 ---
-import { getTranslations } from "../../utils/i18n";
+import { getTranslations, useTranslatedPath } from "../../utils/i18n";
 
 interface Props {
 	title: string;
@@ -12,14 +12,19 @@ interface Props {
 
 const { title, image, link, items_count = 1, alt, currentLang = "ar" } = Astro.props;
 const t = await getTranslations(currentLang as keyof typeof import('../../utils/i18n').languages);
+const translatePath = useTranslatedPath(currentLang as keyof typeof import('../../utils/i18n').languages);
+
+// Create a proper brand slug from the brand name
+const brandSlug = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+const brandUrl = translatePath(`/${brandSlug}`);
 ---
 
 <div class="swiper-slide">
 	<div class="flex flex-col gap-3 text-center">
-		<a href={link}>
-			<img src={image} alt={alt} class="rounded-md w-full h-72 object-cover" /></a
+		<a href={brandUrl} class="transition-transform duration-300 hover:scale-105">
+			<img src={image} alt={alt} class="rounded-md w-full h-72 object-cover transition-all duration-300 hover:shadow-lg" /></a
 		>
-		<a href={link} class="text-2xl font-bold text-center">{title}</a>
-		<p class="text-lg text-center">{items_count} {t.common.element}</p>
+		<a href={brandUrl} class="text-2xl font-bold text-center transition-colors duration-300 hover:text-primary">{title}</a>
+		<p class="text-lg text-center text-text-secondary">{items_count} {t.common.element}</p>
 	</div>
 </div>

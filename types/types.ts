@@ -111,4 +111,7 @@ export interface CompanyDetails {
 	phone: string;
 	address: string;
 	logo: string | Blob;
+	email: string;
+	facebook: string;
+	instagram: string;
 }

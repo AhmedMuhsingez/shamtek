@@ -9,7 +9,7 @@ interface Props {
 
 const { currentLang } = Astro.props;
 const lang = currentLang || getLangFromUrl(Astro.url);
-const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').languages);
+const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
 
 const categoryDescription = "";
 
@@ -18,7 +18,8 @@ const data = await brands.json();
 ---
 
 <div class="mt-20 mb-10">
-	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">{t.home.ourBrands}</span>
+	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">{t.home.ourBrands}</span
+	>
 
 	{categoryDescription && <p>{categoryDescription}</p>}
 
@@ -26,16 +27,15 @@ const data = await brands.json();
 		<div class="swiper-wrapper">
 			{
 				data.map((brand: Brand) => (
-				<BrandsSlide
-					key={brand.id}
-					title={String(brand.name)}
-					image={brand.image}
-					link={String(brand.id)}
-					alt={String(brand.name)}
-					items_count={Number(brand._count.products)}
-					currentLang={lang}
-				/>
-			))
+					<BrandsSlide
+						title={String(brand.name)}
+						image={brand.image as string}
+						link={String(brand.name)}
+						alt={String(brand.name)}
+						items_count={Number(brand._count.products)}
+						currentLang={lang}
+					/>
+				))
 			}
 		</div>
 		<div class="swiper-button-next"></div>

@@ -4,9 +4,10 @@ import type { Category } from "../../../types/types";
 
 type Props = {
 	categories: Category[];
+	lang: "ar" | "en" | "tr";
 };
 
-function NavbarProducts({ categories }: Props) {
+function NavbarProducts({ categories, lang = "ar" }: Props) {
 	const menu_item = categories.map((item, index) => {
 		return (
 			<MenuItem key={index}>
@@ -25,7 +26,7 @@ function NavbarProducts({ categories }: Props) {
 			{({ open }) => (
 				<>
 					<MenuButton className="flex gap-2 justify-center items-center  text-lg cursor-pointer focus:outline-none group">
-						الأقسام
+						{lang === "ar" ? "المنتجات" : lang === "en" ? "Products" : "Ürünler"}
 						<Chevron className={` ${open ? "rotate-0" : "rotate-90"}`} />
 					</MenuButton>
 

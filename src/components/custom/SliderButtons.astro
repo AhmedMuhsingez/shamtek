@@ -7,23 +7,25 @@ const { containerID } = Astro.props;
 <scroll-buttons data-id={containerID} class="">
 	<button
 		id={`scroll-right-${containerID}`}
-		class="absolute right-1 top-1/2 -translate-y-1/2 z-10 pb-8 px-2"
+		class="absolute right-1 top-1/2 -translate-y-1/2 z-10 pb-8 px-2 transition-all duration-300 hover:scale-110 hover:opacity-80"
+		aria-label="Scroll right"
 	>
 		<Chevron
 			direction="right"
-			className="backdrop-blur-lg rounded-full w-5 md:w-6 bg-white dark:bg-action-active-dark"
+			className="backdrop-blur-lg rounded-full w-5 md:w-6 bg-white dark:bg-action-active-dark transition-all duration-300 hover:shadow-md"
 			client:load
 		/>
-		<button
-			id={`scroll-left-${containerID}`}
-			class="absolute left-1 top-1/2 -translate-y-1/2 z-10 pb-8 px-2"
-		>
-			<Chevron
-				direction="left"
-				className="backdrop-blur-lg rounded-full  w-5 md:w-6 bg-white dark:bg-action-active-dark"
-				client:load
-			/>
-		</button>
+	</button>
+	<button
+		id={`scroll-left-${containerID}`}
+		class="absolute left-1 top-1/2 -translate-y-1/2 z-10 pb-8 px-2 transition-all duration-300 hover:scale-110 hover:opacity-80"
+		aria-label="Scroll left"
+	>
+		<Chevron
+			direction="left"
+			className="backdrop-blur-lg rounded-full w-5 md:w-6 bg-white dark:bg-action-active-dark transition-all duration-300 hover:shadow-md"
+			client:load
+		/>
 	</button>
 </scroll-buttons>
 

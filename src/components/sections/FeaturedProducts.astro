@@ -1,4 +1,5 @@
 ---
+import { getLangFromUrl, getTranslations } from "../../utils/i18n";
 import ProductCard from "../ProductCard.astro";
 
 const DUMMY_PRODUCTS = [
@@ -46,10 +47,14 @@ const DUMMY_PRODUCTS = [
 
 // const amountOfProductsToShow = DUMMY_PRODUCTS.length >= 8 ? 8 : 4;
 const amountOfProductsToShow = 4;
+const lang = getLangFromUrl(Astro.url);
+const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
 ---
 
 <div class="mt-20 mb-10">
-	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">Featured Products</span>
+	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full"
+		>{t.home.featuredProducts}</span
+	>
 
 	<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-2 justify-between">
 		{

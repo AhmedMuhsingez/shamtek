@@ -11,8 +11,8 @@ interface Props {
 
 const { currentLang } = Astro.props;
 const lang = currentLang || getLangFromUrl(Astro.url);
-const t = await getTranslations(lang as keyof typeof import('../utils/i18n').languages);
-const translatePath = useTranslatedPath(lang as keyof typeof import('../utils/i18n').languages);
+const t = await getTranslations(lang as keyof typeof import("../utils/i18n").languages);
+const translatePath = useTranslatedPath(lang as keyof typeof import("../utils/i18n").languages);
 
 const categories = await fetch(`${import.meta.env.BASE_API}/categories`);
 const data = await categories.json();
@@ -22,13 +22,17 @@ const data = await categories.json();
 	class="hidden md:flex rounded-3xl py-2 px-4 gap-10 text-black dark:text-white bg-black/10 dark:bg-white/10 place-items-center backdrop-blur-xl"
 >
 	<ToggleTheme />
-	<NavbarProducts client:load categories={data} />
+	<NavbarProducts client:load categories={data} lang={lang as "ar" | "en" | "tr"} />
 
 	{
 		navbar.map((item) => {
 			return (
 				<a href={translatePath(item.link)} class="text-lg flex gap-2">
-					{item.nameKey === 'nav.about' ? t.nav.about : item.nameKey === 'nav.contact' ? t.nav.contact : item.nameKey}
+					{item.nameKey === "nav.about"
+						? t.nav.about
+						: item.nameKey === "nav.contact"
+							? t.nav.contact
+							: item.nameKey}
 				</a>
 			);
 		})

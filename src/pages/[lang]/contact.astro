@@ -1,13 +1,14 @@
 ---
+import { companyData } from "../../data/company-details";
 import Layout from "../../layouts/Layout.astro";
 import { getTranslations, getStaticPathsForI18n } from "../../utils/i18n";
 
 export async function getStaticPaths() {
-  return getStaticPathsForI18n();
+	return getStaticPathsForI18n();
 }
 
 const { lang } = Astro.params;
-const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').languages);
+const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
 ---
 
 <Layout>
@@ -22,20 +23,27 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 				{t.contact.subtitle}
 			</p>
 		</div>
-		<div class="absolute top-10 right-10 w-32 h-32 bg-gradient-primary rounded-full opacity-20 animate-float"></div>
-		<div class="absolute bottom-10 left-10 w-24 h-24 bg-gradient-secondary rounded-full opacity-20 animate-float" style="animation-delay: 1s;"></div>
+		<div
+			class="absolute top-10 right-10 w-32 h-32 bg-gradient-primary rounded-full opacity-20 animate-float"
+		>
+		</div>
+		<div
+			class="absolute bottom-10 left-10 w-24 h-24 bg-gradient-secondary rounded-full opacity-20 animate-float"
+			style="animation-delay: 1s;"
+		>
+		</div>
 	</section>
 
 	<!-- Contact Content -->
 	<section class="py-16">
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+		<div class="grid grid-cols-1 gap-12">
 			<!-- Contact Form -->
-			<div class="animate-slideInRight">
+			<!-- <div class="animate-slideInRight">
 				<div class="glass p-8 rounded-2xl shadow-vibrant-lg">
 					<h2 class="text-2xl md:text-3xl font-bold text-text mb-6">{t.contact.getInTouch}</h2>
 					<form id="contactForm" class="space-y-6">
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<div>
+							`${<div class={lang === "ar"}&&"ps-`4"}>
 								<label for="name" class="block text-text font-medium mb-2">{t.contact.name}</label>
 								<input 
 									type="text" 
@@ -46,7 +54,7 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 									placeholder={lang === 'ar' ? 'أدخل اسمك' : lang === 'en' ? 'Enter your name' : 'Adınızı girin'}
 								/>
 							</div>
-							<div>
+							`${<div class={lang === "ar"}&&"ps-`4"}>
 								<label for="email" class="block text-text font-medium mb-2">{t.contact.email}</label>
 								<input 
 									type="email" 
@@ -58,7 +66,7 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 								/>
 							</div>
 						</div>
-						<div>
+						`${<div class={lang === "ar"}&&"ps-`4"}>
 							<label for="phone" class="block text-text font-medium mb-2">{t.contact.phone}</label>
 							<input 
 								type="tel" 
@@ -68,7 +76,7 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 								placeholder={lang === 'ar' ? 'أدخل رقم هاتفك' : lang === 'en' ? 'Enter your phone number' : 'Telefon numaranızı girin'}
 							/>
 						</div>
-						<div>
+						`${<div class={lang === "ar"}&&"ps-`4"}>
 							<label for="message" class="block text-text font-medium mb-2">{t.contact.message}</label>
 							<textarea 
 								id="message" 
@@ -88,7 +96,7 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 						</button>
 					</form>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Contact Information -->
 			<div class="animate-slideInLeft">
@@ -97,12 +105,18 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 					<div class="glass p-6 rounded-2xl shadow-vibrant">
 						<div class="flex items-start space-x-4 rtl:space-x-reverse">
 							<div class="text-3xl animate-pulse-custom">📍</div>
-							<div>
-								<h3 class="text-xl font-semibold text-text mb-2">{t.contact.address}</h3>
+							<div class={`${lang === "ar" && "ps-4"}`}>
+								<h3 class="text-xl font-semibold text-text mb-2">
+									{t.contact.address}
+								</h3>
 								<p class="text-text-secondary">
-									{lang === 'ar' ? 'دمشق، سوريا\nشارع الثورة، مبنى التكنولوجيا' :
-									 lang === 'en' ? 'Damascus, Syria\nRevolution Street, Technology Building' :
-									 'Şam, Suriye\nDevrim Caddesi, Teknoloji Binası'}
+									{
+										lang === "ar"
+											? companyData.address
+											: lang === "en"
+												? "Aleppo, Alshaar"
+												: "Halep, Elşaar"
+									}
 								</p>
 							</div>
 						</div>
@@ -111,11 +125,17 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 					<!-- Phone -->
 					<div class="glass p-6 rounded-2xl shadow-vibrant">
 						<div class="flex items-start space-x-4 rtl:space-x-reverse">
-							<div class="text-3xl animate-pulse-custom" style="animation-delay: 0.5s;">📞</div>
-							<div>
-								<h3 class="text-xl font-semibold text-text mb-2">{t.contact.phone}</h3>
-								<p class="text-text-secondary">+963 11 123 4567</p>
-								<p class="text-text-secondary">+963 11 765 4321</p>
+							<div
+								class="text-3xl animate-pulse-custom"
+								style="animation-delay: 0.5s;"
+							>
+								📞
+							</div>
+							<div class={`${lang === "ar" && "ps-4"}`}>
+								<h3 class="text-xl font-semibold text-text mb-2">
+									{t.contact.phone}
+								</h3>
+								<p class="text-text-secondary">{companyData.phone}</p>
 							</div>
 						</div>
 					</div>
@@ -123,11 +143,17 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 					<!-- Email -->
 					<div class="glass p-6 rounded-2xl shadow-vibrant">
 						<div class="flex items-start space-x-4 rtl:space-x-reverse">
-							<div class="text-3xl animate-pulse-custom" style="animation-delay: 1s;">📧</div>
-							<div>
-								<h3 class="text-xl font-semibold text-text mb-2">{t.contact.email}</h3>
-								<p class="text-text-secondary">info@shamtek.com</p>
-								<p class="text-text-secondary">support@shamtek.com</p>
+							<div
+								class="text-3xl animate-pulse-custom"
+								style="animation-delay: 1s;"
+							>
+								📧
+							</div>
+							<div class={`${lang === "ar" && "ps-4"}`}>
+								<h3 class="text-xl font-semibold text-text mb-2">
+									{t.contact.email}
+								</h3>
+								<p class="text-text-secondary">{companyData.email}</p>
 							</div>
 						</div>
 					</div>
@@ -135,16 +161,31 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 					<!-- Working Hours -->
 					<div class="glass p-6 rounded-2xl shadow-vibrant">
 						<div class="flex items-start space-x-4 rtl:space-x-reverse">
-							<div class="text-3xl animate-pulse-custom" style="animation-delay: 1.5s;">🕒</div>
-							<div>
-								<h3 class="text-xl font-semibold text-text mb-2">{t.contact.workingHours}</h3>
+							<div
+								class="text-3xl animate-pulse-custom"
+								style="animation-delay: 1.5s;"
+							>
+								🕒
+							</div>
+							<div class={`${lang === "ar" && "ps-4"}`}>
+								<h3 class="text-xl font-semibold text-text mb-2">
+									{t.contact.workingHours}
+								</h3>
 								<p class="text-text-secondary">
-									{t.contact.monday} - {t.contact.sunday}: 9:00 AM - 8:00 PM
+									{
+										lang === "ar"
+											? "9:00 صباحاً - 11:00 مساءً"
+											: "9:00 AM - 23:00 PM"
+									}
 								</p>
 								<p class="text-text-secondary text-sm mt-1">
-									{lang === 'ar' ? 'الجمعة: مغلق' :
-									 lang === 'en' ? 'Friday: Closed' :
-									 'Cuma: Kapalı'}
+									{
+										lang === "ar"
+											? "الجمعة: مغلق"
+											: lang === "en"
+												? "Friday: Closed"
+												: "Cuma: Kapalı"
+									}
 								</p>
 							</div>
 						</div>
@@ -155,69 +196,83 @@ const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').
 	</section>
 
 	<!-- Map Section -->
-	<section class="py-16">
+	<!-- <section class="py-16">
 		<div class="glass p-8 rounded-2xl shadow-vibrant-lg animate-fadeInUp">
 			<h2 class="text-2xl md:text-3xl font-bold text-text mb-6 text-center">
-				{lang === 'ar' ? 'موقعنا على الخريطة' :
-				 lang === 'en' ? 'Find Us on the Map' :
-				 'Bizi Haritada Bulun'}
+				{
+					lang === "ar"
+						? "موقعنا على الخريطة"
+						: lang === "en"
+							? "Find Us on the Map"
+							: "Bizi Haritada Bulun"
+				}
 			</h2>
-			<div class="w-full h-64 bg-gradient-primary rounded-xl flex items-center justify-center">
+			<div
+				class="w-full h-64 bg-gradient-primary rounded-xl flex items-center justify-center"
+			>
 				<div class="text-center text-white">
 					<div class="text-4xl mb-4 animate-float">🗺️</div>
 					<p class="text-lg">
-						{lang === 'ar' ? 'خريطة تفاعلية قريباً' :
-						 lang === 'en' ? 'Interactive Map Coming Soon' :
-						 'Etkileşimli Harita Yakında'}
+						{
+							lang === "ar"
+								? "خريطة تفاعلية قريباً"
+								: lang === "en"
+									? "Interactive Map Coming Soon"
+									: "Etkileşimli Harita Yakında"
+						}
 					</p>
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 </Layout>
 
-<script>
+<!-- <script>
 	// Contact form handling
-	document.addEventListener('DOMContentLoaded', function() {
-		const form = document.getElementById('contactForm');
-		const submitText = document.getElementById('submitText');
-		const loadingText = document.getElementById('loadingText');
+	document.addEventListener("DOMContentLoaded", function () {
+		const form = document.getElementById("contactForm");
+		const submitText = document.getElementById("submitText");
+		const loadingText = document.getElementById("loadingText");
 
-		form?.addEventListener('submit', async function(e) {
+		form?.addEventListener("submit", async function (e) {
 			e.preventDefault();
-			
+
 			// Show loading state
-			submitText?.classList.add('hidden');
-			loadingText?.classList.remove('hidden');
-			
+			submitText?.classList.add("hidden");
+			loadingText?.classList.remove("hidden");
+
 			// Simulate form submission
-			await new Promise(resolve => setTimeout(resolve, 2000));
-			
+			await new Promise((resolve) => setTimeout(resolve, 2000));
+
 			// Show success message
-			alert(window.location.pathname.includes('/ar') || !window.location.pathname.includes('/en') && !window.location.pathname.includes('/tr') ? 
-				'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.' :
-				window.location.pathname.includes('/en') ?
-				'Your message has been sent successfully! We will contact you soon.' :
-				'Mesajınız başarıyla gönderildi! Yakında sizinle iletişime geçeceğiz.'
+			alert(
+				window.location.pathname.includes("/ar") ||
+					(!window.location.pathname.includes("/en") &&
+						!window.location.pathname.includes("/tr"))
+					? "تم إرسال رسالتك بنجاح! سنتواصل معك قريباً."
+					: window.location.pathname.includes("/en")
+						? "Your message has been sent successfully! We will contact you soon."
+						: "Mesajınız başarıyla gönderildi! Yakında sizinle iletişime geçeceğiz."
 			);
-			
+
 			// Reset form
 			(form as HTMLFormElement).reset();
-			
+
 			// Reset button state
-			submitText?.classList.remove('hidden');
-			loadingText?.classList.add('hidden');
+			submitText?.classList.remove("hidden");
+			loadingText?.classList.add("hidden");
 		});
 	});
-</script>
+</script> -->
 
 <style>
 	/* Form animations */
-	input:focus, textarea:focus {
+	input:focus,
+	textarea:focus {
 		transform: translateY(-2px);
 		box-shadow: var(--shadow-medium);
 	}
-	
+
 	.glass:hover {
 		transform: translateY(-3px);
 		box-shadow: var(--shadow-heavy);
