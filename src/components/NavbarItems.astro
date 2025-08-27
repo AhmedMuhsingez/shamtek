@@ -3,6 +3,16 @@ import ChangeLanguage from "./ChangeLanguage.tsx";
 import ToggleTheme from "./ToggleTheme.astro";
 import navbar from "../data/navbar.json";
 import NavbarProducts from "../components/custom/NavbarProducts.tsx";
+import { getLangFromUrl, getTranslations, useTranslatedPath } from "../utils/i18n";
+
+interface Props {
+	currentLang?: string;
+}
+
+const { currentLang } = Astro.props;
+const lang = currentLang || getLangFromUrl(Astro.url);
+const t = await getTranslations(lang as keyof typeof import('../utils/i18n').languages);
+const translatePath = useTranslatedPath(lang as keyof typeof import('../utils/i18n').languages);
 
 const categories = await fetch(`${import.meta.env.BASE_API}/categories`);
 const data = await categories.json();
@@ -17,8 +27,8 @@ const data = await categories.json();
 	{
 		navbar.map((item) => {
 			return (
-				<a href={item.link} class="text-lg flex gap-2">
-					{item.name}
+				<a href={translatePath(item.link)} class="text-lg flex gap-2">
+					{item.nameKey === 'nav.about' ? t.nav.about : item.nameKey === 'nav.contact' ? t.nav.contact : item.nameKey}
 				</a>
 			);
 		})

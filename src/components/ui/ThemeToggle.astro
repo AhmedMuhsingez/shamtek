@@ -1,0 +1,131 @@
+---
+// Theme Toggle Component
+---
+
+<button 
+  id="theme-toggle" 
+  class="theme-toggle glass interactive focus-ring" 
+  aria-label="Toggle theme"
+  title="Toggle theme"
+>
+  <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"></circle>
+    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+  </svg>
+  <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    background: var(--color-card-bg);
+    backdrop-filter: blur(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+
+  .theme-toggle:hover {
+    transform: translateY(-2px) rotate(15deg);
+    box-shadow: var(--shadow-heavy);
+  }
+
+  .theme-toggle:active {
+    transform: translateY(0) rotate(0deg) scale(0.95);
+  }
+
+  .sun-icon,
+  .moon-icon {
+    position: absolute;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .moon-icon {
+    opacity: 0;
+    transform: rotate(180deg) scale(0.5);
+  }
+
+  .dark .sun-icon {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+
+  .dark .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  /* Add glow effect for dark mode */
+  .dark .theme-toggle {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+
+  .dark .theme-toggle:hover {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), var(--shadow-heavy);
+  }
+</style>
+
+<script>
+  // Theme toggle functionality
+  function initThemeToggle() {
+    const toggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    
+    // Get initial theme from localStorage or system preference
+    const getInitialTheme = (): 'light' | 'dark' => {
+      const stored = localStorage.getItem('theme');
+      if (stored === 'light' || stored === 'dark') return stored;
+      
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    
+    // Set theme
+    const setTheme = (theme: 'light' | 'dark') => {
+      html.classList.remove('light', 'dark');
+      html.classList.add(theme);
+      localStorage.setItem('theme', theme);
+      
+      // Dispatch custom event for other components
+      window.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+    };
+    
+    // Initialize theme
+    const currentTheme = getInitialTheme();
+    setTheme(currentTheme);
+    
+    // Toggle theme on click
+    toggle?.addEventListener('click', () => {
+      const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+    });
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+  
+  // Initialize on DOM content loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeToggle);
+  } else {
+    initThemeToggle();
+  }
+</script>

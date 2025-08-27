@@ -2,6 +2,19 @@
 import logo from "../assets/logo.jpeg";
 import NavbarItems from "./NavbarItems.astro";
 import WhatsAppButton from "./WhatsAppButton.astro";
+import ChangeLanguage from "./ChangeLanguage";
+import ThemeToggle from "./ui/ThemeToggle.astro";
+import { getTranslations, useTranslatedPath } from "../utils/i18n";
+
+interface Props {
+	currentLang?: string;
+}
+
+const { currentLang = "ar" } = Astro.props;
+const t = await getTranslations(currentLang as keyof typeof import("../utils/i18n").languages);
+const translatePath = useTranslatedPath(
+	currentLang as keyof typeof import("../utils/i18n").languages
+);
 ---
 
 <div
@@ -12,23 +25,36 @@ import WhatsAppButton from "./WhatsAppButton.astro";
 	id="navbar"
 >
 	<header
-		class="w-full bg-black/5 dark:bg-black/70 backdrop-blur-lg shadow-light-card dark:shadow-dark-card flex justify-center"
+		class="w-full bg-white/40 dark:bg-black/40 backdrop-blur-lg shadow-light-card dark:shadow-dark-card flex justify-center"
 	>
 		<div
 			id="container"
 			class="w-full max-w-7xl px-6 py-4 lg:px-0 lg:py-2 flex justify-between items-center"
 		>
 			<div class="flex gap-2 md:gap-4 items-center">
-				<a class="content-center" href={"/"}
-					><img src={logo.src} class="w-12 h-12 md:w-16 md:h-16" /></a
+				<a
+					class="content-center transition-transform duration-200 hover:scale-105"
+					href={translatePath("/")}
+					><img
+						src={logo.src}
+						class="w-12 h-12 md:w-16 md:h-16 rounded-lg shadow-sm"
+					/></a
 				>
-				<a class="text-2xl md:text-3xl text-text font-[600]" href={"/"}>
-					<span>شام </span>
-					<span class="font-light">تِك</span></a
+				<a
+					class="text-2xl md:text-3xl text-text font-[600] hover:text-primary transition-colors duration-200"
+					href={translatePath("/")}
 				>
+					{t.common.brandName}
+				</a>
 			</div>
-			<NavbarItems />
-			<WhatsAppButton />
+			<div class="hidden md:block">
+				<NavbarItems currentLang={currentLang} />
+			</div>
+			<div class="flex items-center gap-2">
+				<ThemeToggle />
+				<ChangeLanguage currentLang={currentLang} client:load />
+				<WhatsAppButton currentLang={currentLang} />
+			</div>
 		</div>
 	</header>
 </div>

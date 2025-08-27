@@ -1,0 +1,157 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getTranslations, getStaticPathsForI18n } from "../../utils/i18n";
+
+export async function getStaticPaths() {
+  return getStaticPathsForI18n();
+}
+
+const { lang } = Astro.params;
+const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').languages);
+---
+
+<Layout>
+	<!-- Hero Section -->
+	<section class="relative py-20 overflow-hidden">
+		<div class="absolute inset-0 bg-gradient-primary opacity-10"></div>
+		<div class="relative z-10 text-center animate-fadeInUp">
+			<h1 class="text-4xl md:text-6xl font-bold text-text mb-6">
+				{t.about.title}
+			</h1>
+			<p class="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto">
+				{t.about.subtitle}
+			</p>
+		</div>
+		<div class="absolute top-10 left-10 w-32 h-32 bg-gradient-secondary rounded-full opacity-20 animate-float"></div>
+		<div class="absolute bottom-10 right-10 w-24 h-24 bg-gradient-accent rounded-full opacity-20 animate-float" style="animation-delay: 1s;"></div>
+	</section>
+
+	<!-- Stats Section -->
+	<section class="py-16">
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+			<div class="text-center glass p-8 rounded-2xl shadow-vibrant-md animate-slideInRight">
+				<div class="text-4xl md:text-5xl font-bold text-primary mb-2">10+</div>
+				<div class="text-text-secondary">{t.about.experience}</div>
+			</div>
+			<div class="text-center glass p-8 rounded-2xl shadow-vibrant-md animate-fadeInUp" style="animation-delay: 0.2s;">
+				<div class="text-4xl md:text-5xl font-bold text-secondary mb-2">1000+</div>
+				<div class="text-text-secondary">{t.about.customers}</div>
+			</div>
+			<div class="text-center glass p-8 rounded-2xl shadow-vibrant-md animate-slideInLeft" style="animation-delay: 0.4s;">
+				<div class="text-4xl md:text-5xl font-bold text-accent mb-2">500+</div>
+				<div class="text-text-secondary">{t.about.products}</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Our Story Section -->
+	<section class="py-16">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+			<div class="animate-slideInRight">
+				<h2 class="text-3xl md:text-4xl font-bold text-text mb-6">{t.about.ourStory}</h2>
+				<p class="text-text-secondary text-lg leading-relaxed mb-6">
+					{lang === 'ar' ? 
+						'تأسست شام تِك في عام 2014 برؤية واضحة: جعل التكنولوجيا المتقدمة في متناول الجميع. بدأنا كشركة صغيرة متخصصة في الإلكترونيات الاستهلاكية، ونمونا لنصبح واحدة من أبرز الشركات في المنطقة.' :
+						lang === 'en' ?
+						'Founded in 2014, Shamtek started with a clear vision: making advanced technology accessible to everyone. We began as a small company specializing in consumer electronics and have grown to become one of the leading companies in the region.' :
+						'2014 yılında kurulan Shamtek, net bir vizyonla başladı: gelişmiş teknolojiyi herkes için erişilebilir kılmak. Tüketici elektroniği konusunda uzmanlaşmış küçük bir şirket olarak başladık ve bölgenin önde gelen şirketlerinden biri haline geldik.'
+					}
+				</p>
+				<p class="text-text-secondary text-lg leading-relaxed">
+					{lang === 'ar' ? 
+						'اليوم، نفخر بتقديم مجموعة واسعة من المنتجات التقنية عالية الجودة، من الهواتف الذكية إلى أجهزة الكمبيوتر والإكسسوارات المتطورة.' :
+						lang === 'en' ?
+						'Today, we pride ourselves on offering a wide range of high-quality tech products, from smartphones to computers and advanced accessories.' :
+						'Bugün, akıllı telefonlardan bilgisayarlara ve gelişmiş aksesuarlara kadar geniş bir yüksek kaliteli teknoloji ürünü yelpazesi sunmaktan gurur duyuyoruz.'
+					}
+				</p>
+			</div>
+			<div class="animate-slideInLeft">
+				<div class="relative">
+					<div class="w-full h-80 bg-gradient-primary rounded-2xl shadow-vibrant-lg animate-pulse-custom"></div>
+					<div class="absolute inset-4 bg-background-onBg rounded-xl flex items-center justify-center">
+						<div class="text-6xl text-primary animate-float">📱</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Mission & Vision Section -->
+	<section class="py-16">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+			<div class="glass p-8 rounded-2xl shadow-vibrant-md animate-slideInRight">
+				<div class="text-4xl mb-4 animate-float">🎯</div>
+				<h3 class="text-2xl font-bold text-text mb-4">{t.about.ourMission}</h3>
+				<p class="text-text-secondary leading-relaxed">
+					{lang === 'ar' ? 
+						'مهمتنا هي توفير أحدث التقنيات بأسعار معقولة مع ضمان أعلى مستويات الجودة وخدمة العملاء المتميزة.' :
+						lang === 'en' ?
+						'Our mission is to provide the latest technologies at affordable prices while ensuring the highest levels of quality and exceptional customer service.' :
+						'Misyonumuz, en yüksek kalite seviyelerini ve olağanüstü müşteri hizmetini sağlarken, en son teknolojileri uygun fiyatlarla sunmaktır.'
+					}
+				</p>
+			</div>
+			<div class="glass p-8 rounded-2xl shadow-vibrant-md animate-slideInLeft">
+				<div class="text-4xl mb-4 animate-float" style="animation-delay: 1s;">🚀</div>
+				<h3 class="text-2xl font-bold text-text mb-4">{t.about.ourVision}</h3>
+				<p class="text-text-secondary leading-relaxed">
+					{lang === 'ar' ? 
+						'رؤيتنا هي أن نكون الشركة الرائدة في مجال التكنولوجيا في المنطقة، ونساهم في بناء مستقبل رقمي أفضل للجميع.' :
+						lang === 'en' ?
+						'Our vision is to be the leading technology company in the region, contributing to building a better digital future for everyone.' :
+						'Vizyonumuz, bölgede önde gelen teknoloji şirketi olmak ve herkes için daha iyi bir dijital gelecek inşa etmeye katkıda bulunmaktır.'
+					}
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Values Section -->
+	<section class="py-16">
+		<div class="text-center mb-12">
+			<h2 class="text-3xl md:text-4xl font-bold text-text mb-4 animate-fadeInUp">{t.about.ourValues}</h2>
+		</div>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+			<div class="text-center glass p-6 rounded-2xl shadow-vibrant animate-slideInRight">
+				<div class="text-5xl mb-4 animate-pulse-custom">⭐</div>
+				<h4 class="text-xl font-semibold text-text mb-2">{t.home.quality}</h4>
+				<p class="text-text-secondary">
+					{lang === 'ar' ? 'نلتزم بتقديم منتجات عالية الجودة تلبي توقعات عملائنا' :
+					 lang === 'en' ? 'We are committed to delivering high-quality products that meet our customers expectations' :
+					 'Müşterilerimizin beklentilerini karşılayan yüksek kaliteli ürünler sunmaya kararlıyız'}
+				</p>
+			</div>
+			<div class="text-center glass p-6 rounded-2xl shadow-vibrant animate-fadeInUp" style="animation-delay: 0.2s;">
+				<div class="text-5xl mb-4 animate-pulse-custom" style="animation-delay: 0.5s;">🤝</div>
+				<h4 class="text-xl font-semibold text-text mb-2">{t.home.service}</h4>
+				<p class="text-text-secondary">
+					{lang === 'ar' ? 'نقدم خدمة عملاء استثنائية ودعم فني متخصص' :
+					 lang === 'en' ? 'We provide exceptional customer service and specialized technical support' :
+					 'Olağanüstü müşteri hizmeti ve uzman teknik destek sağlıyoruz'}
+				</p>
+			</div>
+			<div class="text-center glass p-6 rounded-2xl shadow-vibrant animate-slideInLeft" style="animation-delay: 0.4s;">
+				<div class="text-5xl mb-4 animate-pulse-custom" style="animation-delay: 1s;">💰</div>
+				<h4 class="text-xl font-semibold text-text mb-2">{t.home.prices}</h4>
+				<p class="text-text-secondary">
+					{lang === 'ar' ? 'نوفر أسعار تنافسية تناسب جميع الميزانيات' :
+					 lang === 'en' ? 'We offer competitive prices suitable for all budgets' :
+					 'Tüm bütçelere uygun rekabetçi fiyatlar sunuyoruz'}
+				</p>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	/* Additional page-specific styles */
+	.glass {
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+	
+	.glass:hover {
+		transform: translateY(-5px);
+		box-shadow: var(--shadow-heavy);
+	}
+</style>

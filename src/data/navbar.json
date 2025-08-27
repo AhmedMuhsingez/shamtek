@@ -1,10 +1,10 @@
 [
 	{
-		"name": "About Us",
+		"nameKey": "nav.about",
 		"link": "/about"
 	},
 	{
-		"name": "Contact",
+		"nameKey": "nav.contact",
 		"link": "/contact"
 	}
 ]

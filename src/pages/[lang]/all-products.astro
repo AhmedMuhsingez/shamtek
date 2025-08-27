@@ -1,6 +1,14 @@
 ---
-import ProductCard from "../components/ProductCard.astro";
-import Layout from "../layouts/Layout.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getTranslations, getStaticPathsForI18n } from "../../utils/i18n";
+
+export async function getStaticPaths() {
+  return getStaticPathsForI18n();
+}
+
+const { lang } = Astro.params;
+const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').languages);
 
 const DUMMY_PRODUCTS = [
 	{

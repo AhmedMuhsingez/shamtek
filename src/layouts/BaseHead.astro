@@ -1,6 +1,14 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import LoadingIndicator from "astro-loading-indicator/component";
+import { getTranslations } from "../utils/i18n";
+
+interface Props {
+	currentLang?: string;
+}
+
+const { currentLang = "ar" } = Astro.props;
+const t = await getTranslations(currentLang as keyof typeof import('../utils/i18n').languages);
 ---
 
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -8,7 +16,7 @@ import LoadingIndicator from "astro-loading-indicator/component";
 
 <link rel="icon" type="image/png" href="/logo.jpeg" />
 
-<title>{"Brand Name"}</title>
+<title>{t.common.brandName}</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

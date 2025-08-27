@@ -1,6 +1,15 @@
 ---
 import type { Brand } from "../../../types/types";
 import BrandsSlide from "../swipers/BrandsSlide.astro";
+import { getLangFromUrl, getTranslations } from "../../utils/i18n";
+
+interface Props {
+	currentLang?: string;
+}
+
+const { currentLang } = Astro.props;
+const lang = currentLang || getLangFromUrl(Astro.url);
+const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').languages);
 
 const categoryDescription = "";
 
@@ -9,7 +18,7 @@ const data = await brands.json();
 ---
 
 <div class="mt-20 mb-10">
-	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">الماركات</span>
+	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">{t.home.ourBrands}</span>
 
 	{categoryDescription && <p>{categoryDescription}</p>}
 
@@ -17,15 +26,16 @@ const data = await brands.json();
 		<div class="swiper-wrapper">
 			{
 				data.map((brand: Brand) => (
-					<BrandsSlide
-						key={brand.id}
-						title={brand.name}
-						image={brand.image}
-						link={brand.id}
-						alt={brand.name}
-						items_count={brand._count.products}
-					/>
-				))
+				<BrandsSlide
+					key={brand.id}
+					title={String(brand.name)}
+					image={brand.image}
+					link={String(brand.id)}
+					alt={String(brand.name)}
+					items_count={Number(brand._count.products)}
+					currentLang={lang}
+				/>
+			))
 			}
 		</div>
 		<div class="swiper-button-next"></div>

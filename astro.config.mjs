@@ -12,8 +12,15 @@ export default defineConfig({
 	},
 
 	i18n: {
-		locales: ["es", "en", "pt-br"],
-		defaultLocale: "en",
+		locales: [
+			{ path: "ar", codes: ["ar", "ar-SY"] },
+			{ path: "en", codes: ["en", "en-US"] },
+			{ path: "tr", codes: ["tr", "tr-TR"] }
+		],
+		defaultLocale: "ar",
+		routing: {
+			prefixDefaultLocale: true
+		}
 	},
 
 	integrations: [react()],

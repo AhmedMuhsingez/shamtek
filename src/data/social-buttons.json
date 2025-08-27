@@ -1,14 +1,17 @@
 [
 	{
 		"name": "Instagram",
-		"href": "/"
+		"url": "https://instagram.com/shamtek",
+		"icon": "fab fa-instagram"
 	},
 	{
 		"name": "Facebook",
-		"href": "/"
+		"url": "https://facebook.com/shamtek",
+		"icon": "fab fa-facebook"
 	},
 	{
-		"name": "Personal",
-		"href": "/"
+		"name": "WhatsApp",
+		"url": "https://wa.me/90XXXXXXXXX",
+		"icon": "fab fa-whatsapp"
 	}
 ]

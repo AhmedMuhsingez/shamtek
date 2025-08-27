@@ -1,0 +1,163 @@
+---
+import BrandsSection from "../../components/sections/BrandsSection.astro";
+import FeaturedProducts from "../../components/sections/FeaturedProducts.astro";
+import SwiperSection from "../../components/sections/SwiperSection.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getTranslations, getStaticPathsForI18n, useTranslatedPath } from "../../utils/i18n";
+
+export async function getStaticPaths() {
+	return getStaticPathsForI18n();
+}
+
+const { lang } = Astro.params;
+const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
+const translatePath = useTranslatedPath(
+	lang as keyof typeof import("../../utils/i18n").languages
+);
+---
+
+<Layout>
+	<!-- Hero Section -->
+	<section class="relative py-20 overflow-hidden mb-16">
+		<div class="absolute inset-0 bg-gradient-primary opacity-5 rounded-lg"></div>
+		<div class="relative z-10 text-center animate-fadeInUp">
+			<h1 class="text-4xl md:text-6xl font-bold text-text mb-6">
+				{t.home.welcome}
+			</h1>
+			<p class="text-xl md:text-2xl text-text-secondary max-w-4xl mx-auto mb-8">
+				{t.home.subtitle}
+			</p>
+			<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+				<a
+					href={translatePath("/all-products")}
+					class="bg-gradient-primary text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-vibrant-md hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-pulse-custom"
+				>
+					{t.nav.allProducts}
+				</a>
+				<a
+					href={translatePath("/contact")}
+					class="glass px-8 py-4 rounded-2xl font-semibold text-lg text-text hover:text-primary transition-all duration-300 transform hover:scale-105"
+				>
+					{t.nav.contact}
+				</a>
+			</div>
+		</div>
+		<div
+			class="absolute top-20 left-10 w-32 h-32 bg-gradient-secondary rounded-full opacity-20 animate-float"
+		>
+		</div>
+		<div
+			class="absolute bottom-20 right-10 w-24 h-24 bg-gradient-accent rounded-full opacity-20 animate-float"
+			style="animation-delay: 1s;"
+		>
+		</div>
+	</section>
+
+	<!-- Swiper Section -->
+	<div class="animate-slideInRight">
+		<SwiperSection />
+	</div>
+
+	<!-- Why Choose Us Section -->
+	<section class="py-16 animate-fadeInUp">
+		<div class="text-center mb-12">
+			<h2 class="text-3xl md:text-4xl font-bold text-text mb-4">{t.home.whyChooseUs}</h2>
+		</div>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+			<div
+				class="text-center glass p-8 rounded-2xl shadow-vibrant hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-slideInRight"
+			>
+				<div class="text-5xl mb-4 animate-pulse-custom">⭐</div>
+				<h3 class="text-xl font-semibold text-text mb-3">{t.home.quality}</h3>
+				<p class="text-text-secondary">
+					{
+						lang === "ar"
+							? "نقدم منتجات عالية الجودة من أفضل العلامات التجارية العالمية"
+							: lang === "en"
+								? "We offer high-quality products from the best global brands"
+								: "En iyi küresel markalardan yüksek kaliteli ürünler sunuyoruz"
+					}
+				</p>
+			</div>
+			<div
+				class="text-center glass p-8 rounded-2xl shadow-vibrant hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-fadeInUp"
+				style="animation-delay: 0.2s;"
+			>
+				<div class="text-5xl mb-4 animate-pulse-custom" style="animation-delay: 0.5s;">
+					🚀
+				</div>
+				<h3 class="text-xl font-semibold text-text mb-3">{t.home.service}</h3>
+				<p class="text-text-secondary">
+					{
+						lang === "ar"
+							? "خدمة عملاء متميزة ودعم فني على مدار الساعة"
+							: lang === "en"
+								? "Exceptional customer service and 24/7 technical support"
+								: "Olağanüstü müşteri hizmeti ve 7/24 teknik destek"
+					}
+				</p>
+			</div>
+			<div
+				class="text-center glass p-8 rounded-2xl shadow-vibrant hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-slideInLeft"
+				style="animation-delay: 0.4s;"
+			>
+				<div class="text-5xl mb-4 animate-pulse-custom" style="animation-delay: 1s;">
+					💰
+				</div>
+				<h3 class="text-xl font-semibold text-text mb-3">{t.home.prices}</h3>
+				<p class="text-text-secondary">
+					{
+						lang === "ar"
+							? "أسعار تنافسية وعروض حصرية لعملائنا الكرام"
+							: lang === "en"
+								? "Competitive prices and exclusive offers for our valued customers"
+								: "Değerli müşterilerimiz için rekabetçi fiyatlar ve özel teklifler"
+					}
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Brands Section -->
+	<div class="animate-slideInLeft">
+		<BrandsSection currentLang={lang} />
+	</div>
+
+	<!-- Featured Products Section -->
+	<div class="animate-fadeInUp">
+		<FeaturedProducts />
+	</div>
+
+	<!-- CTA Section -->
+	<section class="py-16 text-center">
+		<div class="glass p-12 rounded-3xl shadow-vibrant-lg animate-fadeInUp">
+			<h2 class="text-3xl md:text-4xl font-bold text-text mb-6">
+				{
+					lang === "ar"
+						? "اكتشف مجموعتنا الكاملة"
+						: lang === "en"
+							? "Discover Our Complete Collection"
+							: "Tam Koleksiyonumuzu Keşfedin"
+				}
+			</h2>
+			<p class="text-text-secondary text-lg mb-8 max-w-2xl mx-auto">
+				{
+					lang === "ar"
+						? "تصفح آلاف المنتجات من أحدث التقنيات والإلكترونيات"
+						: lang === "en"
+							? "Browse thousands of products from the latest technologies and electronics"
+							: "En son teknolojiler ve elektroniklerden binlerce ürüne göz atın"
+				}
+			</p>
+			<a
+				href={translatePath("/all-products")}
+				aria-label="See all products"
+				class="inline-flex items-center gap-3 bg-gradient-secondary text-white px-10 py-5 rounded-2xl text-xl font-semibold shadow-vibrant-md hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-pulse-custom"
+			>
+				<span>✨</span>
+				<span>{t.nav.allProducts}</span>
+				<span>→</span>
+			</a>
+		</div>
+	</section>
+</Layout>

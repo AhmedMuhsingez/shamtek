@@ -1,5 +1,17 @@
 ---
-const { title, image, link, items_count = 1, alt } = Astro.props;
+import { getTranslations } from "../../utils/i18n";
+
+interface Props {
+	title: string;
+	image: string;
+	link: string;
+	items_count?: number;
+	alt: string;
+	currentLang?: string;
+}
+
+const { title, image, link, items_count = 1, alt, currentLang = "ar" } = Astro.props;
+const t = await getTranslations(currentLang as keyof typeof import('../../utils/i18n').languages);
 ---
 
 <div class="swiper-slide">
@@ -8,6 +20,6 @@ const { title, image, link, items_count = 1, alt } = Astro.props;
 			<img src={image} alt={alt} class="rounded-md w-full h-72 object-cover" /></a
 		>
 		<a href={link} class="text-2xl font-bold text-center">{title}</a>
-		<p class="text-lg text-center">{items_count} عنصر</p>
+		<p class="text-lg text-center">{items_count} {t.common.element}</p>
 	</div>
 </div>

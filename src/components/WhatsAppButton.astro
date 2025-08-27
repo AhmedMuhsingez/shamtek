@@ -1,11 +1,19 @@
 ---
 import WhatsAppIcon from "./Icons/WhatsAppIcon.astro";
+import { getTranslations } from "../utils/i18n";
+
+interface Props {
+	currentLang?: string;
+}
+
+const { currentLang = "ar" } = Astro.props;
+const t = await getTranslations(currentLang as keyof typeof import('../utils/i18n').languages);
 ---
 
 <a
 	href="/"
-	class="bg-[#00CC6C] hover:bg-[#008848] text-white px-2 py-1 md:px-4 md:py-2 rounded-full md:font-bold flex gap-2"
+	class="bg-[#00cc6dc0] hover:bg-[#00884887] backdrop-blur-lg text-white px-2 py-1 md:px-4 md:py-2 rounded-full md:font-bold flex gap-2"
 >
 	<WhatsAppIcon />
-	<span>تواصل معنا</span>
+	<span>{t.common.whatsappContact}</span>
 </a>
