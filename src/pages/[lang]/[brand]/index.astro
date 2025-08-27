@@ -5,10 +5,19 @@ import { getStaticPathsForI18n, getTranslations } from "../../../utils/i18n";
 import type { Product, Brand } from "../../../../types/types";
 
 export async function getStaticPaths() {
-	// Get all brands to generate static paths
+	// Get all brands to generate static paths with enhanced error handling
 	try {
 		const brandsResponse = await fetch(`${import.meta.env.BASE_API}/brands`);
+
+		if (!brandsResponse.ok) {
+			throw new Error(`HTTP error! status: ${brandsResponse.status}`);
+		}
+
 		const brands: Brand[] = await brandsResponse.json();
+
+		if (!Array.isArray(brands) || brands.length === 0) {
+			return getStaticPathsForI18n();
+		}
 
 		const paths: Array<{
 			params: { lang: string; brand: string };
@@ -18,20 +27,26 @@ export async function getStaticPaths() {
 
 		for (const lang of languages) {
 			for (const brand of brands) {
+				if (!brand.name) {
+					continue;
+				}
+
 				const brandSlug = brand.name
 					.toLowerCase()
 					.replace(/\s+/g, "-")
 					.replace(/[^a-z0-9-]/g, "");
-				paths.push({
-					params: { lang, brand: brandSlug },
-					props: { brandData: brand },
-				});
+
+				if (brandSlug) {
+					paths.push({
+						params: { lang, brand: brandSlug },
+						props: { brandData: brand },
+					});
+				}
 			}
 		}
 
 		return paths;
 	} catch (error) {
-		console.error("Error fetching brands for static paths:", error);
 		return getStaticPathsForI18n();
 	}
 }
@@ -40,74 +55,96 @@ const { lang, brand: brandSlug } = Astro.params as { lang: string; brand: string
 const { brandData } = Astro.props as { brandData?: Brand };
 const t = await getTranslations(lang as keyof typeof import("../../../utils/i18n").languages);
 
-// Fetch brand-specific products
+// Enhanced brand name handling with fallbacks
+let brandName = brandData?.name;
+let actualBrandData = brandData;
+
+// If brandData is not available, try to fetch it directly
+if (!brandData || !brandName) {
+	try {
+		const brandsResponse = await fetch(`${import.meta.env.BASE_API}/brands`);
+		const allBrands: Brand[] = await brandsResponse.json();
+
+		// Find brand by matching slug
+		actualBrandData = allBrands.find((brand) => {
+			const slug = brand.name
+				.toLowerCase()
+				.replace(/\s+/g, "-")
+				.replace(/[^a-z0-9-]/g, "");
+			return slug === brandSlug;
+		});
+
+		brandName =
+			actualBrandData?.name ||
+			brandSlug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+	} catch (error) {
+		brandName = brandSlug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+	}
+}
+
+// Enhanced product fetching with better error handling
 let brandProducts: Product[] = [];
-let brandName = "";
+let cardsExist = false;
 
 try {
-	if (brandData) {
-		// Use the brand data passed from getStaticPaths
-		brandName = brandData.name;
-		// Fetch products for this specific brand
-		const productsResponse = await fetch(`${import.meta.env.BASE_API}/items`);
-		if (productsResponse.ok) {
-			brandProducts = await productsResponse.json();
-		}
+	const products = await fetch(`${import.meta.env.BASE_API}/items`);
+
+	if (!products.ok) {
+		throw new Error(`HTTP error! status: ${products.status}`);
 	}
+
+	const data = await products.json();
+
+	if (actualBrandData?.id) {
+		brandProducts = data.filter((product: Product) => product.brandId === actualBrandData.id);
+	} else {
+		console.warn("No brand ID available for filtering products");
+	}
+
+	cardsExist = brandProducts.length > 0;
 } catch (error) {
-	console.error("Error fetching brand products:", error);
-	// Fallback to brand name from slug
-	brandName = brandSlug
-		? brandSlug.replace(/-/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase())
-		: "Brand";
+	console.error("Error fetching products:", error);
+	brandProducts = [];
+	cardsExist = false;
 }
 ---
 
 <Layout>
-	<!-- Brand Header -->
-	<div class="text-center animate-fadeInUp w-full items-center flex justify-center mb-6">
-		<h1
-			class="text-4xl md:text-5xl font-bold text-text mb-4 bg-gradient-primary bg-clip-text w-fit px-4 py-3 rounded-br-xl rounded-tl-xl"
+	<div class="relative animate-fadeInUp w-full flex justify-center items-center mb-6">
+		<div class="brand-glass shadow-brand p-8 mb-8 transform hover:scale-105 transition-all duration-300">
+					<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-center bg-gradient-brand bg-clip-text text-transparent relative animate-glow">
+						{brandName}
+					</h1>
+				</div>
+		<a
+			href="/"
+			class="absolute cursor-pointer right-0 top-1/2 transform -translate-y-1/2 group flex items-center justify-center w-12 h-12 bg-gradient-primary hover:bg-gradient-secondary rounded-full shadow-vibrant hover:shadow-vibrant-lg hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
 		>
-			{brandName}
-		</h1>
+			<span class="icon-[maki--arrow] text-white dark:text-text"></span>
+		</a>
 	</div>
 
-	<!-- Products Section -->
 	<div class="container mx-auto px-4 pb-16">
-		{
-			brandProducts.length > 0 ? (
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-slideInUp">
-					{brandProducts.map((product, index) => {
-						const productImages = Array.isArray(product.image)
-							? product.image
-							: [product.image];
-						return (
-							<div
-								class="animate-fadeInUp transition-all duration-300 hover:transform hover:scale-105"
-								style={`animation-delay: ${index * 0.1}s;`}
-							>
-								<ProductCard
-									title={product.name}
-									image={productImages}
-									link={`/product/${product.id}`}
-								/>
-							</div>
-						);
-					})}
-				</div>
-			) : (
-				// <!-- No Products Message -->
-				<div class="text-center py-20 animate-fadeInUp">
-					<div class="glass p-12 rounded-3xl shadow-vibrant-lg max-w-md mx-auto">
-						<div class="text-6xl mb-6 opacity-50">📦</div>
-						<h2 class="text-2xl font-semibold text-text mb-4">
-							{t.brands.noItemsTitle}
-						</h2>
-						<p class="text-text-secondary">{t.brands.noItemsDescription}</p>
+		<div class="container mx-auto px-4 pb-16">
+			{
+				cardsExist ? (
+					<>
+						{brandProducts.map((product) => (
+							<ProductCard product={product} />
+						))}
+					</>
+				) : (
+					<div class="text-center py-20 animate-fadeInUp">
+						<div class="glass p-12 rounded-3xl shadow-vibrant-lg max-w-md mx-auto">
+							<div class="text-6xl mb-6 opacity-50">📦</div>
+							<h2 class="text-2xl font-semibold text-text mb-4">
+								{t.brands.noItemsTitle}
+							</h2>
+							<p class="text-text-secondary">{t.brands.noItemsDescription}</p>
+						</div>
 					</div>
-				</div>
-			)
-		}
+				)
+			}
+		</div>
 	</div>
 </Layout>

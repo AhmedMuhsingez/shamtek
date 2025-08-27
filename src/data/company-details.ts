@@ -10,7 +10,8 @@ export const companyData = {
 	logo: data.logo,
 	address: data.address,
 	phone: data.phone,
-	email: data.email ?? "shaamtek4@gmail.com",
-	facebook: "https://facebook.com/shamtek12321",
-	instagram: "https://instagram.com/sham_tek1",
+	email: "shaamtek4@gmail.com",
+	facebook: data.facebook,
+	instagram: data.instagram,
+	whatsapp: data.whatsapp,
 };

@@ -1,38 +1,41 @@
 ---
+import type { Product } from "../../types/types";
 import { cn } from "../utils/utils";
 import SliderButtons from "./custom/SliderButtons.astro";
-import PaginationDots from "./PaginationDots";
+// import PaginationDots from "./PaginationDots";
 
-const { title, image, link, isFeaturedProduct } = Astro.props;
-
-const moreThanOnePhoto = image.length > 1;
+const { product } = Astro.props;
+const data: Product = product;
+// const moreThanOnePhoto = image.length > 1;
 ---
 
-<div class="relative justify-items-center group transition-all duration-300 hover:transform hover:scale-[1.02]">
+<div
+	class="relative justify-items-center group transition-all duration-300 hover:transform hover:scale-[1.02]"
+>
 	<div
-		id={link}
+		id={data.id}
 		class={cn(
-			"overflow-x-auto flex items-center rounded-lg shadow-md hover:shadow-lg no-scrollbar gap-3 scroll-smooth snap-x snap-mandatory transition-all duration-300",
-			isFeaturedProduct ? "lg:w-auto lg:min-w-[19rem] lg:max-w-[19rem]" : "w-full"
+			"overflow-x-auto flex items-center rounded-lg shadow-md hover:shadow-lg no-scrollbar gap-3 scroll-smooth snap-x snap-mandatory transition-all duration-300"
+			// isFeaturedProduct ? "lg:w-auto lg:min-w-[19rem] lg:max-w-[19rem]" : "w-full"
 		)}
 	>
-		{
-			image.map((img: string) => (
-				<img
-					src={img}
-					alt={title}
-					class="object-cover transition-all duration-300 h-64 md:h-auto snap-start shrink-0 w-full rounded-lg group-hover:brightness-105"
-					loading="lazy"
-				/>
-			))
-		}
+		<!-- {
+			image.map((img: string) => ( -->
+		<img
+			alt={data.name}
+			class="object-cover transition-all duration-300 h-64 md:h-auto snap-start shrink-0 w-full rounded-lg group-hover:brightness-105"
+			loading="lazy"
+			src={data.image as string}
+		/>
+		<!-- // 	))
+		// } -->
 	</div>
 
-	<a href={link} class="my-4 block transition-colors duration-300 hover:text-primary">
+	<!-- <a href={link} class="my-4 block transition-colors duration-300 hover:text-primary">
 		<h3 class="text-lg font-semibold text-center transition-colors duration-300">
 			{title}
 		</h3>
-	</a>
+	</a> -->
 
-	{moreThanOnePhoto && <SliderButtons containerID={link} />}
+	<!-- {moreThanOnePhoto && <SliderButtons containerID={link} />} -->
 </div>

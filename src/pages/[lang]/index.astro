@@ -119,11 +119,14 @@ const translatePath = useTranslatedPath(
 			<a
 				href={translatePath("/all-products")}
 				aria-label="See all products"
-				class="inline-flex items-center gap-3 bg-gradient-secondary text-white px-10 py-5 rounded-2xl text-xl font-semibold shadow-vibrant-md hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-pulse-custom"
+				class="group inline-flex items-center gap-3 bg-gradient-secondary text-white px-10 py-5 rounded-2xl text-xl font-semibold shadow-vibrant-md hover:shadow-vibrant-lg transform hover:scale-105 transition-all duration-300 animate-pulse-custom"
 			>
 				<span>✨</span>
 				<span>{t.nav.allProducts}</span>
-				<span>→</span>
+				<!-- <span class="">→</span> -->
+				<span
+					class="icon-[material-symbols--arrow-back-rounded] group-hover:-translate-x-3 transition-all duration-300"
+				></span>
 			</a>
 		</div>
 	</section>

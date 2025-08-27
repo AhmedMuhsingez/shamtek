@@ -20,7 +20,7 @@ export interface Category {
 }
 
 export interface Product {
-	id: number;
+	id: string;
 	name: string;
 	description: string;
 	image: string[] | string | Blob; // depending on usage, adjust to one type
@@ -111,7 +111,7 @@ export interface CompanyDetails {
 	phone: string;
 	address: string;
 	logo: string | Blob;
-	email: string;
+	whatsapp: string;
 	facebook: string;
 	instagram: string;
 }

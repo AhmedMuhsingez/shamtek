@@ -16,18 +16,20 @@ const direction = getDirection(lang);
 		<BaseHead currentLang={lang} />
 		<script>
 			// Prevent flash of unstyled content (FOUC) for theme
-			(function() {
+			(function () {
 				const getInitialTheme = () => {
-					const stored = localStorage.getItem('theme');
+					const stored = localStorage.getItem("theme");
 					if (stored) return stored;
-					return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+					return window.matchMedia("(prefers-color-scheme: dark)").matches
+						? "dark"
+						: "light";
 				};
 				document.documentElement.classList.add(getInitialTheme());
 			})();
 		</script>
 	</head>
 
-	<body class="antialiased bg-background font-cairo text-text transition-all duration-500 ease-in-out">
+	<body class="antialiased bg-background font-cairo text-text">
 		<Navbar currentLang={lang} />
 		<SizeIndicator />
 		<div class="max-w-7xl mt-10 mx-4 md:mx-auto" id="website-body">
@@ -38,43 +40,45 @@ const direction = getDirection(lang);
 </html>
 
 <style>
-		html,
-		body {
-			margin: 0;
-			scrollbar-gutter: stable;
-			scroll-behavior: smooth;
-			transition: background-color 0.5s ease-in-out, color 0.3s ease-in-out;
-		}
+	html,
+	body {
+		margin: 0;
+		scrollbar-gutter: stable;
+		scroll-behavior: smooth;
+		transition:
+			background-color 0.5s ease-in-out,
+			color 0.3s ease-in-out;
+	}
 
-		/* Enhanced scrollbar styling */
-		::-webkit-scrollbar {
-			width: 8px;
-		}
+	/* Enhanced scrollbar styling */
+	::-webkit-scrollbar {
+		width: 8px;
+	}
 
-		::-webkit-scrollbar-track {
-			background: var(--color-background-secondary);
-		}
+	::-webkit-scrollbar-track {
+		background: var(--color-background-secondary);
+	}
 
-		::-webkit-scrollbar-thumb {
-			background: var(--color-primary);
-			border-radius: 4px;
-			transition: background-color 0.3s ease;
-		}
+	::-webkit-scrollbar-thumb {
+		background: var(--color-primary);
+		border-radius: 4px;
+		transition: background-color 0.3s ease;
+	}
 
-		::-webkit-scrollbar-thumb:hover {
-			background: var(--color-primary-dark);
-		}
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--color-primary-dark);
+	}
 
-		/* Selection styling */
-		::selection {
-			background: var(--color-primary-light);
-			color: white;
-		}
+	/* Selection styling */
+	::selection {
+		background: var(--color-primary-light);
+		color: white;
+	}
 
-		/* Focus visible for accessibility */
-		:focus-visible {
-			outline: 2px solid var(--color-primary);
-			outline-offset: 2px;
-			border-radius: 4px;
-		}
-	</style>
+	/* Focus visible for accessibility */
+	:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+</style>

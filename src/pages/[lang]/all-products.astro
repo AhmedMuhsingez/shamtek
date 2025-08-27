@@ -1,72 +1,19 @@
 ---
+import type { Product } from "../../../types/types";
 import ProductCard from "../../components/ProductCard.astro";
 import Layout from "../../layouts/Layout.astro";
-import { getTranslations, getStaticPathsForI18n } from "../../utils/i18n";
 
-export async function getStaticPaths() {
-  return getStaticPathsForI18n();
-}
-
-const { lang } = Astro.params;
-const t = await getTranslations(lang as keyof typeof import('../../utils/i18n').languages);
-
-const DUMMY_PRODUCTS = [
-	{
-		title: "Product 1",
-		image: ["/dummy_img.jpg", "/dummy_img.jpg", "/dummy_img.jpg", "/dummy_img.jpg"],
-		link: "/categories/Product1",
-	},
-	{
-		title: "Product 2",
-		image: ["/dummy_img.jpg"],
-		link: "/categories/Product2",
-	},
-	{
-		title: "Product 3",
-		image: ["/dummy_img.jpg"],
-		link: "/categories/Product3",
-	},
-	{
-		title: "Product 4",
-		image: ["/dummy_img.jpg"],
-		link: "/categories/Product4",
-	},
-	{
-		title: "Product 5",
-		image: ["/dummy_img.jpg"],
-		link: "/categories/Product5",
-	},
-	{
-		title: "Product 6",
-		image: ["/dummy_img.jpg"],
-		link: "/categories/Product6",
-	},
-	{
-		title: "Product 7",
-		image: ["/dummy_img.jpg"],
-		link: "/categories/Product7",
-	},
-	{
-		title: "Product 8",
-		image: ["/dummy_img.jpg"],
-		link: "/categories/Product8",
-	},
-];
+const products = await fetch(`${import.meta.env.BASE_API}/items`);
+const data = await products.json();
 ---
 
 <Layout>
 	<div
-		class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 flex-col gap-4 justify-between mb-10"
+		class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-4 justify-between mb-10"
 	>
 		{
-			DUMMY_PRODUCTS.map((category) => {
-				return (
-					<ProductCard
-						title={category.title}
-						image={category.image}
-						link={category.link}
-					/>
-				);
+			data.map((product: Product) => {
+				return <ProductCard product={product} />;
 			})
 		}
 	</div>
