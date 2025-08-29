@@ -202,22 +202,9 @@ body::before {
 			rgba(167, 139, 250, 0.12) 0%,
 			transparent 60%
 		),
-		radial-gradient(
-			circle at 80% 20%,
-			rgba(244, 114, 182, 0.08) 0%,
-			transparent 50%
-		),
-		radial-gradient(
-			circle at 40% 80%,
-			rgba(6, 182, 212, 0.06) 0%,
-			transparent 45%
-		),
-		linear-gradient(
-			45deg,
-			transparent 40%,
-			rgba(139, 92, 246, 0.03) 50%,
-			transparent 60%
-		);
+		radial-gradient(circle at 80% 20%, rgba(244, 114, 182, 0.08) 0%, transparent 50%),
+		radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 45%),
+		linear-gradient(45deg, transparent 40%, rgba(139, 92, 246, 0.03) 50%, transparent 60%);
 }
 
 /* RTL support */
@@ -411,18 +398,13 @@ body::before {
 }
 
 .bg-gradient-brand::before {
-	content: '';
+	content: "";
 	position: absolute;
 	top: 0;
 	left: -100%;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(
-		90deg,
-		transparent,
-		rgba(255, 255, 255, 0.2),
-		transparent
-	);
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 	transition: left 0.5s ease;
 }
 
@@ -434,12 +416,12 @@ body::before {
 .brand-glass {
 	background: rgba(255, 255, 255, 0.1);
 	backdrop-filter: blur(20px) saturate(180%);
-	border: 2px solid rgba(255, 255, 255, 0.2);
+	/* border: 2px solid rgba(255, 255, 255, 0.2); */
 	border-radius: 24px;
-	box-shadow: 
+	/* box-shadow: 
 		0 8px 32px rgba(0, 0, 0, 0.1),
 		0 4px 16px rgba(0, 0, 0, 0.05),
-		inset 0 1px 0 rgba(255, 255, 255, 0.3);
+		inset 0 1px 0 rgba(255, 255, 255, 0.3); */
 	position: relative;
 	overflow: hidden;
 }
@@ -447,9 +429,7 @@ body::before {
 .dark .brand-glass {
 	background: rgba(22, 33, 62, 0.3);
 	border: 2px solid rgba(167, 139, 250, 0.3);
-	box-shadow: 
-		0 8px 32px rgba(0, 0, 0, 0.3),
-		0 4px 16px rgba(0, 0, 0, 0.2),
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2),
 		inset 0 1px 0 rgba(167, 139, 250, 0.2);
 }
 
@@ -514,17 +494,13 @@ body::before {
 }
 
 .shadow-brand {
-	box-shadow: 
-		0 20px 40px -12px rgba(139, 92, 246, 0.25),
-		0 8px 16px -4px rgba(244, 114, 182, 0.15),
-		0 4px 8px -2px rgba(6, 182, 212, 0.1);
+	box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.25),
+		0 8px 16px -4px rgba(244, 114, 182, 0.15), 0 4px 8px -2px rgba(6, 182, 212, 0.1);
 }
 
 .dark .shadow-brand {
-	box-shadow: 
-		0 20px 40px -12px rgba(139, 92, 246, 0.4),
-		0 8px 16px -4px rgba(244, 114, 182, 0.25),
-		0 4px 8px -2px rgba(6, 182, 212, 0.15),
+	box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.4),
+		0 8px 16px -4px rgba(244, 114, 182, 0.25), 0 4px 8px -2px rgba(6, 182, 212, 0.15),
 		0 0 0 1px rgba(167, 139, 250, 0.1);
 }
 
@@ -595,7 +571,7 @@ body::before {
 
 /* Floating particles effect for dark mode */
 .dark body::after {
-	content: '';
+	content: "";
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -603,8 +579,7 @@ body::before {
 	height: 100%;
 	pointer-events: none;
 	z-index: 1;
-	background-image: 
-		radial-gradient(2px 2px at 20px 30px, rgba(167, 139, 250, 0.3), transparent),
+	background-image: radial-gradient(2px 2px at 20px 30px, rgba(167, 139, 250, 0.3), transparent),
 		radial-gradient(2px 2px at 40px 70px, rgba(244, 114, 182, 0.2), transparent),
 		radial-gradient(1px 1px at 90px 40px, rgba(6, 182, 212, 0.3), transparent),
 		radial-gradient(1px 1px at 130px 80px, rgba(139, 92, 246, 0.2), transparent),
@@ -615,8 +590,16 @@ body::before {
 }
 
 @keyframes floatParticles {
-	0% { transform: translateY(0px) translateX(0px); }
-	33% { transform: translateY(-10px) translateX(10px); }
-	66% { transform: translateY(5px) translateX(-5px); }
-	100% { transform: translateY(0px) translateX(0px); }
+	0% {
+		transform: translateY(0px) translateX(0px);
+	}
+	33% {
+		transform: translateY(-10px) translateX(10px);
+	}
+	66% {
+		transform: translateY(5px) translateX(-5px);
+	}
+	100% {
+		transform: translateY(0px) translateX(0px);
+	}
 }

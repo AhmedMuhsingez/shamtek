@@ -32,6 +32,7 @@ export interface Product {
 	addedBy: { name: string };
 	brand: { name: string };
 	brandId: number;
+	is_featured: boolean;
 }
 
 export interface Brand {

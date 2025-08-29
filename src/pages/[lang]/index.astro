@@ -1,4 +1,5 @@
 ---
+import type { Product } from "../../../types/types";
 import BrandsSection from "../../components/sections/BrandsSection.astro";
 import FeaturedProducts from "../../components/sections/FeaturedProducts.astro";
 import HeroSection from "../../components/sections/HeroSection.astro";
@@ -17,14 +18,10 @@ const translatePath = useTranslatedPath(
 ---
 
 <Layout>
-	<!-- Hero Section -->
-
-	<!-- Swiper Section -->
 	<div class="animate-slideInRight">
 		<HeroSection />
 	</div>
 
-	<!-- Why Choose Us Section -->
 	<section class="py-16 animate-fadeInUp">
 		<div class="text-center mb-12">
 			<h2 class="text-3xl md:text-4xl font-bold text-text mb-4">{t.home.whyChooseUs}</h2>
