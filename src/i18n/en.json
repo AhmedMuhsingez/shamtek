@@ -4,7 +4,8 @@
 		"about": "About Us",
 		"contact": "Contact",
 		"products": "Products",
-		"allProducts": "All Products"
+		"allProducts": "All Products",
+		"homePage": "Home Page"
 	},
 	"common": {
 		"loading": "Loading...",
@@ -28,6 +29,7 @@
 		"element": "Element",
 		"location": "Istanbul, Turkey"
 	},
+
 	"home": {
 		"welcome": "Welcome to",
 		"subtitle": "Your premier destination for technology and electronics",
@@ -101,10 +103,17 @@
 		"brands": "Brands",
 		"sortBy": "Sort By",
 		"priceRange": "Price Range",
-		"inStock": "In Stock",
-		"outOfStock": "Out of Stock",
 		"addToCart": "Add to Cart",
-		"viewDetails": "View Details"
+		"viewDetails": "View Details",
+
+		"brand": "Brand",
+		"stock": "Stock",
+		"category": "Category",
+		"inStock": "In Stock",
+		"lowStock": "Low Stock",
+		"coming_soon": "Coming Soon",
+		"outOfStock": "Out of Stock",
+		"available": "Available"
 	},
 	"brands": {
 		"noItemsTitle": "No items available yet",

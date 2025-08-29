@@ -5,6 +5,7 @@ import FeaturedProducts from "../../components/sections/FeaturedProducts.astro";
 import HeroSection from "../../components/sections/HeroSection.astro";
 import Layout from "../../layouts/Layout.astro";
 import { getTranslations, getStaticPathsForI18n, useTranslatedPath } from "../../utils/i18n";
+import { cn } from "../../utils/utils";
 
 export async function getStaticPaths() {
 	return getStaticPathsForI18n();
@@ -15,6 +16,12 @@ const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").
 const translatePath = useTranslatedPath(
 	lang as keyof typeof import("../../utils/i18n").languages
 );
+
+const featuredProducts = await fetch(`${import.meta.env.BASE_API}/items`);
+const data: Product[] = await featuredProducts.json();
+const hasFeaturedProducts = data.filter((product) => product.is_featured).length > 0;
+
+const isRTL = (lang as keyof typeof import("../../utils/i18n").languages) === "ar";
 ---
 
 <Layout>
@@ -88,13 +95,17 @@ const translatePath = useTranslatedPath(
 	</div>
 
 	<!-- Featured Products Section -->
-	<div class="animate-fadeInUp">
-		<FeaturedProducts />
-	</div>
+	{
+		hasFeaturedProducts && (
+			<div class="animate-fadeInUp">
+				<FeaturedProducts data={data.filter((product) => product.is_featured)} />
+			</div>
+		)
+	}
 
 	<!-- CTA Section -->
 	<section class="py-16 text-center">
-		<div class="glass p-12 rounded-3xl shadow-vibrant-lg animate-fadeInUp">
+		<div class="glass p-8 md:p-12 rounded-3xl shadow-vibrant-lg animate-fadeInUp">
 			<h2 class="text-3xl md:text-4xl font-bold text-text mb-6">
 				{
 					lang === "ar"
@@ -120,10 +131,11 @@ const translatePath = useTranslatedPath(
 			>
 				<span>✨</span>
 				<span>{t.nav.allProducts}</span>
-				<!-- <span class="">→</span> -->
 				<span
-					class="icon-[material-symbols--arrow-back-rounded] group-hover:-translate-x-3 transition-all duration-300"
-				></span>
+					class={cn(
+						"icon-[material-symbols--arrow-back-rounded] group-hover:-translate-x-3 transition-all duration-300",
+						!isRTL && "rotate-180 group-hover:translate-x-3"
+					)}></span>
 			</a>
 		</div>
 	</section>

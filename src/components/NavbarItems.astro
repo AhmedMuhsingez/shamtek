@@ -16,6 +16,9 @@ const translatePath = useTranslatedPath(lang as keyof typeof import("../utils/i1
 
 const categories = await fetch(`${import.meta.env.BASE_API}/categories`);
 const data = await categories.json();
+
+// Get current page for active state
+const currentPath = Astro.url.pathname;
 ---
 
 <div
@@ -26,16 +29,93 @@ const data = await categories.json();
 
 	{
 		navbar.map((item) => {
+			const isActive = currentPath.includes(item.link) && item.link !== "/";
 			return (
-				<a href={translatePath(item.link)} class="text-lg flex gap-2">
+				<a
+					href={translatePath(item.link)}
+					class={`navbar-link text-lg flex gap-2 relative px-3 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 hover:text-primary hover:scale-105 ${
+						isActive ? "text-primary bg-primary/10 font-semibold" : ""
+					}`}
+					data-smooth-scroll
+				>
 					{item.nameKey === "nav.about"
 						? t.nav.about
 						: item.nameKey === "nav.contact"
 							? t.nav.contact
 							: item.nameKey}
+					{isActive && (
+						<span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-primary rounded-full animate-pulse" />
+					)}
 				</a>
 			);
 		})
 	}
 	<ChangeLanguage client:load />
 </div>
+
+<script>
+	// Enhanced navbar functionality
+	document.addEventListener("DOMContentLoaded", function () {
+		// Smooth scrolling for anchor links
+		const smoothScrollLinks = document.querySelectorAll("[data-smooth-scroll]");
+
+		smoothScrollLinks.forEach((link) => {
+			link.addEventListener("click", function (e) {
+				const target = e.currentTarget as HTMLAnchorElement;
+				const href = target.getAttribute("href");
+
+				// Check if it's an anchor link (starts with #)
+				if (href && href.startsWith("#")) {
+					e.preventDefault();
+
+					const targetElement = document.querySelector(href);
+					if (targetElement) {
+						targetElement.scrollIntoView({
+							behavior: "smooth",
+							block: "start",
+						});
+					}
+				}
+			});
+		});
+
+		// Enhanced hover effects for navbar links
+		const navbarLinks = document.querySelectorAll(".navbar-link");
+
+		navbarLinks.forEach((link) => {
+			const htmlLink = link as HTMLElement;
+
+			htmlLink.addEventListener("mouseenter", function () {
+				htmlLink.style.transform = "translateY(-2px)";
+				htmlLink.style.boxShadow = "0 4px 12px rgba(102, 126, 234, 0.2)";
+			});
+
+			htmlLink.addEventListener("mouseleave", function () {
+				htmlLink.style.transform = "translateY(0)";
+				htmlLink.style.boxShadow = "none";
+			});
+		});
+
+		// Active state management
+		function updateActiveStates() {
+			const currentPath = window.location.pathname;
+			const navLinks = document.querySelectorAll(".navbar-link");
+
+			navLinks.forEach((link) => {
+				const htmlLink = link as HTMLAnchorElement;
+				const href = htmlLink.getAttribute("href");
+				const isActive = href && currentPath.includes(href) && href !== "/";
+
+				if (isActive) {
+					htmlLink.classList.add("text-primary", "bg-primary/10", "font-semibold");
+				} else {
+					htmlLink.classList.remove("text-primary", "bg-primary/10", "font-semibold");
+				}
+			});
+		}
+
+		// Update active states on page load and navigation
+		updateActiveStates();
+		window.addEventListener("popstate", updateActiveStates);
+	});
+</script>

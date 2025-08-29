@@ -31,6 +31,18 @@ const ui = {
 } as const;
 
 export async function getTranslations(lang: keyof typeof languages = defaultLang) {
+  // Debug: Check if lang is valid
+  if (!lang || !(lang in ui)) {
+    console.warn(`Invalid language: ${lang}, falling back to ${defaultLang}`);
+    lang = defaultLang;
+  }
+  
+  // Debug: Check if ui[lang] is a function
+  if (typeof ui[lang] !== 'function') {
+    console.error(`ui[${lang}] is not a function:`, typeof ui[lang]);
+    throw new Error(`Translation loader for language '${lang}' is not a function`);
+  }
+  
   return await ui[lang]();
 }
 

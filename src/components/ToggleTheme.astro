@@ -4,13 +4,13 @@ import SunIcon from "./Icons/SunIcon.astro"
 ---
 
 <theme-toggle class="relative h-6 w-6 self-center">
-	<button id="toggle-theme" class="group cursor-pointer">
+	<button id="toggle-theme" class="group cursor-pointer" aria-pressed="false">
 		<span class="absolute left-0 right-0 top-0 opacity-0 group-aria-pressed:opacity-100">
 			<SunIcon />
 		</span>
 
 		<span
-			class="absolute left-0 right-0 top-0 opacity-0 group-aria-[pressed=false]:opacity-100"
+			class="absolute left-0 right-0 top-0 opacity-100 group-aria-pressed:opacity-0 group-aria-[pressed=false]:opacity-100"
 		>
 			<MoonIcon />
 		</span>
@@ -47,13 +47,20 @@ import SunIcon from "./Icons/SunIcon.astro"
 </script>
 
 <script is:inline>
-	document.addEventListener("DOMContentLoaded", () => {
+	function initializeThemeButton() {
 		const button = document.getElementById("toggle-theme")
 		if (button) {
 			const isDark = document.documentElement.classList.contains("dark")
 			button.setAttribute("aria-pressed", String(isDark))
 		}
-	})
+	}
+
+	// Initialize immediately if DOM is ready
+	if (document.readyState === 'loading') {
+		document.addEventListener("DOMContentLoaded", initializeThemeButton)
+	} else {
+		initializeThemeButton()
+	}
 
 	function getTheme() {
 		const storedTheme = typeof localStorage !== "undefined" && localStorage.getItem("theme")
@@ -89,7 +96,11 @@ import SunIcon from "./Icons/SunIcon.astro"
 	})
 	// set initial theme
 	setTheme(getTheme())
-	document.addEventListener("DOMContentLoaded", () => setTheme(getTheme()))
+	document.addEventListener("DOMContentLoaded", () => {
+		setTheme(getTheme())
+		// Ensure button is initialized after custom element is ready
+		setTimeout(initializeThemeButton, 10)
+	})
 
 	document.addEventListener("theme-change", (e) => {
 		setTheme(e.detail.theme)

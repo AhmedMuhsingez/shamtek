@@ -5,6 +5,8 @@ import "../styles/global.css";
 import SizeIndicator from "../components/custom/SizeIndicator.astro";
 import Footer from "../components/sections/Footer.astro";
 import { getLangFromUrl, getDirection } from "../utils/i18n";
+import ClientRouter from "astro/components/ClientRouter.astro";
+import LoadingIndicator from "astro-loading-indicator/component";
 
 const lang = getLangFromUrl(Astro.url);
 const direction = getDirection(lang);
@@ -27,15 +29,17 @@ const direction = getDirection(lang);
 				document.documentElement.classList.add(getInitialTheme());
 			})();
 		</script>
+		<LoadingIndicator color="#667eea" />
 	</head>
 
-	<body class="antialiased bg-background font-cairo text-text">
+	<body class="antialiased bg-background font-cairo text-text" id="website">
 		<Navbar currentLang={lang} />
 		<SizeIndicator />
 		<div class="max-w-7xl mt-10 mx-4 md:mx-auto" id="website-body">
 			<slot />
 		</div>
 		<Footer currentLang={lang} />
+		<ClientRouter />
 	</body>
 </html>
 

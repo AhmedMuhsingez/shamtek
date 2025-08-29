@@ -48,10 +48,10 @@ function ChangeLanguage({ currentLang = "ar" }: Props) {
 				<a
 					href={item.link}
 					className={`group flex w-full items-center justify-between gap-4 rounded-lg py-2 px-3  hover:scale-105 ${
-						isActive
-							? "bg-primary/20 dark:bg-primary/50 text-primary-darker border border-primary/50"
-							: "text-white dark:text-black hover:bg-white/20 dark:hover:bg-white/40"
-					}`}
+					isActive
+						? "bg-primary/20 dark:bg-primary/50 text-white dark:text-gray-900 font-semibold border border-primary/50 shadow-md"
+						: "text-white dark:text-black hover:bg-white/20 dark:hover:bg-white/40"
+				}`}
 				>
 					<span className="font-medium">{item.name}</span>
 					<div className="relative">

@@ -1,40 +1,116 @@
 ---
 import type { Product } from "../../types/types";
 import { cn } from "../utils/utils";
-import SliderButtons from "./custom/SliderButtons.astro";
-// import PaginationDots from "./PaginationDots";
+import { getLangFromUrl, useTranslations } from "../utils/i18n";
+import { callSafely } from "astro:actions";
 
 const { product } = Astro.props;
 const data: Product = product;
-// const moreThanOnePhoto = image.length > 1;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const brandLabel = await t("products.brand");
+const stockLabel = await t("products.stock");
+const categoryLabel = await t("products.category");
+
+const stockState = data.stock_state?.toLowerCase();
+
+const inStock = stockState === "in_stock";
+const outOfStock = stockState === "out_of_stock";
+
+function getStockTranslation(stockState: string) {
+	const lowerStock = stockState.toLowerCase();
+	if (lowerStock === "in_stock") {
+		return t("products.inStock");
+	} else if (lowerStock === "coming_soon") {
+		return t("products.coming_soon");
+	} else {
+		return t("products.outOfStock");
+	}
+}
+
+const stockTranslation = await getStockTranslation(data.stock_state!);
 ---
 
-<div
-	class="relative justify-items-center group transition-all duration-300 hover:transform hover:scale-[1.02]"
->
+<div class="group w-full max-w-sm mx-auto h-full">
+	<!-- Card Container with Glass Effect -->
 	<div
-		class={cn(
-			"overflow-x-auto flex items-center rounded-lg shadow-md hover:shadow-lg no-scrollbar gap-3 scroll-smooth snap-x snap-mandatory transition-all duration-300"
-			// isFeaturedProduct ? "lg:w-auto lg:min-w-[19rem] lg:max-w-[19rem]" : "w-full"
-		)}
+		class="glass shadow-soft hover:shadow-vibrant rounded-2xl overflow-hidden transition-all duration-500 hover:transform hover:scale-[1.02] hover:-translate-y-1 bg-white/80 dark:bg-surface/80 backdrop-blur-xl border border-white/20 dark:border-white/10 h-full flex flex-col"
 	>
-		<!-- {
-			image.map((img: string) => ( -->
-		<img
-			alt={data.name}
-			class="object-cover transition-all duration-300 h-64 md:h-auto snap-start shrink-0 w-full rounded-lg group-hover:brightness-105"
-			loading="lazy"
-			src={data.image as string}
-		/>
-		<!-- // 	))
-		// } -->
+		<!-- Image Container -->
+		<div class="relative overflow-hidden rounded-t-2xl">
+			<img
+				alt={data.name}
+				class="object-cover w-full h-48 sm:h-56 md:h-64 transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
+				loading="lazy"
+				src={data.image as string}
+			/>
+			<!-- Gradient Overlay -->
+			<div
+				class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+			>
+			</div>
+		</div>
+
+		<!-- Content Container -->
+		<div class="p-3 md:p-4 sm:p-5 flex-1 flex flex-col">
+			<!-- Product Name -->
+			<div class="mb-4">
+				<h3
+					class="text-lg sm:text-xl font-bold text-text dark:text-white line-clamp-2 group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300 text-center"
+				>
+					{data.name}
+				</h3>
+			</div>
+
+			<!-- Product Details -->
+			<div class="space-y-3 mt-auto">
+				<!-- Brand Name -->
+				<div class="flex items-center justify-between">
+					<span
+						class="text-xs sm:text-sm font-medium text-text-muted dark:text-text-secondary uppercase tracking-wide min-w-0 flex-shrink-0"
+						>{brandLabel}</span
+					>
+					<span
+						class="text-sm sm:text-base font-semibold text-primary dark:text-accent bg-primary/10 dark:bg-accent/10 px-2 py-1 rounded-full truncate"
+					>
+						{data.brand.name}
+					</span>
+				</div>
+
+				<!-- Stock State -->
+				<div class="flex items-center justify-between">
+					<span
+						class="text-xs sm:text-sm font-medium text-text-muted dark:text-text-secondary uppercase tracking-wide min-w-0 flex-shrink-0"
+						>{stockLabel}</span
+					>
+					<span
+						class={cn(
+							"text-xs sm:text-sm font-bold px-2 py-1 rounded-full uppercase tracking-wide truncate",
+							inStock
+								? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+								: outOfStock
+									? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+									: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+						)}
+					>
+						{stockTranslation}
+					</span>
+				</div>
+
+				<!-- Category -->
+				<div class="flex items-center justify-between">
+					<span
+						class="text-xs sm:text-sm font-medium text-text-muted dark:text-text-secondary uppercase tracking-wide min-w-0 flex-shrink-0"
+						>{categoryLabel}</span
+					>
+					<span
+						class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800/50 px-2 py-1 rounded-full truncate border border-gray-200 dark:border-gray-700"
+					>
+						{data.category.name}
+					</span>
+				</div>
+			</div>
+		</div>
 	</div>
-
-	<!-- <a href={link} class="my-4 block transition-colors duration-300 hover:text-primary">
-		<h3 class="text-lg font-semibold text-center transition-colors duration-300">
-			{title}
-		</h3>
-	</a> -->
-
-	<!-- {moreThanOnePhoto && <SliderButtons containerID={link} />} -->
 </div>

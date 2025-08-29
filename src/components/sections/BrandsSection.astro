@@ -17,9 +17,8 @@ const brands = await fetch(`${import.meta.env.BASE_API}/brands`);
 const data = await brands.json();
 ---
 
-<div class="mt-20 mb-10">
-	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full">{t.home.ourBrands}</span
-	>
+<div class="mt-10 md:mt-20 mb-10">
+	<span class="block mb-10 font-bold text-3xl text-center w-full">{t.home.ourBrands}</span>
 
 	{categoryDescription && <p>{categoryDescription}</p>}
 

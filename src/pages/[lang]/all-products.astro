@@ -1,6 +1,7 @@
 ---
 import type { Product } from "../../../types/types";
 import ProductCard from "../../components/ProductCard.astro";
+import PageHeader from "../../components/sections/PageHeader.astro";
 import Layout from "../../layouts/Layout.astro";
 
 const products = await fetch(`${import.meta.env.BASE_API}/items`);
@@ -8,8 +9,9 @@ const data = await products.json();
 ---
 
 <Layout>
+	<PageHeader />
 	<div
-		class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-4 justify-between mb-10"
+		class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-4 justify-between py-10"
 	>
 		{
 			data.map((product: Product) => {

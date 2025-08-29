@@ -6,27 +6,20 @@ import ProductCard from "../ProductCard.astro";
 const lang = getLangFromUrl(Astro.url);
 const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
 
-const data = await fetch(`${import.meta.env.BASE_API}/items`);
-const highlightedProducts: Product[] = await data.json();
-
-console.log(
-	"asdasdasd",
-	highlightedProducts.filter((product) => product.is_featured)
-);
+const { data } = Astro.props;
+const featuredProducts: Product[] = data;
 ---
 
-<div class="mt-20 mb-10">
-	<span class="block mt-20 mb-10 font-bold text-3xl text-center w-full"
+<div class="mt-10 md:mt-20 mb-10">
+	<span class="block mb-10 font-bold text-3xl text-center w-full"
 		>{t.home.featuredProducts}</span
 	>
 
 	<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-2 justify-between">
 		{
-			highlightedProducts
-				.filter((product) => product.is_featured)
-				.map((product) => {
-					return <ProductCard product={product} isFeaturedProduct />;
-				})
+			featuredProducts.map((product) => {
+				return <ProductCard product={product} isFeaturedProduct />;
+			})
 		}
 	</div>
 </div>

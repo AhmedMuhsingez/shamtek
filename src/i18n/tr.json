@@ -4,7 +4,8 @@
 		"about": "Hakkımızda",
 		"contact": "İletişim",
 		"products": "Ürünler",
-		"allProducts": "Tüm Ürünler"
+		"allProducts": "Tüm Ürünler",
+		"homePage": "Ana Sayfa"
 	},
 	"common": {
 		"loading": "Yükleniyor...",
@@ -28,6 +29,7 @@
 		"element": "Öğe",
 		"location": "İstanbul, Türkiye"
 	},
+
 	"home": {
 		"welcome": "Shamtek'e Hoş Geldiniz",
 		"subtitle": "Teknoloji ve elektronik için önde gelen destinasyonunuz",
@@ -101,10 +103,17 @@
 		"brands": "Markalar",
 		"sortBy": "Sırala",
 		"priceRange": "Fiyat Aralığı",
-		"inStock": "Stokta",
-		"outOfStock": "Stokta Yok",
+		"coming_soon": "Yakında",
 		"addToCart": "Sepete Ekle",
-		"viewDetails": "Detayları Gör"
+		"viewDetails": "Detayları Gör",
+
+		"brand": "Marka",
+		"stock": "Stok",
+		"category": "Kategori",
+		"inStock": "Stokta",
+		"lowStock": "Az Stok",
+		"outOfStock": "Stokta Yok",
+		"available": "Mevcut"
 	},
 	"brands": {
 		"noItemsTitle": "Henüz mevcut ürün yok",

@@ -1,4 +1,5 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { useState, useEffect } from "react";
 import Chevron from "../Icons/Chevron";
 import type { Category } from "../../../types/types";
 
@@ -8,15 +9,48 @@ type Props = {
 };
 
 function NavbarProducts({ categories, lang = "ar" }: Props) {
+	const [isActive, setIsActive] = useState(false);
+
+	// Check if current page is a product category page
+	useEffect(() => {
+		const currentPath = window.location.pathname;
+		const isProductPage = categories.some(
+			(category) =>
+				currentPath.includes(category.name.toLowerCase()) ||
+				currentPath.includes("/products") ||
+				currentPath.includes("/all-products")
+		);
+		setIsActive(isProductPage);
+	}, [categories]);
+
 	const menu_item = categories.map((item, index) => {
 		return (
-			<MenuItem key={index}>
-				<a
-					href={item.name}
-					className="group flex w-full items-center gap-2 rounded-lg px-2 py-1.5 data-[focus]:bg-white/50	dark:data-[focus]:bg-white/40 "
-				>
-					<span className="text-white dark:text-black">{item.name}</span>
-				</a>
+			<MenuItem>
+				{({ focus, active }) => (
+					<a
+						href={item.name}
+						className={`group flex w-full items-center gap-2 rounded-lg px-3 py-2.5 transition-all duration-200 ${
+							focus || active
+								? "bg-primary/20 text-primary transform scale-[1.02] shadow-md"
+								: "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
+						}`}
+					>
+						<span className="font-medium">{item.name}</span>
+						<svg
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							className={`transition-transform duration-200 ${
+								focus || active ? "translate-x-1" : ""
+							}`}
+						>
+							<path d="M9 18l6-6-6-6" />
+						</svg>
+					</a>
+				)}
 			</MenuItem>
 		);
 	});
@@ -24,20 +58,32 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 	return (
 		<Menu>
 			{({ open }) => (
-				<>
-					<MenuButton className="flex gap-2 justify-center items-center  text-lg cursor-pointer focus:outline-none group">
-						{lang === "ar" ? "المنتجات" : lang === "en" ? "Products" : "Ürünler"}
-						<Chevron className={` ${open ? "rotate-0" : "rotate-90"}`} />
+				<div>
+					<MenuButton
+						className={`navbar-link flex gap-2 justify-center items-center text-lg cursor-pointer focus:outline-none group px-3 py-2 rounded-lg transition-all duration-200 ${
+							isActive
+								? "text-primary bg-primary/10 font-semibold"
+								: "hover:text-primary hover:bg-primary/5"
+						}`}
+					>
+						<span className="font-medium">
+							{lang === "ar" ? "المنتجات" : lang === "en" ? "Products" : "Ürünler"}
+						</span>
+						<Chevron
+							className={`transition-transform duration-300 ${
+								open ? "rotate-0" : "rotate-90"
+							}`}
+						/>
 					</MenuButton>
 
 					<MenuItems
 						transition
-						anchor="bottom end"
-						className="z-50 flex flex-col gap-y-1 mt-2 backdrop-blur-sm origin-top-right rounded-xl p-1 text-sm/6 dark:bg-white/70 bg-black/80 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+						anchor="bottom start"
+						className="z-50 min-w-[200px] mt-2 backdrop-blur-xl origin-top-left rounded-xl p-2 shadow-2xl border border-white/20 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 focus:outline-none transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 data-[closed]:-translate-y-1"
 					>
-						{menu_item}
+						<div className="space-y-1">{menu_item}</div>
 					</MenuItems>
-				</>
+				</div>
 			)}
 		</Menu>
 	);

@@ -4,7 +4,8 @@
 		"about": "من نحن",
 		"contact": "اتصل بنا",
 		"products": "المنتجات",
-		"allProducts": "جميع المنتجات"
+		"allProducts": "جميع المنتجات",
+		"homePage": "الصفحة الرئيسية"
 	},
 	"common": {
 		"loading": "جاري التحميل...",
@@ -28,12 +29,13 @@
 		"element": "عنصر",
 		"location": "إسطنبول، تركيا"
 	},
+
 	"home": {
 		"welcome": "مرحباً بكم في",
 		"subtitle": "وجهتكم الأولى للتكنولوجيا والإلكترونيات",
 		"featuredProducts": "المنتجات المميزة",
 		"ourBrands": "علاماتنا التجارية",
-		"whyChooseUs": "لماذا تختارنا؟",
+		"whyChooseUs": "لماذا نحن؟",
 		"quality": "جودة عالية",
 		"service": "خدمة ممتازة",
 		"prices": "أسعار تنافسية",
@@ -102,10 +104,16 @@
 		"brands": "العلامات التجارية",
 		"sortBy": "ترتيب حسب",
 		"priceRange": "نطاق السعر",
-		"inStock": "متوفر",
-		"outOfStock": "غير متوفر",
 		"addToCart": "أضف للسلة",
-		"viewDetails": "عرض التفاصيل"
+		"viewDetails": "عرض التفاصيل",
+
+		"brand": "العلامة التجارية",
+		"stock": "المخزون",
+		"category": "الفئة",
+		"inStock": "متوفر",
+		"coming_soon": "قادم قريباً",
+		"outOfStock": "غير متوفر",
+		"available": "متاح"
 	},
 	"brands": {
 		"noItemsTitle": "لا توجد منتجات متاحة حالياً",

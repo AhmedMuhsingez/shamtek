@@ -1,0 +1,30 @@
+---
+import { getTranslations, useTranslatedPath } from "../../utils/i18n";
+
+const { lang } = Astro.params;
+const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
+
+const { name = t.nav.allProducts } = Astro.props;
+---
+
+<div class="relative animate-fadeInUp w-full flex justify-center items-center my-6">
+	<a
+		href="/"
+		class="absolute cursor-pointer left-0 top-1/2 transform -translate-y-1/2 group flex items-center justify-center w-8 h-8 md:w-12 md:h-12 bg-gradient-primary hover:bg-gradient-secondary rounded-full shadow-vibrant hover:shadow-vibrant-lg hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+	>
+		<span class="icon-[mdi--sort] text-white dark:text-text text-xl md:text-2xl"></span>
+	</a>
+
+	<h1
+		class="text-2xl p-3 md:p-8 md:text-5xl lg:text-6xl font-bold text-center relative animate-glow rounded-2xl text-white"
+	>
+		{name}
+	</h1>
+
+	<a
+		href="/"
+		class="absolute cursor-pointer right-0 top-1/2 transform -translate-y-1/2 group flex items-center justify-center w-8 h-8 md:w-12 md:h-12 bg-gradient-primary hover:bg-gradient-secondary rounded-full shadow-vibrant hover:shadow-vibrant-lg hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+	>
+		<span class="icon-[maki--arrow] text-white dark:text-text text-xl md:text-2xl"></span>
+	</a>
+</div>
