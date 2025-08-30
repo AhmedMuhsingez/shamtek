@@ -12,6 +12,7 @@ const t = useTranslations(lang);
 const brandLabel = await t("products.brand");
 const stockLabel = await t("products.stock");
 const categoryLabel = await t("products.category");
+const codeNameLabel = await t("products.codeName");
 
 const stockState = data.stock_state?.toLowerCase();
 
@@ -33,11 +34,9 @@ const stockTranslation = await getStockTranslation(data.stock_state!);
 ---
 
 <div class="group w-full max-w-sm mx-auto h-full">
-	<!-- Card Container with Glass Effect -->
 	<div
 		class="glass shadow-soft hover:shadow-vibrant rounded-2xl overflow-hidden transition-all duration-500 hover:transform hover:scale-[1.02] hover:-translate-y-1 bg-white/80 dark:bg-surface/80 backdrop-blur-xl border border-white/20 dark:border-white/10 h-full flex flex-col"
 	>
-		<!-- Image Container -->
 		<div class="relative overflow-hidden rounded-t-2xl">
 			<img
 				alt={data.name}
@@ -45,16 +44,13 @@ const stockTranslation = await getStockTranslation(data.stock_state!);
 				loading="lazy"
 				src={data.image as string}
 			/>
-			<!-- Gradient Overlay -->
 			<div
 				class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
 			>
 			</div>
 		</div>
 
-		<!-- Content Container -->
 		<div class="p-3 md:p-4 sm:p-5 flex-1 flex flex-col">
-			<!-- Product Name -->
 			<div class="mb-4">
 				<h3
 					class="text-lg sm:text-xl font-bold text-text dark:text-white line-clamp-2 group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300 text-center"
@@ -63,9 +59,7 @@ const stockTranslation = await getStockTranslation(data.stock_state!);
 				</h3>
 			</div>
 
-			<!-- Product Details -->
 			<div class="space-y-3 mt-auto">
-				<!-- Brand Name -->
 				<div class="flex items-center justify-between">
 					<span
 						class="text-xs sm:text-sm font-medium text-text-muted dark:text-text-secondary uppercase tracking-wide min-w-0 flex-shrink-0"
@@ -78,7 +72,6 @@ const stockTranslation = await getStockTranslation(data.stock_state!);
 					</span>
 				</div>
 
-				<!-- Stock State -->
 				<div class="flex items-center justify-between">
 					<span
 						class="text-xs sm:text-sm font-medium text-text-muted dark:text-text-secondary uppercase tracking-wide min-w-0 flex-shrink-0"
@@ -98,7 +91,6 @@ const stockTranslation = await getStockTranslation(data.stock_state!);
 					</span>
 				</div>
 
-				<!-- Category -->
 				<div class="flex items-center justify-between">
 					<span
 						class="text-xs sm:text-sm font-medium text-text-muted dark:text-text-secondary uppercase tracking-wide min-w-0 flex-shrink-0"
@@ -110,6 +102,19 @@ const stockTranslation = await getStockTranslation(data.stock_state!);
 						{data.category.name}
 					</span>
 				</div>
+
+				{
+					data.code_name && (
+						<div class="flex items-center justify-between">
+							<span class="text-xs sm:text-sm font-medium text-text-muted dark:text-text-secondary uppercase tracking-wide min-w-0 flex-shrink-0">
+								{categoryLabel}
+							</span>
+							<span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800/50 px-2 py-1 rounded-full truncate border border-gray-200 dark:border-gray-700">
+								{data.code_name}
+							</span>
+						</div>
+					)
+				}
 			</div>
 		</div>
 	</div>
