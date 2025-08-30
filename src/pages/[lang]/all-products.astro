@@ -6,6 +6,7 @@ import Layout from "../../layouts/Layout.astro";
 
 const products = await fetch(`${import.meta.env.BASE_API}/items`);
 const data = await products.json();
+// commit
 ---
 
 <Layout>
