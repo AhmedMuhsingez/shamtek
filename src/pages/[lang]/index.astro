@@ -1,6 +1,6 @@
 ---
 import type { Product } from "../../../types/types";
-import BrandsSection from "../../components/sections/BrandsSection.astro";
+import CategoriesSection from "../../components/sections/CategoriesSection.astro";
 import FeaturedProducts from "../../components/sections/FeaturedProducts.astro";
 import HeroSection from "../../components/sections/HeroSection.astro";
 import Layout from "../../layouts/Layout.astro";
@@ -91,7 +91,7 @@ const isRTL = (lang as keyof typeof import("../../utils/i18n").languages) === "a
 
 	<!-- Brands Section -->
 	<div class="animate-slideInLeft">
-		<BrandsSection currentLang={lang} />
+		<CategoriesSection currentLang={lang} />
 	</div>
 
 	<!-- Featured Products Section -->

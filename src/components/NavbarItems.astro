@@ -14,8 +14,8 @@ const lang = currentLang || getLangFromUrl(Astro.url);
 const t = await getTranslations(lang as keyof typeof import("../utils/i18n").languages);
 const translatePath = useTranslatedPath(lang as keyof typeof import("../utils/i18n").languages);
 
-const categories = await fetch(`${import.meta.env.BASE_API}/categories`);
-const data = await categories.json();
+const brands = await fetch(`${import.meta.env.BASE_API}/brands`);
+const data = await brands.json();
 
 // Get current page for active state
 const currentPath = Astro.url.pathname;
@@ -43,9 +43,9 @@ const currentPath = Astro.url.pathname;
 						: item.nameKey === "nav.contact"
 							? t.nav.contact
 							: item.nameKey}
-					{isActive && (
+					{/* {isActive && (
 						<span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-primary rounded-full animate-pulse" />
-					)}
+					)} */}
 				</a>
 			);
 		})

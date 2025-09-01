@@ -1,5 +1,4 @@
 ---
-import WhatsAppIcon from "./Icons/WhatsAppIcon.astro";
 import { getTranslations } from "../utils/i18n";
 import { companyData } from "../data/company-details";
 
@@ -17,6 +16,6 @@ const number = companyData.whatsapp;
 	href={number}
 	class="transistion-all duration-300 bg-[#00cc6dc0] hover:bg-[#008848] backdrop-blur-lg text-white px-2 py-1 md:px-4 md:py-2 rounded-full md:font-bold flex gap-2 items-center"
 >
-	<WhatsAppIcon />
+	<span class="icon-[ic--twotone-whatsapp] text-2xl"></span>
 	<span>{t.common.whatsappContact}</span>
 </a>

@@ -28,27 +28,15 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 			<MenuItem>
 				{({ focus, active }) => (
 					<a
-						href={item.name}
-						className={`group flex w-full items-center gap-2 rounded-lg px-3 py-2.5 transition-all duration-200 ${
+						href={item.name.toLowerCase()}
+						className={`group flex w-full items-center gap-2 rounded-lg px-1 py-2.5 transition-all duration-200 justify-between ${
 							focus || active
 								? "bg-primary/20 text-primary transform scale-[1.02] shadow-md"
 								: "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
 						}`}
 					>
 						<span className="font-medium">{item.name}</span>
-						<svg
-							width="16"
-							height="16"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							className={`transition-transform duration-200 ${
-								focus || active ? "translate-x-1" : ""
-							}`}
-						>
-							<path d="M9 18l6-6-6-6" />
-						</svg>
+						<span className="icon-[mdi-light--chevron-left] text-2xl"></span>
 					</a>
 				)}
 			</MenuItem>
@@ -67,11 +55,11 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 						}`}
 					>
 						<span className="font-medium">
-							{lang === "ar" ? "المنتجات" : lang === "en" ? "Products" : "Ürünler"}
+							{lang === "ar" ? "الماركات" : lang === "en" ? "Brands" : "Markalar"}
 						</span>
 						<Chevron
 							className={`transition-transform duration-300 ${
-								open ? "rotate-0" : "rotate-90"
+								open ? "rotate-180" : "rotate-90"
 							}`}
 						/>
 					</MenuButton>
@@ -79,7 +67,7 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 					<MenuItems
 						transition
 						anchor="bottom start"
-						className="z-50 min-w-[200px] mt-2 backdrop-blur-xl origin-top-left rounded-xl p-2 shadow-2xl border border-white/20 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 focus:outline-none transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 data-[closed]:-translate-y-1"
+						className="z-50 min-w-[100px] mt-2 backdrop-blur-xl origin-top-left rounded-xl p-2 shadow-2xl border border-white/20 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 focus:outline-none transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 data-[closed]:-translate-y-1"
 					>
 						<div className="space-y-1">{menu_item}</div>
 					</MenuItems>

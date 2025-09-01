@@ -1,7 +1,7 @@
 ---
-import type { Brand } from "../../../types/types";
-import BrandsSlide from "../swipers/BrandsSlide.astro";
+import type { Category } from "../../../types/types";
 import { getLangFromUrl, getTranslations } from "../../utils/i18n";
+import HomeSlider from "../swipers/HomeSlider.astro";
 
 interface Props {
 	currentLang?: string;
@@ -13,26 +13,27 @@ const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").
 
 const categoryDescription = "";
 
-const brands = await fetch(`${import.meta.env.BASE_API}/brands`);
-const data = await brands.json();
+const categories = await fetch(`${import.meta.env.BASE_API}/categories`);
+const data = await categories.json();
 ---
 
 <div class="mt-10 md:mt-20 mb-10">
-	<span class="block mb-10 font-bold text-3xl text-center w-full">{t.home.ourBrands}</span>
+	<span class="block mb-10 font-bold text-3xl text-center w-full">{t.home.categories}</span>
 
 	{categoryDescription && <p>{categoryDescription}</p>}
 
 	<div class="swiper myCategoriesSwiper">
 		<div class="swiper-wrapper">
 			{
-				data.map((brand: Brand) => (
-					<BrandsSlide
-						title={String(brand.name)}
-						image={brand.image as string}
-						link={String(brand.name)}
-						alt={String(brand.name)}
-						items_count={Number(brand._count.products)}
+				data.map((category: Category) => (
+					<HomeSlider
+						title={String(category.name)}
+						image={category.image as string}
+						slug={category.slug}
+						alt={String(category.name)}
+						items_count={Number(category._count.products)}
 						currentLang={lang}
+						id={String(category.id)}
 					/>
 				))
 			}

@@ -1,5 +1,4 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import Language from "./Icons/language";
 import { languages, getLanguageFlag } from "../utils/i18n";
 import { useEffect, useState } from "react";
 
@@ -48,10 +47,10 @@ function ChangeLanguage({ currentLang = "ar" }: Props) {
 				<a
 					href={item.link}
 					className={`group flex w-full items-center justify-between gap-4 rounded-lg py-2 px-3  hover:scale-105 ${
-					isActive
-						? "bg-primary/20 dark:bg-primary/50 text-white dark:text-gray-900 font-semibold border border-primary/50 shadow-md"
-						: "text-white dark:text-black hover:bg-white/20 dark:hover:bg-white/40"
-				}`}
+						isActive
+							? "bg-primary/20 dark:bg-primary/50 text-white dark:text-gray-900 font-semibold border border-primary/50 shadow-md"
+							: "text-white dark:text-black hover:bg-white/20 dark:hover:bg-white/40"
+					}`}
 				>
 					<span className="font-medium">{item.name}</span>
 					<div className="relative">
@@ -72,9 +71,7 @@ function ChangeLanguage({ currentLang = "ar" }: Props) {
 	return (
 		<Menu>
 			<MenuButton className="flex gap-2 justify-center items-center text-lg cursor-pointer focus:outline-none group hover:scale-110 p-2 rounded-lg hover:bg-white/10  transition ease-in duration-200">
-				<div className="group-hover:rotate-12  transition ease-in duration-200">
-					<Language />
-				</div>
+				<span className="mt-1 icon-[clarity--language-line] text-3xl group-hover:rotate-12 transition ease-in duration-200 items-center"></span>
 			</MenuButton>
 
 			<MenuItems

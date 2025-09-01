@@ -1,0 +1,34 @@
+---
+import { getTranslations, useTranslatedPath } from "../../utils/i18n";
+
+interface Props {
+	title: string;
+	image: string;
+	slug: string;
+	items_count?: number;
+	alt: string;
+	currentLang?: string;
+	id: string;
+}
+
+const { title, image, slug, items_count = 1, alt, currentLang = "ar", id } = Astro.props;
+const t = await getTranslations(currentLang as keyof typeof import("../../utils/i18n").languages);
+---
+
+<div class="swiper-slide">
+	<div class="flex flex-col gap-3 text-center">
+		<a href={slug} class="transition-transform duration-300 hover:scale-105">
+			<img
+				src={image}
+				alt={alt}
+				class="rounded-md w-full h-72 object-cover transition-all duration-300 hover:shadow-lg"
+			/></a
+		>
+		<a
+			href={id}
+			class="text-2xl font-bold text-center transition-colors duration-300 hover:text-primary"
+			>{title}</a
+		>
+		<p class="text-lg text-center text-text-secondary">{items_count} {t.common.element}</p>
+	</div>
+</div>
