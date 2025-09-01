@@ -3,6 +3,7 @@ import type { Product } from "../../../types/types";
 import ProductCard from "../../components/ProductCard.astro";
 import PageHeader from "../../components/sections/PageHeader.astro";
 import Layout from "../../layouts/Layout.astro";
+import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
 
 const products = await fetch(`${import.meta.env.BASE_API}/items`);
 const data = await products.json();
@@ -19,4 +20,7 @@ const data = await products.json();
 			})
 		}
 	</div>
+	
+	<!-- النافذة المنبثقة لتفاصيل المنتج -->
+	<GlobalProductDetailsModal client:load />
 </Layout>

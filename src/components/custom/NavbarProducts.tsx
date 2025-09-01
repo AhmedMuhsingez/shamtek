@@ -1,24 +1,20 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Chevron from "../Icons/Chevron";
 import type { Category } from "../../../types/types";
 
 type Props = {
 	categories: Category[];
-	lang: "ar" | "en" | "tr";
+	lang?: "ar" | "en" | "tr";
 };
 
 function NavbarProducts({ categories, lang = "ar" }: Props) {
 	const [isActive, setIsActive] = useState(false);
 
-	// Check if current page is a product category page
 	useEffect(() => {
 		const currentPath = window.location.pathname;
-		const isProductPage = categories.some(
-			(category) =>
-				currentPath.includes(category.name.toLowerCase()) ||
-				currentPath.includes("/products") ||
-				currentPath.includes("/all-products")
+		const isProductPage = categories.some((category) =>
+			currentPath.includes(category.name.toLowerCase())
 		);
 		setIsActive(isProductPage);
 	}, [categories]);
@@ -31,7 +27,7 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 						href={item.name.toLowerCase()}
 						className={`group flex w-full items-center gap-2 rounded-lg px-1 py-2.5 transition-all duration-200 justify-between ${
 							focus || active
-								? "bg-primary/20 text-primary transform scale-[1.02] shadow-md"
+								? "bg-primary/20 text-primary transform scale-[1.02]"
 								: "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
 						}`}
 					>

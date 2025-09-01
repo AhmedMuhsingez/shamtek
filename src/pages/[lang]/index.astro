@@ -1,9 +1,10 @@
 ---
-import type { Product } from "../../../types/types";
+import type { Product, ProductsApiResponse } from "../../../types/types";
 import CategoriesSection from "../../components/sections/CategoriesSection.astro";
 import FeaturedProducts from "../../components/sections/FeaturedProducts.astro";
 import HeroSection from "../../components/sections/HeroSection.astro";
 import Layout from "../../layouts/Layout.astro";
+import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
 import { getTranslations, getStaticPathsForI18n, useTranslatedPath } from "../../utils/i18n";
 import { cn } from "../../utils/utils";
 
@@ -139,4 +140,7 @@ const isRTL = (lang as keyof typeof import("../../utils/i18n").languages) === "a
 			</a>
 		</div>
 	</section>
+	
+	<!-- النافذة المنبثقة لتفاصيل المنتج -->
+	<GlobalProductDetailsModal client:load />
 </Layout>

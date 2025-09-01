@@ -117,3 +117,11 @@ export interface CompanyDetails {
 	facebook: string;
 	instagram: string;
 }
+
+export interface ProductsApiResponse {
+	data: Product[];
+	total: number;
+	page: number;
+	limit: number;
+	totalPages: number;
+}

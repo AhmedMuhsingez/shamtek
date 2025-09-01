@@ -1,13 +1,14 @@
 ---
-import ProductCard from "../../../components/ProductCard.astro";
-import Layout from "../../../layouts/Layout.astro";
-import { getTranslations } from "../../../utils/i18n";
-import type { Product, Category } from "../../../../types/types";
-import PageHeader from "../../../components/sections/PageHeader.astro";
+import type { Category, Product } from "../../../types/types";
+import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
+import ProductCard from "../../components/ProductCard.astro";
+import PageHeader from "../../components/sections/PageHeader.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getTranslations } from "../../utils/i18n";
 
 const { slug } = Astro.params;
 const { lang } = Astro.params as { lang: string };
-const t = await getTranslations(lang as keyof typeof import("../../../utils/i18n").languages);
+const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
 
 if (!slug) {
 	return Astro.redirect("/404");
@@ -58,4 +59,7 @@ const cardsExist = categoryProducts.length > 0;
 			)
 		}
 	</div>
+
+	<!-- النافذة المنبثقة لتفاصيل المنتج -->
+	<GlobalProductDetailsModal client:load />
 </Layout>

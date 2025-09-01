@@ -6,6 +6,7 @@ import ChangeLanguage from "./ChangeLanguage";
 
 import { getTranslations, useTranslatedPath } from "../utils/i18n";
 import ToggleTheme from "./ToggleTheme.astro";
+import NavbarProducts from "./custom/NavbarProducts";
 
 interface Props {
 	currentLang?: string;
@@ -16,6 +17,9 @@ const t = await getTranslations(currentLang as keyof typeof import("../utils/i18
 const translatePath = useTranslatedPath(
 	currentLang as keyof typeof import("../utils/i18n").languages
 );
+
+const brands = await fetch(`${import.meta.env.BASE_API}/brands`);
+const data = await brands.json();
 ---
 
 <div
@@ -57,8 +61,9 @@ const translatePath = useTranslatedPath(
 				</div>
 
 				<div class="flex gap-3 md:hidden">
-					<ChangeLanguage client:load />
+					<!-- <ChangeLanguage client:load /> -->
 					<ToggleTheme />
+					<NavbarProducts client:load categories={data} />
 				</div>
 			</div>
 		</div>

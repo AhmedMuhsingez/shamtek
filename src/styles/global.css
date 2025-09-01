@@ -20,7 +20,7 @@
 	);
 	--color-background-secondary: linear-gradient(45deg, #ffecd2 0%, #fcb69f 100%);
 	--color-background-onBg: rgba(255, 255, 255, 0.95);
-	--color-card-bg: rgba(255, 255, 255, 0.701);
+	--color-card-bg: rgba(255, 255, 255, 0.477);
 	--color-surface: rgba(255, 255, 255, 0.9);
 
 	--color-text: #1a202c;

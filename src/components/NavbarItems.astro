@@ -17,7 +17,6 @@ const translatePath = useTranslatedPath(lang as keyof typeof import("../utils/i1
 const brands = await fetch(`${import.meta.env.BASE_API}/brands`);
 const data = await brands.json();
 
-// Get current page for active state
 const currentPath = Astro.url.pathname;
 ---
 
@@ -43,9 +42,6 @@ const currentPath = Astro.url.pathname;
 						: item.nameKey === "nav.contact"
 							? t.nav.contact
 							: item.nameKey}
-					{/* {isActive && (
-						<span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-primary rounded-full animate-pulse" />
-					)} */}
 				</a>
 			);
 		})
@@ -54,17 +50,13 @@ const currentPath = Astro.url.pathname;
 </div>
 
 <script>
-	// Enhanced navbar functionality
 	document.addEventListener("DOMContentLoaded", function () {
-		// Smooth scrolling for anchor links
 		const smoothScrollLinks = document.querySelectorAll("[data-smooth-scroll]");
 
 		smoothScrollLinks.forEach((link) => {
 			link.addEventListener("click", function (e) {
 				const target = e.currentTarget as HTMLAnchorElement;
 				const href = target.getAttribute("href");
-
-				// Check if it's an anchor link (starts with #)
 				if (href && href.startsWith("#")) {
 					e.preventDefault();
 
@@ -78,8 +70,6 @@ const currentPath = Astro.url.pathname;
 				}
 			});
 		});
-
-		// Enhanced hover effects for navbar links
 		const navbarLinks = document.querySelectorAll(".navbar-link");
 
 		navbarLinks.forEach((link) => {
@@ -96,7 +86,6 @@ const currentPath = Astro.url.pathname;
 			});
 		});
 
-		// Active state management
 		function updateActiveStates() {
 			const currentPath = window.location.pathname;
 			const navLinks = document.querySelectorAll(".navbar-link");
@@ -113,8 +102,6 @@ const currentPath = Astro.url.pathname;
 				}
 			});
 		}
-
-		// Update active states on page load and navigation
 		updateActiveStates();
 		window.addEventListener("popstate", updateActiveStates);
 	});
