@@ -17,7 +17,7 @@ const t = await getTranslations(currentLang as keyof typeof import("../../utils/
 
 <div class="swiper-slide">
 	<div class="flex flex-col gap-3 text-center">
-		<a href={slug} class="transition-transform duration-300 hover:scale-105">
+		<a href={`category/${slug}`} class="transition-transform duration-300 hover:scale-105">
 			<img
 				src={image}
 				alt={alt}

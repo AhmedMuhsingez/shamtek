@@ -1,35 +1,33 @@
 ---
-import type { Category, Product } from "../../../types/types";
-import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
-import ProductCard from "../../components/ProductCard.astro";
-import PageHeader from "../../components/sections/PageHeader.astro";
-import Layout from "../../layouts/Layout.astro";
-import { getTranslations } from "../../utils/i18n";
+import type { Brand, Product } from "../../../../types/types";
+import GlobalProductDetailsModal from "../../../components/GlobalProductDetailsModal";
+import ProductCard from "../../../components/ProductCard.astro";
+import PageHeader from "../../../components/sections/PageHeader.astro";
+import Layout from "../../../layouts/Layout.astro";
+import { getTranslations } from "../../../utils/i18n";
 
 const { slug } = Astro.params;
 const { lang } = Astro.params as { lang: string };
-const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
+const t = await getTranslations(lang as keyof typeof import("../../../utils/i18n").languages);
 
 if (!slug) {
 	return Astro.redirect("/404");
 }
 
-const getCategoryData = fetch(`${import.meta.env.BASE_API}/single-category/${slug}`).then((res) =>
+const getBrand = fetch(`${import.meta.env.BASE_API}/single-brand/${slug}`).then((res) =>
 	res.json()
 );
-const categoryData: Category = await getCategoryData;
+const brandData: Brand = await getBrand;
 
-if (!categoryData) {
+if (!brandData) {
 	return Astro.redirect("/404");
 }
-const categoryName = categoryData.name;
+const categoryName = brandData.name;
 
 const getItems = fetch(`${import.meta.env.BASE_API}/items`).then((res) => res.json());
 const items: Product[] = await getItems;
 
-const categoryProducts = items.filter(
-	(product: Product) => product.categoryId === categoryData.id
-);
+const categoryProducts = items.filter((product: Product) => product.brandId === brandData.id);
 const cardsExist = categoryProducts.length > 0;
 ---
 

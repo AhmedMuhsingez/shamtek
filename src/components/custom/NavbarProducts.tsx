@@ -24,7 +24,7 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 			<MenuItem>
 				{({ focus, active }) => (
 					<a
-						href={item.name.toLowerCase()}
+						href={`/ar/brand/${item.slug}`}
 						className={`group flex w-full items-center gap-2 rounded-lg px-1 py-2.5 transition-all duration-200 justify-between ${
 							focus || active
 								? "bg-primary/20 text-primary transform scale-[1.02]"

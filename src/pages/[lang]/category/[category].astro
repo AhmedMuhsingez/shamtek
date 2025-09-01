@@ -1,0 +1,65 @@
+---
+import type { Product, Category } from "../../../../types/types";
+import GlobalProductDetailsModal from "../../../components/GlobalProductDetailsModal";
+import ProductCard from "../../../components/ProductCard.astro";
+import PageHeader from "../../../components/sections/PageHeader.astro";
+import Layout from "../../../layouts/Layout.astro";
+import { getTranslations } from "../../../utils/i18n";
+
+const { category } = Astro.params;
+const { lang } = Astro.params as { lang: string };
+const t = await getTranslations(lang as keyof typeof import("../../../utils/i18n").languages);
+
+if (!category) {
+	return Astro.redirect("/404");
+}
+
+const getCategoryData = fetch(`${import.meta.env.BASE_API}/single-category/${category}`).then(
+	(res) => res.json()
+);
+const categoryData: Category = await getCategoryData;
+
+if (!categoryData) {
+	return Astro.redirect("/404");
+}
+const categoryName = categoryData.name;
+
+const getItems = fetch(`${import.meta.env.BASE_API}/items`).then((res) => res.json());
+const items: Product[] = await getItems;
+
+const categoryProducts = items.filter(
+	(product: Product) => product.categoryId === categoryData.id
+);
+const cardsExist = categoryProducts.length > 0;
+---
+
+<Layout>
+	<PageHeader name={categoryName} />
+
+	<div class="container mx-auto px-4 py-16">
+		{
+			cardsExist ? (
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
+					{categoryProducts.map((product) => (
+						<div class="w-full h-full">
+							<ProductCard product={product} />
+						</div>
+					))}
+				</div>
+			) : (
+				<div class="text-center py-20 animate-fadeInUp">
+					<div class="glass p-12 rounded-3xl shadow-vibrant-lg max-w-md mx-auto">
+						<div class="text-6xl mb-6 opacity-50">📦</div>
+						<h2 class="text-2xl font-semibold text-text mb-4">
+							{t.brands.noItemsTitle}
+						</h2>
+						<p class="text-text-secondary">{t.brands.noItemsDescription}</p>
+					</div>
+				</div>
+			)
+		}
+	</div>
+
+	<!-- النافذة المنبثقة لتفاصيل المنتج -->
+	<GlobalProductDetailsModal client:load />
+</Layout>
