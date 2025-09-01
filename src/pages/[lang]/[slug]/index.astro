@@ -6,7 +6,6 @@ import type { Product, Category } from "../../../../types/types";
 import PageHeader from "../../../components/sections/PageHeader.astro";
 
 const { slug } = Astro.params;
-console.log(slug);
 const { lang } = Astro.params as { lang: string };
 const t = await getTranslations(lang as keyof typeof import("../../../utils/i18n").languages);
 
@@ -17,7 +16,6 @@ if (!slug) {
 const getCategoryData = fetch(`${import.meta.env.BASE_API}/single-category/${slug}`).then((res) =>
 	res.json()
 );
-
 const categoryData: Category = await getCategoryData;
 
 if (!categoryData) {
