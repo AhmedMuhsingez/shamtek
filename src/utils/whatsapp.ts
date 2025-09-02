@@ -11,16 +11,12 @@ export function generateWhatsAppMessage(
 	product: Product,
 	language: "ar" | "en" | "tr" = "ar"
 ): string {
-	const phoneNumber = companyData.whatsapp;
+	const whatsappLink = companyData.whatsapp;
 
-	if (!phoneNumber) {
+	if (!whatsappLink) {
 		throw new Error("WhatsApp phone number not available");
 	}
 
-	// Remove any non-numeric characters from phone number
-	const whatsappLink = phoneNumber.replace(/[^0-9]/g, "");
-
-	// Generate message based on language
 	const messages = {
 		ar: {
 			greeting: "مرحباً، أود الاستفسار عن هذا المنتج:",
@@ -77,7 +73,7 @@ export function generateWhatsAppMessage(
 	const encodedMessage = encodeURIComponent(message);
 
 	// Return WhatsApp URL
-	return `/${whatsappLink}?text=${encodedMessage}`;
+	return `${whatsappLink}?text=${encodedMessage}`;
 }
 
 /**

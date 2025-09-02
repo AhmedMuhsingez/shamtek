@@ -69,7 +69,6 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 			window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 		} catch (error) {
 			console.error("Error opening WhatsApp:", error);
-			// You could show a toast notification here
 		}
 	};
 
@@ -208,8 +207,25 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 										)}
 									</div>
 
+									{/* WhatsApp Button */}
+									{whatsappAvailable && (
+										<div className="mt-4 md:mt-6">
+											<button
+												onClick={handleWhatsAppClick}
+												className="hover:cursor-pointer w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-3 md:py-3 md:px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
+												aria-label={getWhatsAppButtonText()}
+											>
+												<span className="icon-[ic--twotone-whatsapp] text-xl group-hover:scale-110 transition-transform duration-300"></span>
+												<span className="text-md">
+													{getWhatsAppButtonText()}
+												</span>
+												<span className="icon-[material-symbols--arrow-outward] text-xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></span>
+											</button>
+										</div>
+									)}
+
 									{/* Additional Info */}
-									<div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700/50">
+									<div className="mt-4 md:mt-6">
 										<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
 											<span>
 												تاريخ الإضافة:{" "}
@@ -221,23 +237,6 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 											</span>
 										</div>
 									</div>
-
-									{/* WhatsApp Button */}
-									{whatsappAvailable && (
-										<div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700/50">
-											<button
-												onClick={handleWhatsAppClick}
-												className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
-												aria-label={getWhatsAppButtonText()}
-											>
-												<span className="icon-[ic--twotone-whatsapp] text-2xl group-hover:scale-110 transition-transform duration-300"></span>
-												<span className="text-lg">
-													{getWhatsAppButtonText()}
-												</span>
-												<span className="icon-[material-symbols--arrow-outward] text-xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></span>
-											</button>
-										</div>
-									)}
 								</div>
 							</DialogPanel>
 						</TransitionChild>
