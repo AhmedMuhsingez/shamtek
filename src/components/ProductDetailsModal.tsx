@@ -124,7 +124,7 @@ function ProductDetailsModal({ product, isOpen, onClose, translations = {} }: Pr
 
 									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
 										{/* Brand */}
-										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50">
+										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50 items-center">
 											<div className="flex items-center justify-between">
 												<span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
 													{"العلامة التجارية"}
@@ -136,7 +136,7 @@ function ProductDetailsModal({ product, isOpen, onClose, translations = {} }: Pr
 										</div>
 
 										{/* Category */}
-										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50">
+										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50 items-center">
 											<div className="flex items-center justify-between">
 												<span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
 													{"القسم"}
@@ -148,7 +148,7 @@ function ProductDetailsModal({ product, isOpen, onClose, translations = {} }: Pr
 										</div>
 
 										{/* Stock Status */}
-										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50">
+										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50 items-center content-center">
 											<div className="flex items-center justify-between">
 												<span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
 													{"الحالة"}
@@ -166,7 +166,7 @@ function ProductDetailsModal({ product, isOpen, onClose, translations = {} }: Pr
 
 										{/* Code Name */}
 										{displayProduct?.code_name && (
-											<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50">
+											<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50 items-center">
 												<div className="flex items-center justify-between">
 													<span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
 														{"رقم المنتج"}

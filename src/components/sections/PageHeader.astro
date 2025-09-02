@@ -1,10 +1,10 @@
 ---
-import { getTranslations, useTranslatedPath } from "../../utils/i18n";
+import { getTranslations } from "../../utils/i18n";
 
 const { lang } = Astro.params;
 const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
 
-const { name = t.nav.allProducts } = Astro.props;
+const { name = t.nav.allProducts, description } = Astro.props;
 ---
 
 <div class="relative animate-fadeInUp w-full flex justify-center items-center my-6">
@@ -15,11 +15,15 @@ const { name = t.nav.allProducts } = Astro.props;
 		<span class="icon-[mdi--sort] text-white dark:text-text text-xl md:text-2xl"></span>
 	</a>
 
-	<h1
-		class="text-2xl p-3 md:p-8 md:text-5xl lg:text-6xl font-bold text-center relative animate-glow rounded-2xl text-white"
-	>
-		{name}
-	</h1>
+	<div class="flex flex-col justify-center items-center gap-10">
+		<h1
+			class="text-2xl p-3 md:p-8 md:text-5xl lg:text-6xl font-bold text-center relative animate-glow rounded-2xl text-white"
+		>
+			{name}
+		</h1>
+
+		{description && <p class="text-xl text-center">{description}</p>}
+	</div>
 
 	<a
 		href="/"

@@ -24,6 +24,7 @@ if (!categoryData) {
 	return Astro.redirect("/404");
 }
 const categoryName = categoryData.name;
+const categoryDescription = categoryData.description;
 
 const getItems = fetch(`${import.meta.env.BASE_API}/items`).then((res) => res.json());
 const items: ProductResponse = await getItems;
@@ -31,10 +32,12 @@ const items: ProductResponse = await getItems;
 const categoryProducts = items.data.filter(
 	(product: Product) => product.categoryId === categoryData.id
 );
+
+console.log(categoryName, categoryDescription);
 ---
 
 <Layout>
-	<PageHeader name={categoryName} />
+	<PageHeader name={categoryName} description={categoryDescription} />
 
 	<div class="container mx-auto px-4 py-16">
 		{
