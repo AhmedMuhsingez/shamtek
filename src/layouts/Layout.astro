@@ -7,6 +7,7 @@ import Footer from "../components/sections/Footer.astro";
 import { getLangFromUrl, getDirection } from "../utils/i18n";
 import ClientRouter from "astro/components/ClientRouter.astro";
 import LoadingIndicator from "astro-loading-indicator/component";
+// import GlobalProductModal from "../components/GlobalProductModal";
 
 const lang = getLangFromUrl(Astro.url);
 const direction = getDirection(lang);
@@ -39,6 +40,7 @@ const direction = getDirection(lang);
 			<slot />
 		</div>
 		<Footer currentLang={lang} />
+		<!-- <GlobalProductModal client:load /> -->
 		<ClientRouter />
 	</body>
 </html>

@@ -1,6 +1,7 @@
 ---
-import type { Brand, Product } from "../../../../types/types";
+import type { Brand, Product, ProductResponse } from "../../../../types/types";
 import GlobalProductDetailsModal from "../../../components/GlobalProductDetailsModal";
+import NoItemsAvailable from "../../../components/NoItemsAvailable.astro";
 import ProductCard from "../../../components/ProductCard.astro";
 import PageHeader from "../../../components/sections/PageHeader.astro";
 import Layout from "../../../layouts/Layout.astro";
@@ -22,42 +23,34 @@ const brandData: Brand = await getBrand;
 if (!brandData) {
 	return Astro.redirect("/404");
 }
-const categoryName = brandData.name;
 
-const getItems = fetch(`${import.meta.env.BASE_API}/items`).then((res) => res.json());
-const items: Product[] = await getItems;
+const getProducts = fetch(`${import.meta.env.BASE_API}/items`).then((res) => res.json());
+const items: ProductResponse = await getProducts;
 
-const categoryProducts = items.filter((product: Product) => product.brandId === brandData.id);
-const cardsExist = categoryProducts.length > 0;
+const brandItems = items.data.filter((item) => item.brandId === brandData.id);
 ---
 
 <Layout>
-	<PageHeader name={categoryName} />
+	<PageHeader name={brandData.name} />
 
-	<div class="container mx-auto px-4 py-16">
-		{
-			cardsExist ? (
+	{
+		brandItems.length > 0 ? (
+			<div class="container mx-auto px-4 py-16">
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
-					{categoryProducts.map((product) => (
+					{brandItems.map((product) => (
 						<div class="w-full h-full">
 							<ProductCard product={product} />
 						</div>
 					))}
 				</div>
-			) : (
-				<div class="text-center py-20 animate-fadeInUp">
-					<div class="glass p-12 rounded-3xl shadow-vibrant-lg max-w-md mx-auto">
-						<div class="text-6xl mb-6 opacity-50">📦</div>
-						<h2 class="text-2xl font-semibold text-text mb-4">
-							{t.brands.noItemsTitle}
-						</h2>
-						<p class="text-text-secondary">{t.brands.noItemsDescription}</p>
-					</div>
-				</div>
-			)
-		}
-	</div>
+			</div>
+		) : (
+			<NoItemsAvailable
+				title={t.brands.noItemsTitle}
+				descriptions={t.brands.noItemsDescription}
+			/>
+		)
+	}
 
-	<!-- النافذة المنبثقة لتفاصيل المنتج -->
 	<GlobalProductDetailsModal client:load />
 </Layout>

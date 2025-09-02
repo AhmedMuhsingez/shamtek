@@ -19,6 +19,15 @@ export interface Category {
 	addedBy: { name: string };
 }
 
+export interface ProductResponse {
+	data: Product[];
+	meta: {
+		page: number;
+		pageSize: number;
+		totalCount: number;
+		totalPages: number;
+	};
+}
 export interface Product {
 	id: string;
 	name: string;

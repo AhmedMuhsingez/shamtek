@@ -1,0 +1,56 @@
+---
+import { cn } from "../../utils/utils";
+
+const currentLang = Astro.params.lang;
+const currentSlug = Astro.url.pathname.split("/")[2];
+const baseURL = `/${currentLang}/${currentSlug}`;
+
+const { totalItems } = Astro.props;
+
+const currentPage = Number(Astro.url.searchParams.get("page") ?? 1);
+
+const hasNext = currentPage < totalItems;
+const hasPrev = currentPage > 1;
+---
+
+<div class="w-full justify-items-center mt-4">
+	<ul
+		class="flex max-w-5xl justify-between w-full items-center border-t border-black dark:border-white py-4"
+	>
+		<li>
+			<a href={hasPrev ? `${baseURL}?page=${currentPage - 1}` : null}>
+				<span
+					class={cn("icon-[carbon--next-outline] text-4xl!", !hasPrev && "opacity-50")}
+				></span></a
+			>
+		</li>
+
+		<div class="flex gap-2 items-center">
+			{
+				Array.from({ length: totalItems }, (_, i) => (
+					<li class="text-xl font-semibold">
+						<a
+							href={`${baseURL}?page=${i + 1}`}
+							class={cn(
+								"opacity-50",
+								currentPage === i + 1 && "text-2xl opacity-100"
+							)}
+						>
+							{i + 1}
+						</a>
+					</li>
+				))
+			}
+		</div>
+
+		<li>
+			<a href={hasNext ? `${baseURL}?page=${currentPage + 1}` : null}>
+				<span
+					class={cn(
+						"icon-[carbon--next-outline] rotate-180 text-4xl!",
+						!hasNext && "opacity-50"
+					)}></span></a
+			>
+		</li>
+	</ul>
+</div>

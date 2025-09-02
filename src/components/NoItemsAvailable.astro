@@ -1,0 +1,13 @@
+---
+const { title, descriptions } = Astro.props;
+---
+
+<div class="text-center py-20 animate-fadeInUp">
+	<div class="glass p-12 rounded-3xl shadow-vibrant-lg max-w-md mx-auto">
+		<div class="text-6xl mb-6 opacity-50">📦</div>
+		<h2 class="text-2xl font-semibold text-text mb-4">
+			{title}
+		</h2>
+		<p class="text-text-secondary">{descriptions}</p>
+	</div>
+</div>

@@ -1,5 +1,5 @@
 ---
-import type { Product, ProductsApiResponse } from "../../../types/types";
+import type { Product, ProductResponse, ProductsApiResponse } from "../../../types/types";
 import CategoriesSection from "../../components/sections/CategoriesSection.astro";
 import FeaturedProducts from "../../components/sections/FeaturedProducts.astro";
 import HeroSection from "../../components/sections/HeroSection.astro";
@@ -8,21 +8,18 @@ import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModa
 import { getTranslations, getStaticPathsForI18n, useTranslatedPath } from "../../utils/i18n";
 import { cn } from "../../utils/utils";
 
-export async function getStaticPaths() {
-	return getStaticPathsForI18n();
-}
-
 const { lang } = Astro.params;
 const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
 const translatePath = useTranslatedPath(
 	lang as keyof typeof import("../../utils/i18n").languages
 );
-
-const featuredProducts = await fetch(`${import.meta.env.BASE_API}/items`);
-const data: Product[] = await featuredProducts.json();
-const hasFeaturedProducts = data.filter((product) => product.is_featured).length > 0;
-
 const isRTL = (lang as keyof typeof import("../../utils/i18n").languages) === "ar";
+
+const products = await fetch(`${import.meta.env.BASE_API}/items`);
+const data: ProductsApiResponse = await products.json();
+
+const featuredProducts = data.data.filter((product) => product.is_featured);
+const hasFeaturedProducts = featuredProducts.length > 0;
 ---
 
 <Layout>
@@ -99,7 +96,7 @@ const isRTL = (lang as keyof typeof import("../../utils/i18n").languages) === "a
 	{
 		hasFeaturedProducts && (
 			<div class="animate-fadeInUp">
-				<FeaturedProducts data={data.filter((product) => product.is_featured)} />
+				<FeaturedProducts data={featuredProducts} />
 			</div>
 		)
 	}
@@ -140,7 +137,7 @@ const isRTL = (lang as keyof typeof import("../../utils/i18n").languages) === "a
 			</a>
 		</div>
 	</section>
-	
+
 	<!-- النافذة المنبثقة لتفاصيل المنتج -->
 	<GlobalProductDetailsModal client:load />
 </Layout>

@@ -1,12 +1,15 @@
 ---
-import type { Product } from "../../../types/types";
+import type { Product, ProductResponse } from "../../../types/types";
 import ProductCard from "../../components/ProductCard.astro";
 import PageHeader from "../../components/sections/PageHeader.astro";
 import Layout from "../../layouts/Layout.astro";
 import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
+import Pagination from "../../components/sections/Pagination.astro";
 
-const products = await fetch(`${import.meta.env.BASE_API}/items`);
-const data = await products.json();
+const page = Astro.url.searchParams.get("page") ?? 1;
+
+const products = await fetch(`${import.meta.env.BASE_API}/items?page=${page}`);
+const data: ProductResponse = await products.json();
 ---
 
 <Layout>
@@ -15,12 +18,13 @@ const data = await products.json();
 		class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-4 justify-between py-10"
 	>
 		{
-			data.map((product: Product) => {
+			data.data.map((product: Product) => {
 				return <ProductCard product={product} />;
 			})
 		}
 	</div>
-	
-	<!-- النافذة المنبثقة لتفاصيل المنتج -->
+
+	<Pagination totalItems={data.meta.totalPages} />
+
 	<GlobalProductDetailsModal client:load />
 </Layout>
