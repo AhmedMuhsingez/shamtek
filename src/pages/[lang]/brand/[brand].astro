@@ -1,5 +1,5 @@
 ---
-import type { Product, Category, ProductResponse } from "../../../../types/types";
+import type { Brand, Product, ProductResponse } from "../../../../types/types";
 import GlobalProductDetailsModal from "../../../components/GlobalProductDetailsModal";
 import NoItemsAvailable from "../../../components/NoItemsAvailable.astro";
 import ProductCard from "../../../components/ProductCard.astro";
@@ -8,37 +8,35 @@ import Pagination from "../../../components/sections/Pagination.astro";
 import Layout from "../../../layouts/Layout.astro";
 import { getTranslations } from "../../../utils/i18n";
 
-const { category } = Astro.params;
+const { brand } = Astro.params;
 const { lang } = Astro.params as { lang: string };
 const t = await getTranslations(lang as keyof typeof import("../../../utils/i18n").languages);
+
+if (!brand) {
+	return Astro.redirect("/404");
+}
+
+const getBrand = fetch(`${import.meta.env.BASE_API}/single-brand/${brand}`).then((res) =>
+	res.json()
+);
+const brandData: Brand = await getBrand;
+
+if (!brandData) {
+	return Astro.redirect("/404");
+}
+
 const page = Astro.url.searchParams.get("page") ?? 1;
 
-if (!category) {
-	return Astro.redirect("/404");
-}
-
-const getCategoryData = fetch(`${import.meta.env.BASE_API}/single-category/${category}`).then(
-	(res) => res.json()
-);
-const categoryData: Category = await getCategoryData;
-
-if (!categoryData) {
-	return Astro.redirect("/404");
-}
-
-const categoryName = categoryData.name;
-const categoryDescription = categoryData.description;
-
 let status: "loading" | "success" | "error" = "loading";
-let categoryProducts: ProductResponse | null = null;
+let filteredProducts: ProductResponse | null = null;
 
 try {
 	const response = await fetch(
-		`${import.meta.env.BASE_API}/items?category=${categoryData.name}&page=${page}`
+		`${import.meta.env.BASE_API}/items?brand=${brandData.name}&page=${page}`
 	);
 
 	if (response.status === 200) {
-		categoryProducts = await response.json();
+		filteredProducts = await response.json();
 		status = "success";
 	} else {
 		status = "error";
@@ -50,21 +48,22 @@ try {
 ---
 
 <Layout>
-	<PageHeader name={categoryName} description={categoryDescription} />
+	<PageHeader name={brandData.name} />
 
 	{
 		status === "success" ? (
 			<>
 				<div class="container mx-auto py-10">
 					<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
-						{categoryProducts!.data.map((product) => (
+						{filteredProducts!.data.map((product) => (
 							<div class="w-full h-full">
 								<ProductCard product={product} />
 							</div>
 						))}
 					</div>
 				</div>
-				<Pagination totalItems={categoryProducts!.meta.totalPages} subPage />
+
+				<Pagination totalItems={filteredProducts!.meta.totalPages} subPage />
 			</>
 		) : (
 			<NoItemsAvailable

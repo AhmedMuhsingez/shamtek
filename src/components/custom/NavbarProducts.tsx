@@ -21,7 +21,7 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 
 	const menu_item = categories.map((item, index) => {
 		return (
-			<MenuItem>
+			<MenuItem key={item.id}>
 				{({ focus, active }) => (
 					<a
 						href={`/ar/brand/${item.slug}`}

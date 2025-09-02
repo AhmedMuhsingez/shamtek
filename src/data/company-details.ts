@@ -19,7 +19,6 @@ try {
 	}
 
 	const data: CompanyDetails = await company.json();
-	console.log(data);
 
 	companyData = {
 		name: data.name,
