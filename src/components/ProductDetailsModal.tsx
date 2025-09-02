@@ -2,11 +2,13 @@ import { Fragment, useEffect, useState } from "react";
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
 import type { Product } from "../../types/types";
 import { cn } from "../utils/utils";
+import { generateWhatsAppMessage, isWhatsAppAvailable } from "../utils/whatsapp";
 
 interface ProductModalProps {
 	product: Product | null;
 	isOpen: boolean;
 	onClose: () => void;
+	language?: "ar" | "en" | "tr";
 	translations?: {
 		brand?: string;
 		category?: string;
@@ -17,10 +19,11 @@ interface ProductModalProps {
 		outOfStock?: string;
 		comingSoon?: string;
 		close?: string;
+		whatsappInquiry?: string;
 	};
 }
 
-function ProductDetailsModal({ product, isOpen, onClose, translations = {} }: ProductModalProps) {
+function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: ProductModalProps) {
 	const [displayProduct, setDisplayProduct] = useState<Product | null>(product);
 	useEffect(() => {
 		if (isOpen && product) {
@@ -56,6 +59,32 @@ function ProductDetailsModal({ product, isOpen, onClose, translations = {} }: Pr
 	const productImage = Array.isArray(displayProduct?.image)
 		? displayProduct.image[0]
 		: displayProduct?.image;
+
+	// WhatsApp functionality
+	const handleWhatsAppClick = () => {
+		if (!displayProduct) return;
+
+		try {
+			const whatsappUrl = generateWhatsAppMessage(displayProduct, language);
+			window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+		} catch (error) {
+			console.error("Error opening WhatsApp:", error);
+			// You could show a toast notification here
+		}
+	};
+
+	const whatsappAvailable = isWhatsAppAvailable();
+
+	const getWhatsAppButtonText = () => {
+		switch (language) {
+			case "en":
+				return "Inquire via WhatsApp";
+			case "tr":
+				return "WhatsApp ile Sorgula";
+			default:
+				return "استفسار عبر واتساب";
+		}
+	};
 
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
@@ -192,6 +221,23 @@ function ProductDetailsModal({ product, isOpen, onClose, translations = {} }: Pr
 											</span>
 										</div>
 									</div>
+
+									{/* WhatsApp Button */}
+									{whatsappAvailable && (
+										<div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700/50">
+											<button
+												onClick={handleWhatsAppClick}
+												className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
+												aria-label={getWhatsAppButtonText()}
+											>
+												<span className="icon-[ic--twotone-whatsapp] text-2xl group-hover:scale-110 transition-transform duration-300"></span>
+												<span className="text-lg">
+													{getWhatsAppButtonText()}
+												</span>
+												<span className="icon-[material-symbols--arrow-outward] text-xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></span>
+											</button>
+										</div>
+									)}
 								</div>
 							</DialogPanel>
 						</TransitionChild>

@@ -10,6 +10,7 @@ const { currentLang = "ar" } = Astro.props;
 const t = await getTranslations(currentLang as keyof typeof import("../utils/i18n").languages);
 
 const number = companyData.whatsapp;
+console.log(number);
 ---
 
 <a

@@ -7,6 +7,14 @@ function GlobalProductDetailsModal() {
 	const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
+	// Detect current language from URL
+	const getCurrentLanguage = (): "ar" | "en" | "tr" => {
+		// const path = window.location.pathname;
+		// if (path.includes("/en/")) return "en";
+		// if (path.includes("/tr/")) return "tr";
+		return "ar"; // default
+	};
+
 	const openModal = async (productId: string) => {
 		setIsLoading(true);
 		try {
@@ -77,6 +85,7 @@ function GlobalProductDetailsModal() {
 				product={currentProduct}
 				isOpen={isModalOpen}
 				onClose={closeModal}
+				language={getCurrentLanguage()}
 			/>
 		</>
 	);

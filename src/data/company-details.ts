@@ -1,5 +1,4 @@
 import type { CompanyDetails } from "../../types/types";
-import { baseAPI } from "../api/endpoints";
 
 let companyData: {
 	name: string;
@@ -13,17 +12,18 @@ let companyData: {
 };
 
 try {
-	const company = await fetch(`${baseAPI}/company`);
-	
+	const company = await fetch(`${import.meta.env.PUBLIC_API_URL}/company`);
+
 	if (!company.ok) {
 		throw new Error(`HTTP error! status: ${company.status}`);
 	}
-	
+
 	const data: CompanyDetails = await company.json();
-	
+	console.log(data);
+
 	companyData = {
 		name: data.name,
-		logo: typeof data.logo === 'string' ? data.logo : '',
+		logo: typeof data.logo === "string" ? data.logo : "",
 		address: data.address,
 		phone: data.phone,
 		email: "shaamtek4@gmail.com",
@@ -32,7 +32,7 @@ try {
 		whatsapp: data.whatsapp,
 	};
 } catch (error) {
-	console.error('Error fetching company data:', error);
+	console.error("Error fetching company data:", error);
 	// Fallback data in case of API failure
 	companyData = {
 		name: "Shamtek",

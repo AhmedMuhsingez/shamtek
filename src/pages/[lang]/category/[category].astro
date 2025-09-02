@@ -32,8 +32,6 @@ const items: ProductResponse = await getItems;
 const categoryProducts = items.data.filter(
 	(product: Product) => product.categoryId === categoryData.id
 );
-
-console.log(categoryName, categoryDescription);
 ---
 
 <Layout>
