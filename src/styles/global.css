@@ -6,9 +6,9 @@
 /* Root variables for smooth theme transitions */
 :root {
 	/* Fonts */
-	--font-ard: "Ard", sans-serif;
-	--font-cairo: "Cairo", sans-serif;
-
+	/* --font-ard: "Ard", sans-serif;
+	--font-cairo: "Cairo", sans-serif; */
+	--font-rubik: "Rubik", sans-serif;
 	/* Light theme - Enhanced vibrant colors */
 	--color-background: linear-gradient(
 		135deg,
@@ -154,16 +154,7 @@
 .swiper-button-next:after {
 	color: #5939c7;
 	border-radius: 50%;
-	/* background-color: #211e2c16; */
-	/* width: 4.5rem;
-	height: 4.5rem;
-	font-size: 2rem; */
 	padding: 4.5rem;
-}
-
-/* Global styles and transitions */
-* {
-	/* transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
 }
 
 /* Smooth theme transitions */
@@ -176,9 +167,9 @@ body {
 	background-attachment: fixed;
 	min-height: 100vh;
 	transition: background 0.5s ease;
+	font-family: var(--font-rubik), system-ui, -apple-system, sans-serif;
 }
 
-/* Enhanced body background with overlay pattern */
 body::before {
 	content: "";
 	position: fixed;
