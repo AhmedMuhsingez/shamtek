@@ -12,14 +12,14 @@ try {
 	const data: CompanyDetails = await company.json();
 
 	companyData = {
-		name: data.name,
+		name: data.name ?? "",
 		logo: typeof data.logo === "string" ? data.logo : "",
-		address: data.address,
-		phone: data.phone,
+		address: data.address ?? "",
+		phone: data.phone ?? "",
 		email: "shaamtek4@gmail.com",
-		facebook: data.facebook,
-		instagram: data.instagram,
-		whatsapp: data.whatsapp,
+		facebook: data.facebook ?? "",
+		instagram: data.instagram ?? "",
+		whatsapp: data.whatsapp ?? "",
 	};
 } catch (error) {
 	console.error("Error fetching company data:", error);

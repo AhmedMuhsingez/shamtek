@@ -6,8 +6,6 @@ const currentLang = Astro.params.lang;
 const currentSlug = Astro.url.pathname.split("/")[2];
 const subPageSlug = Astro.url.pathname.split("/")[3];
 
-console.log(currentLang, currentSlug, subPageSlug);
-
 const baseURL = `/${currentLang}/${currentSlug}${subPage ? `/${subPageSlug}` : ""}`;
 
 const currentPage = Number(Astro.url.searchParams.get("page") ?? 1);
