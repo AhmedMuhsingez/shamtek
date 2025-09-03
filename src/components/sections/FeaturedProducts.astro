@@ -18,7 +18,7 @@ const featuredProducts: Product[] = data;
 	<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-2 justify-between">
 		{
 			featuredProducts.map((product) => {
-				return <ProductCard product={product} isFeaturedProduct />;
+				return <ProductCard product={product} />;
 			})
 		}
 	</div>

@@ -5,7 +5,7 @@ import FeaturedProducts from "../../components/sections/FeaturedProducts.astro";
 import HeroSection from "../../components/sections/HeroSection.astro";
 import Layout from "../../layouts/Layout.astro";
 import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
-import { getTranslations, getStaticPathsForI18n, useTranslatedPath } from "../../utils/i18n";
+import { getTranslations, useTranslatedPath } from "../../utils/i18n";
 import { cn } from "../../utils/utils";
 
 const { lang } = Astro.params;
@@ -13,13 +13,11 @@ const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").
 const translatePath = useTranslatedPath(
 	lang as keyof typeof import("../../utils/i18n").languages
 );
-const isRTL = (lang as keyof typeof import("../../utils/i18n").languages) === "ar";
+const isRTL = lang as "ar";
 
-const products = await fetch(`${import.meta.env.BASE_API}/items`);
-const data: ProductsApiResponse = await products.json();
-
-const featuredProducts = data.data.filter((product) => product.is_featured);
-const hasFeaturedProducts = featuredProducts.length > 0;
+const getFeaturedProducts = await fetch(`${import.meta.env.BASE_API}/items?featured=true`);
+const featuredProducts: ProductResponse = await getFeaturedProducts.json();
+const hasFeaturedProducts = featuredProducts.data.length > 0;
 ---
 
 <Layout>
@@ -96,7 +94,7 @@ const hasFeaturedProducts = featuredProducts.length > 0;
 	{
 		hasFeaturedProducts && (
 			<div class="animate-fadeInUp">
-				<FeaturedProducts data={featuredProducts} />
+				<FeaturedProducts data={featuredProducts.data} />
 			</div>
 		)
 	}

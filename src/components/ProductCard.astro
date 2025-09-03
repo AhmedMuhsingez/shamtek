@@ -2,7 +2,6 @@
 import type { Product } from "../../types/types";
 import { cn } from "../utils/utils";
 import { getLangFromUrl, useTranslations } from "../utils/i18n";
-import { callSafely } from "astro:actions";
 
 const { product } = Astro.props;
 const data: Product = product;

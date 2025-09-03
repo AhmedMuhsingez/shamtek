@@ -67,7 +67,7 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 					<MenuItems
 						transition
 						anchor="bottom start"
-						className="z-50 min-w-[100px] mt-2 backdrop-blur-xl origin-top-left rounded-xl p-2 shadow-2xl border border-white/20 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 focus:outline-none transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 data-[closed]:-translate-y-1"
+						className="ml-2 z-50 min-w-[100px] mt-2 backdrop-blur-xl origin-top-left rounded-xl p-2 shadow-2xl border border-white/20 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 focus:outline-none transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 data-[closed]:-translate-y-1"
 					>
 						<div className="space-y-1">{menu_item}</div>
 					</MenuItems>

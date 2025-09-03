@@ -1,0 +1,347 @@
+---
+import type { Brand, Category } from "../../types/types";
+import { getTranslations } from "../utils/i18n";
+
+const { isBrand, isCategory } = Astro.props;
+const { lang } = Astro.params;
+
+const currentBrand = Astro.url.searchParams.get("brandId") || "";
+const currentCategory = Astro.url.searchParams.get("categoryId") || "";
+
+const getBrands = await fetch(`${import.meta.env.BASE_API}/brands`);
+const brands = await getBrands.json();
+
+const getCategories = await fetch(`${import.meta.env.BASE_API}/categories`);
+const categories = await getCategories.json();
+
+const t = await getTranslations(lang as "ar");
+---
+
+<div
+	id="filters-container"
+	class="filters-container hidden overflow-hidden transition-all duration-500 ease-in-out transform opacity-0 max-h-0 pt-5"
+>
+	<div
+		class="flex flex-col sm:flex-row gap-4 pt-6 pb-4 px-4 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg border border-primary/20 backdrop-blur-sm"
+	>
+		{
+			!isCategory && (
+				<div class="flex flex-col gap-2 flex-1">
+					<label for="category-filter" class="text-sm font-medium text-text-secondary">
+						{t.filters?.category || "Category"}
+					</label>
+					<select
+						id="category-filter"
+						class="w-full px-3 py-2 bg-background border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 hover:border-primary/50"
+					>
+						<option value="">{t.filters?.allCategories || "All Categories"}</option>
+						{categories?.map((category: Category) => (
+							<option
+								value={category.id}
+								selected={currentCategory === category.name}
+							>
+								{category.name}
+							</option>
+						))}
+					</select>
+				</div>
+			)
+		}
+
+		{
+			!isBrand && (
+				<div class="flex flex-col gap-2 flex-1">
+					<label for="brand-filter" class="text-sm font-medium text-text-secondary">
+						{t.filters?.brand || "Brand"}
+					</label>
+					<select
+						id="brand-filter"
+						class="w-full px-3 py-2 bg-background border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 hover:border-primary/50"
+					>
+						<option value="">{t.filters?.allBrands || "All Brands"}</option>
+						{brands?.map((brand: Brand) => (
+							<option value={brand.id} selected={currentBrand === brand.name}>
+								{brand.name}
+							</option>
+						))}
+					</select>
+				</div>
+			)
+		}
+
+		<div class="flex items-end">
+			<button
+				id="clear-filters"
+				type="button"
+				class="px-4 py-2 text-sm font-medium text-text-secondary hover:text-primary border border-gray-300 dark:border-gray-600 rounded-md hover:border-primary/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
+			>
+				{t.filters?.clear || "Clear"}
+			</button>
+		</div>
+	</div>
+</div>
+
+<script>
+	class PageHeaderController {
+		filtersContainer;
+		filtersButton;
+		filterIcon;
+		brandFilter;
+		categoryFilter;
+		clearButton;
+		isFiltersVisible;
+
+		constructor() {
+			this.filtersContainer = document.getElementById("filters-container");
+			this.filtersButton = document.getElementById("filters-button");
+			this.filterIcon = document.getElementById("filter-icon");
+			this.brandFilter = document.getElementById("brand-filter");
+			this.categoryFilter = document.getElementById("category-filter");
+			this.clearButton = document.getElementById("clear-filters");
+			this.isFiltersVisible = false;
+
+			if (!this.filtersButton) {
+				console.warn("PageHeaderController: Required elements not found");
+				return;
+			}
+
+			this.init();
+		}
+
+		init() {
+			try {
+				this.setupEventListeners();
+				this.syncFiltersWithURL();
+				this.checkInitialFilterState();
+			} catch (error) {
+				console.error("Error initializing PageHeader:", error);
+			}
+		}
+
+		setupEventListeners() {
+			if (this.filtersButton) {
+				this.filtersButton.replaceWith(this.filtersButton.cloneNode(true));
+				this.filtersButton = document.getElementById("filters-button");
+
+				// @ts-ignore
+				this.filtersButton.addEventListener("click", (e) => {
+					e.preventDefault();
+					this.toggleFilters();
+				});
+			}
+
+			if (this.brandFilter) {
+				this.brandFilter.addEventListener("change", () => {
+					this.updateURL();
+				});
+			}
+
+			if (this.categoryFilter) {
+				this.categoryFilter.addEventListener("change", () => {
+					this.updateURL();
+				});
+			}
+
+			if (this.clearButton) {
+				this.clearButton.addEventListener("click", (e) => {
+					e.preventDefault();
+					this.clearFilters();
+				});
+			}
+
+			window.addEventListener("popstate", () => {
+				this.syncFiltersWithURL();
+			});
+
+			window.addEventListener("resize", () => {
+				this.handleResize();
+			});
+		}
+
+		toggleFilters() {
+			if (!this.filtersContainer) return;
+
+			this.isFiltersVisible = !this.isFiltersVisible;
+
+			if (this.isFiltersVisible) {
+				this.showFilters();
+			} else {
+				this.hideFilters();
+			}
+		}
+
+		showFilters() {
+			if (!this.filtersContainer) return;
+
+			this.filtersContainer.classList.remove("hidden");
+			this.filtersContainer.offsetHeight;
+			this.filtersContainer.classList.remove("opacity-0", "max-h-0");
+			this.filtersContainer.classList.add("opacity-100", "max-h-96");
+
+			if (this.filterIcon) {
+				this.filterIcon.style.transform = "rotate(180deg)";
+			}
+
+			if (this.filtersButton) {
+				this.filtersButton.setAttribute("aria-expanded", "true");
+			}
+		}
+
+		hideFilters() {
+			if (!this.filtersContainer) return;
+
+			this.filtersContainer.classList.remove("opacity-100", "max-h-96");
+			this.filtersContainer.classList.add("opacity-0", "max-h-0");
+
+			if (this.filterIcon) {
+				this.filterIcon.style.transform = "rotate(0deg)";
+			}
+
+			if (this.filtersButton) {
+				this.filtersButton.setAttribute("aria-expanded", "false");
+			}
+
+			setTimeout(() => {
+				if (!this.isFiltersVisible && this.filtersContainer) {
+					this.filtersContainer.classList.add("hidden");
+				}
+			}, 500);
+		}
+
+		updateURL() {
+			try {
+				const url = new URL(window.location.href);
+				const params = new URLSearchParams(window.location.search);
+				// @ts-ignore
+				const brandValue = this.brandFilter?.value || "";
+				// @ts-ignore
+				const categoryValue = this.categoryFilter?.value || "";
+
+				if (brandValue) {
+					params.set("brandId", brandValue);
+				} else {
+					params.delete("brandId");
+				}
+
+				if (categoryValue) {
+					params.set("categoryId", categoryValue);
+				} else {
+					params.delete("categoryId");
+				}
+
+				params.delete("page");
+				const newURL = `${url.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+				window.history.pushState({}, "", newURL);
+				window.location.reload();
+			} catch (error) {
+				console.error("Error updating URL:", error);
+			}
+		}
+
+		syncFiltersWithURL() {
+			try {
+				const params = new URLSearchParams(window.location.search);
+				const brand = params.get("brandId") || "";
+				const category = params.get("categoryId") || "";
+
+				if (this.brandFilter) {
+					// @ts-ignore
+					this.brandFilter.value = brand;
+				}
+				if (this.categoryFilter) {
+					// @ts-ignore
+					this.categoryFilter.value = category;
+				}
+			} catch (error) {
+				console.error("Error syncing filters with URL:", error);
+			}
+		}
+
+		clearFilters() {
+			try {
+				// @ts-ignore
+				if (this.brandFilter) this.brandFilter.value = "";
+				// @ts-ignore
+				if (this.categoryFilter) this.categoryFilter.value = "";
+				this.updateURL();
+			} catch (error) {
+				console.error("Error clearing filters:", error);
+			}
+		}
+
+		checkInitialFilterState() {
+			const params = new URLSearchParams(window.location.search);
+			const hasActiveFilters = params.has("brandId") || params.has("categoryId");
+
+			if (hasActiveFilters && !this.isFiltersVisible) {
+				this.isFiltersVisible = true;
+				this.showFilters();
+			}
+		}
+
+		handleResize() {
+			if (window.innerWidth < 640 && this.isFiltersVisible) {
+				if (this.filtersContainer) {
+					this.filtersContainer.style.maxHeight = "none";
+				}
+			}
+		}
+	}
+
+	let pageHeaderController: PageHeaderController | null = null;
+
+	function initializePageHeader() {
+		if (pageHeaderController) {
+			pageHeaderController = null;
+		}
+		const button = document.getElementById("filters-button");
+		if (!button) {
+			return false;
+		}
+		pageHeaderController = new PageHeaderController();
+		return true;
+	}
+
+	function waitForElementsAndInitialize() {
+		const maxAttempts = 10;
+		let attempts = 0;
+
+		function attempt() {
+			attempts++;
+
+			if (initializePageHeader()) {
+				return;
+			}
+
+			if (attempts < maxAttempts) {
+				setTimeout(attempt, 100);
+			} else {
+				console.error("Failed to initialize PageHeader after maximum attempts");
+			}
+		}
+
+		attempt();
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		waitForElementsAndInitialize();
+	});
+
+	document.addEventListener("astro:page-load", () => {
+		setTimeout(waitForElementsAndInitialize, 50);
+	});
+
+	if (document.readyState !== "loading") {
+		setTimeout(waitForElementsAndInitialize, 50);
+	}
+
+	window.addEventListener("load", () => {
+		if (!pageHeaderController) {
+			setTimeout(waitForElementsAndInitialize, 100);
+		}
+	});
+
+	window.addEventListener("popstate", () => {
+		setTimeout(waitForElementsAndInitialize, 100);
+	});
+</script>
