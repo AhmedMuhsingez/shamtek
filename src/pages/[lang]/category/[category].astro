@@ -32,9 +32,11 @@ const categoryDescription = categoryData.description;
 let status: "loading" | "success" | "error" = "loading";
 let categoryProducts: ProductResponse | null = null;
 
+const brand = Astro.url.searchParams.get("brandId") ?? "";
+
 try {
 	const response = await fetch(
-		`${import.meta.env.BASE_API}/items?category=${categoryData.name}&page=${page}`
+		`${import.meta.env.BASE_API}/items?category=${categoryData.name}&brandId=${brand}&page=${page}`
 	);
 
 	if (response.status === 200) {
@@ -50,7 +52,7 @@ try {
 ---
 
 <Layout>
-	<PageHeader name={categoryName} description={categoryDescription} />
+	<PageHeader name={categoryName} description={categoryDescription} isCategory />
 
 	{
 		status === "success" ? (

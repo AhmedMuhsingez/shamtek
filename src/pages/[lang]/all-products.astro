@@ -11,12 +11,6 @@ const page = Astro.url.searchParams.get("page") ?? 1;
 const brand = Astro.url.searchParams.get("brandId") ?? "";
 const category = Astro.url.searchParams.get("categoryId") ?? "";
 
-const getBrands = await fetch(`${import.meta.env.BASE_API}/brands`);
-const brands = await getBrands.json();
-
-const getCategories = await fetch(`${import.meta.env.BASE_API}/categories`);
-const categories = await getCategories.json();
-
 let status: "loading" | "success" | "error" = "loading";
 let products: ProductResponse | null = null;
 
@@ -38,7 +32,7 @@ try {
 ---
 
 <Layout>
-	<PageHeader categories={categories} brands={brands} />
+	<PageHeader />
 
 	{
 		status === "success" ? (

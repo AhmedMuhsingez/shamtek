@@ -26,13 +26,14 @@ if (!brandData) {
 }
 
 const page = Astro.url.searchParams.get("page") ?? 1;
+const category = Astro.url.searchParams.get("categoryId") ?? "";
 
 let status: "loading" | "success" | "error" = "loading";
 let filteredProducts: ProductResponse | null = null;
 
 try {
 	const response = await fetch(
-		`${import.meta.env.BASE_API}/items?brand=${brandData.name}&page=${page}`
+		`${import.meta.env.BASE_API}/items?brand=${brandData.name}&categoryId=${category}&page=${page}`
 	);
 
 	if (response.status === 200) {
@@ -48,7 +49,7 @@ try {
 ---
 
 <Layout>
-	<PageHeader name={brandData.name} />
+	<PageHeader name={brandData.name} isBrand />
 
 	{
 		status === "success" ? (
