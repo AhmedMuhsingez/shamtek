@@ -71,7 +71,10 @@ function ChangeLanguage({ currentLang = "ar" }: Props) {
 
 	return (
 		<Menu>
-			<MenuButton className="flex gap-2 justify-center items-center text-lg cursor-pointer focus:outline-none group hover:scale-110 p-2 rounded-lg hover:bg-white/10  transition ease-in duration-200">
+			<MenuButton
+				aria-label="Change Language"
+				className="flex gap-2 justify-center items-center text-lg cursor-pointer focus:outline-none group hover:scale-110 p-2 rounded-lg hover:bg-white/10  transition ease-in duration-200"
+			>
 				<span className="mt-1 icon-[clarity--language-line] text-3xl group-hover:rotate-12 transition ease-in duration-200 items-center"></span>
 			</MenuButton>
 
