@@ -119,7 +119,6 @@ const categories = await getCategories.json();
 </div>
 
 <script>
-	// Enhanced PageHeader functionality with filter toggle and URL synchronization
 	class PageHeaderController {
 		filtersContainer: HTMLElement | null;
 		filtersButton: HTMLElement | null;
@@ -152,7 +151,6 @@ const categories = await getCategories.json();
 		}
 
 		setupEventListeners() {
-			// Toggle filters visibility
 			if (this.filtersButton) {
 				this.filtersButton.addEventListener("click", (e) => {
 					e.preventDefault();
@@ -160,7 +158,6 @@ const categories = await getCategories.json();
 				});
 			}
 
-			// Filter change handlers
 			if (this.brandFilter) {
 				this.brandFilter.addEventListener("change", () => {
 					this.updateURL();
@@ -173,19 +170,16 @@ const categories = await getCategories.json();
 				});
 			}
 
-			// Clear filters
 			if (this.clearButton) {
 				this.clearButton.addEventListener("click", () => {
 					this.clearFilters();
 				});
 			}
 
-			// Handle browser back/forward
 			window.addEventListener("popstate", () => {
 				this.syncFiltersWithURL();
 			});
 
-			// Handle responsive behavior
 			window.addEventListener("resize", () => {
 				this.handleResize();
 			});
@@ -206,22 +200,13 @@ const categories = await getCategories.json();
 		showFilters() {
 			if (!this.filtersContainer) return;
 
-			// Remove hidden class and prepare for animation
 			this.filtersContainer.classList.remove("hidden");
-
-			// Force reflow
 			this.filtersContainer.offsetHeight;
-
-			// Add visible classes with animation
 			this.filtersContainer.classList.remove("opacity-0", "max-h-0");
 			this.filtersContainer.classList.add("opacity-100", "max-h-96");
-
-			// Rotate filter icon
 			if (this.filterIcon) {
 				this.filterIcon.style.transform = "rotate(180deg)";
 			}
-
-			// Update ARIA attributes for accessibility
 			if (this.filtersButton) {
 				this.filtersButton.setAttribute("aria-expanded", "true");
 			}
@@ -229,22 +214,14 @@ const categories = await getCategories.json();
 
 		hideFilters() {
 			if (!this.filtersContainer) return;
-
-			// Start hide animation
 			this.filtersContainer.classList.remove("opacity-100", "max-h-96");
 			this.filtersContainer.classList.add("opacity-0", "max-h-0");
-
-			// Reset filter icon
 			if (this.filterIcon) {
 				this.filterIcon.style.transform = "rotate(0deg)";
 			}
-
-			// Update ARIA attributes
 			if (this.filtersButton) {
 				this.filtersButton.setAttribute("aria-expanded", "false");
 			}
-
-			// Hide completely after animation
 			setTimeout(() => {
 				if (!this.isFiltersVisible && this.filtersContainer) {
 					this.filtersContainer.classList.add("hidden");
@@ -256,32 +233,21 @@ const categories = await getCategories.json();
 			try {
 				const url = new URL(window.location.href);
 				const params = new URLSearchParams(window.location.search);
-
-				// Get current filter values
 				const brandValue = this.brandFilter?.value || "";
 				const categoryValue = this.categoryFilter?.value || "";
-
-				// Update or remove parameters
 				if (brandValue) {
 					params.set("brandId", brandValue);
 				} else {
 					params.delete("brandId");
 				}
-
 				if (categoryValue) {
 					params.set("categoryId", categoryValue);
 				} else {
 					params.delete("categoryId");
 				}
-
-				// Reset to page 1 when filters change
 				params.delete("page");
-
-				// Update URL without page reload
 				const newURL = `${url.pathname}${params.toString() ? "?" + params.toString() : ""}`;
 				window.history.pushState({}, "", newURL);
-
-				// Reload page to apply filters
 				window.location.reload();
 			} catch (error) {
 				console.error("Error updating URL:", error);
@@ -294,11 +260,9 @@ const categories = await getCategories.json();
 				const brand = params.get("brandId") || "";
 				const category = params.get("categoryId") || "";
 
-				// Update filter selections
 				if (this.brandFilter) {
 					this.brandFilter.value = brand;
 				}
-
 				if (this.categoryFilter) {
 					this.categoryFilter.value = category;
 				}
@@ -309,11 +273,8 @@ const categories = await getCategories.json();
 
 		clearFilters() {
 			try {
-				// Reset filter values
 				if (this.brandFilter) this.brandFilter.value = "";
 				if (this.categoryFilter) this.categoryFilter.value = "";
-
-				// Update URL
 				this.updateURL();
 			} catch (error) {
 				console.error("Error clearing filters:", error);
@@ -321,7 +282,6 @@ const categories = await getCategories.json();
 		}
 
 		checkInitialFilterState() {
-			// Show filters if any are active
 			const params = new URLSearchParams(window.location.search);
 			const hasActiveFilters = params.has("brandId") || params.has("categoryId");
 
@@ -332,9 +292,7 @@ const categories = await getCategories.json();
 		}
 
 		handleResize() {
-			// Ensure responsive behavior on window resize
 			if (window.innerWidth < 640 && this.isFiltersVisible) {
-				// Adjust layout for mobile if needed
 				if (this.filtersContainer) {
 					this.filtersContainer.style.maxHeight = "none";
 				}
@@ -342,12 +300,9 @@ const categories = await getCategories.json();
 		}
 	}
 
-	// Initialize when DOM is loaded
 	document.addEventListener("DOMContentLoaded", () => {
 		new PageHeaderController();
 	});
-
-	// Also initialize immediately if DOM is already loaded
 	if (document.readyState === "loading") {
 		document.addEventListener("DOMContentLoaded", () => {
 			new PageHeaderController();
