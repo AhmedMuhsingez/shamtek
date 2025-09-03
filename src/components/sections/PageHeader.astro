@@ -118,7 +118,7 @@ const categories = await getCategories.json();
 	</div>
 </div>
 
-<script>
+<!-- <script>
 	class PageHeaderController {
 		filtersContainer: HTMLElement | null;
 		filtersButton: HTMLElement | null;
@@ -300,14 +300,287 @@ const categories = await getCategories.json();
 		}
 	}
 
-	document.addEventListener("DOMContentLoaded", () => {
-		new PageHeaderController();
-	});
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", () => {
-			new PageHeaderController();
-		});
-	} else {
-		new PageHeaderController();
+	(function initializePageHeader() {
+		function createController() {
+			// Ensure the button exists before creating the controller
+			const button = document.getElementById("filters-button");
+			if (button) {
+				new PageHeaderController();
+			} else {
+				console.warn("Page header elements not ready, retrying...");
+				setTimeout(createController, 50);
+			}
+		}
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", createController);
+		} else {
+			createController();
+		}
+	})();
+</script> -->
+
+<script>
+	class PageHeaderController {
+		filtersContainer;
+		filtersButton;
+		filterIcon;
+		brandFilter;
+		categoryFilter;
+		clearButton;
+		isFiltersVisible;
+
+		constructor() {
+			this.filtersContainer = document.getElementById("filters-container");
+			this.filtersButton = document.getElementById("filters-button");
+			this.filterIcon = document.getElementById("filter-icon");
+			this.brandFilter = document.getElementById("brand-filter");
+			this.categoryFilter = document.getElementById("category-filter");
+			this.clearButton = document.getElementById("clear-filters");
+			this.isFiltersVisible = false;
+
+			if (!this.filtersButton) {
+				console.warn("PageHeaderController: Required elements not found");
+				return;
+			}
+
+			this.init();
+		}
+
+		init() {
+			try {
+				this.setupEventListeners();
+				this.syncFiltersWithURL();
+				this.checkInitialFilterState();
+			} catch (error) {
+				console.error("Error initializing PageHeader:", error);
+			}
+		}
+
+		setupEventListeners() {
+			if (this.filtersButton) {
+				this.filtersButton.replaceWith(this.filtersButton.cloneNode(true));
+				this.filtersButton = document.getElementById("filters-button");
+
+				// @ts-ignore
+				this.filtersButton.addEventListener("click", (e) => {
+					e.preventDefault();
+					this.toggleFilters();
+				});
+			}
+
+			if (this.brandFilter) {
+				this.brandFilter.addEventListener("change", () => {
+					this.updateURL();
+				});
+			}
+
+			if (this.categoryFilter) {
+				this.categoryFilter.addEventListener("change", () => {
+					this.updateURL();
+				});
+			}
+
+			if (this.clearButton) {
+				this.clearButton.addEventListener("click", (e) => {
+					e.preventDefault();
+					this.clearFilters();
+				});
+			}
+
+			window.addEventListener("popstate", () => {
+				this.syncFiltersWithURL();
+			});
+
+			window.addEventListener("resize", () => {
+				this.handleResize();
+			});
+		}
+
+		toggleFilters() {
+			if (!this.filtersContainer) return;
+
+			this.isFiltersVisible = !this.isFiltersVisible;
+
+			if (this.isFiltersVisible) {
+				this.showFilters();
+			} else {
+				this.hideFilters();
+			}
+		}
+
+		showFilters() {
+			if (!this.filtersContainer) return;
+
+			this.filtersContainer.classList.remove("hidden");
+			this.filtersContainer.offsetHeight;
+			this.filtersContainer.classList.remove("opacity-0", "max-h-0");
+			this.filtersContainer.classList.add("opacity-100", "max-h-96");
+
+			if (this.filterIcon) {
+				this.filterIcon.style.transform = "rotate(180deg)";
+			}
+
+			if (this.filtersButton) {
+				this.filtersButton.setAttribute("aria-expanded", "true");
+			}
+		}
+
+		hideFilters() {
+			if (!this.filtersContainer) return;
+
+			this.filtersContainer.classList.remove("opacity-100", "max-h-96");
+			this.filtersContainer.classList.add("opacity-0", "max-h-0");
+
+			if (this.filterIcon) {
+				this.filterIcon.style.transform = "rotate(0deg)";
+			}
+
+			if (this.filtersButton) {
+				this.filtersButton.setAttribute("aria-expanded", "false");
+			}
+
+			setTimeout(() => {
+				if (!this.isFiltersVisible && this.filtersContainer) {
+					this.filtersContainer.classList.add("hidden");
+				}
+			}, 500);
+		}
+
+		updateURL() {
+			try {
+				const url = new URL(window.location.href);
+				const params = new URLSearchParams(window.location.search);
+				// @ts-ignore
+				const brandValue = this.brandFilter?.value || "";
+				// @ts-ignore
+				const categoryValue = this.categoryFilter?.value || "";
+
+				if (brandValue) {
+					params.set("brandId", brandValue);
+				} else {
+					params.delete("brandId");
+				}
+
+				if (categoryValue) {
+					params.set("categoryId", categoryValue);
+				} else {
+					params.delete("categoryId");
+				}
+
+				params.delete("page");
+				const newURL = `${url.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+				window.history.pushState({}, "", newURL);
+				window.location.reload();
+			} catch (error) {
+				console.error("Error updating URL:", error);
+			}
+		}
+
+		syncFiltersWithURL() {
+			try {
+				const params = new URLSearchParams(window.location.search);
+				const brand = params.get("brandId") || "";
+				const category = params.get("categoryId") || "";
+
+				if (this.brandFilter) {
+					// @ts-ignore
+					this.brandFilter.value = brand;
+				}
+				if (this.categoryFilter) {
+					// @ts-ignore
+					this.categoryFilter.value = category;
+				}
+			} catch (error) {
+				console.error("Error syncing filters with URL:", error);
+			}
+		}
+
+		clearFilters() {
+			try {
+				// @ts-ignore
+				if (this.brandFilter) this.brandFilter.value = "";
+				// @ts-ignore
+				if (this.categoryFilter) this.categoryFilter.value = "";
+				this.updateURL();
+			} catch (error) {
+				console.error("Error clearing filters:", error);
+			}
+		}
+
+		checkInitialFilterState() {
+			const params = new URLSearchParams(window.location.search);
+			const hasActiveFilters = params.has("brandId") || params.has("categoryId");
+
+			if (hasActiveFilters && !this.isFiltersVisible) {
+				this.isFiltersVisible = true;
+				this.showFilters();
+			}
+		}
+
+		handleResize() {
+			if (window.innerWidth < 640 && this.isFiltersVisible) {
+				if (this.filtersContainer) {
+					this.filtersContainer.style.maxHeight = "none";
+				}
+			}
+		}
 	}
+
+	let pageHeaderController: PageHeaderController | null = null;
+
+	function initializePageHeader() {
+		if (pageHeaderController) {
+			pageHeaderController = null;
+		}
+		const button = document.getElementById("filters-button");
+		if (!button) {
+			return false;
+		}
+		pageHeaderController = new PageHeaderController();
+		return true;
+	}
+
+	function waitForElementsAndInitialize() {
+		const maxAttempts = 10;
+		let attempts = 0;
+
+		function attempt() {
+			attempts++;
+
+			if (initializePageHeader()) {
+				return;
+			}
+
+			if (attempts < maxAttempts) {
+				setTimeout(attempt, 100);
+			} else {
+				console.error("Failed to initialize PageHeader after maximum attempts");
+			}
+		}
+
+		attempt();
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		waitForElementsAndInitialize();
+	});
+
+	document.addEventListener("astro:page-load", () => {
+		setTimeout(waitForElementsAndInitialize, 50);
+	});
+
+	if (document.readyState !== "loading") {
+		setTimeout(waitForElementsAndInitialize, 50);
+	}
+
+	window.addEventListener("load", () => {
+		if (!pageHeaderController) {
+			setTimeout(waitForElementsAndInitialize, 100);
+		}
+	});
+
+	window.addEventListener("popstate", () => {
+		setTimeout(waitForElementsAndInitialize, 100);
+	});
 </script>
