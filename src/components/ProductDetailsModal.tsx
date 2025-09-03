@@ -3,6 +3,7 @@ import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@
 import type { Product } from "../../types/types";
 import { cn } from "../utils/utils";
 import { generateWhatsAppMessage, isWhatsAppAvailable } from "../utils/whatsapp";
+import MarkdownViewer from "./MarkdownViewer";
 
 interface ProductModalProps {
 	product: Product | null;
@@ -144,9 +145,12 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 
 									{displayProduct?.description && (
 										<div className="mb-6">
-											<p className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
+											{/* <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
 												{displayProduct.description}
-											</p>
+											</p> */}
+											<MarkdownViewer
+												content={displayProduct.description}
+											/>
 										</div>
 									)}
 
