@@ -5,26 +5,61 @@ import PageHeader from "../../components/sections/PageHeader.astro";
 import Layout from "../../layouts/Layout.astro";
 import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
 import Pagination from "../../components/sections/Pagination.astro";
+import NoItemsAvailable from "../../components/NoItemsAvailable.astro";
 
 const page = Astro.url.searchParams.get("page") ?? 1;
+const brand = Astro.url.searchParams.get("brandId") ?? "";
+const category = Astro.url.searchParams.get("categoryId") ?? "";
 
-const products = await fetch(`${import.meta.env.BASE_API}/items?page=${page}`);
-const data: ProductResponse = await products.json();
+const getBrands = await fetch(`${import.meta.env.BASE_API}/brands`);
+const brands = await getBrands.json();
+
+const getCategories = await fetch(`${import.meta.env.BASE_API}/categories`);
+const categories = await getCategories.json();
+
+let status: "loading" | "success" | "error" = "loading";
+let products: ProductResponse | null = null;
+
+try {
+	const response = await fetch(
+		`${import.meta.env.BASE_API}/items?page=${page}&brandId=${brand}&categoryId=${category}`
+	);
+
+	if (response.status === 200) {
+		products = await response.json();
+		status = "success";
+	} else {
+		status = "error";
+	}
+} catch (error) {
+	console.error("Error fetching products:", error);
+	status = "error";
+}
 ---
 
 <Layout>
-	<PageHeader />
-	<div
-		class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 flex-col gap-4 justify-between py-10"
-	>
-		{
-			data.data.map((product: Product) => {
-				return <ProductCard product={product} />;
-			})
-		}
-	</div>
+	<PageHeader categories={categories} brands={brands} />
 
-	<Pagination totalItems={data.meta.totalPages} />
+	{
+		status === "success" ? (
+			<>
+				<div class="container mx-auto py-10">
+					<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
+						{products!.data.map((product) => (
+							<div class="w-full h-full">
+								<ProductCard product={product} />
+							</div>
+						))}
+					</div>
+				</div>
+				<Pagination totalItems={products!.meta.totalPages} subPage />
+			</>
+		) : (
+			<div class="w-full h-full">
+				<NoItemsAvailable title="لا يوجد منتجات" descriptions="لا يوجد منتجات بعد!" />
+			</div>
+		)
+	}
 
 	<GlobalProductDetailsModal client:load />
 </Layout>

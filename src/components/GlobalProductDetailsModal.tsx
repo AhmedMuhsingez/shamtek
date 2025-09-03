@@ -5,7 +5,6 @@ import type { Product } from "../../types/types";
 function GlobalProductDetailsModal() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
 
 	// Detect current language from URL
 	const getCurrentLanguage = (): "ar" | "en" | "tr" => {
@@ -16,7 +15,6 @@ function GlobalProductDetailsModal() {
 	};
 
 	const openModal = async (productId: string) => {
-		setIsLoading(true);
 		try {
 			const response = await fetch(
 				`${import.meta.env.PUBLIC_API_URL}/single-item/${productId}`
@@ -30,9 +28,7 @@ function GlobalProductDetailsModal() {
 			setCurrentProduct(product);
 			setIsModalOpen(true);
 		} catch (error) {
-			console.error("خطأ في جلب بيانات المنتج:", error);
-		} finally {
-			setIsLoading(false);
+			console.error("Error fetching data:", error);
 		}
 	};
 
@@ -67,27 +63,12 @@ function GlobalProductDetailsModal() {
 	}, []);
 
 	return (
-		<>
-			{/* {isLoading && (
-				// <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-				// 	<div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl">
-				// 		<div className="flex items-center space-x-3 rtl:space-x-reverse">
-				// 			<div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-				// 			<span className="text-gray-700 dark:text-gray-300">
-				// 				جاري تحميل تفاصيل المنتج...
-				// 			</span>
-				// 		</div>
-				// 	</div>
-				// </div>
-			)} */}
-
-			<ProductDetailsModal
-				product={currentProduct}
-				isOpen={isModalOpen}
-				onClose={closeModal}
-				language={getCurrentLanguage()}
-			/>
-		</>
+		<ProductDetailsModal
+			product={currentProduct}
+			isOpen={isModalOpen}
+			onClose={closeModal}
+			language={getCurrentLanguage()}
+		/>
 	);
 }
 

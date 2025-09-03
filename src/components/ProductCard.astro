@@ -2,10 +2,10 @@
 import type { Product } from "../../types/types";
 import { cn } from "../utils/utils";
 import { getLangFromUrl, useTranslations } from "../utils/i18n";
+import { callSafely } from "astro:actions";
 
 const { product } = Astro.props;
 const data: Product = product;
-
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
@@ -15,6 +15,7 @@ const categoryLabel = await t("products.category");
 const codeNameLabel = await t("products.codeName");
 
 const stockState = data.stock_state?.toLowerCase();
+
 const inStock = stockState === "in_stock";
 const outOfStock = stockState === "out_of_stock";
 

@@ -99,6 +99,13 @@
 		"cookies": "ملفات تعريف الارتباط",
 		"poweredBy": "تم التطوير بواسطة "
 	},
+	"filters": {
+		"brand": "العلامة التجارية",
+		"category": "الفئة",
+		"allBrands": "جميع العلامات التجارية",
+		"allCategories": "جميع الفئات",
+		"clear": "مسح الفلاتر"
+	},
 	"products": {
 		"title": "منتجاتنا",
 		"categories": "الفئات",

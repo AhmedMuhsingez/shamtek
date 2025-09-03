@@ -9,8 +9,7 @@ function MarkdownViewer({ content }: Props) {
 		<div
 			className="markdown-content"
 			style={{
-				fontFamily: "var(--font-rubik)",
-				fontSize: "1.2rem", // equivalent to text-2xl
+				fontSize: "1.2rem",
 			}}
 		>
 			<Markdown rehypePlugins={[rehypeRaw]}>{content}</Markdown>
