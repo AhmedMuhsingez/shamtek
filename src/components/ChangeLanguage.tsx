@@ -58,6 +58,7 @@ function ChangeLanguage({ currentLang = "ar" }: Props) {
 							src={item.icon}
 							className="w-6 h-6 rounded-full shadow-sm group-hover:scale-110"
 							aria-label={item.name}
+							alt={`flag of ${item.name}`}
 						/>
 						{isActive && (
 							<div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse"></div>

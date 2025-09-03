@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import LoadingIndicator from "astro-loading-indicator/component";
 import { getTranslations } from "../utils/i18n";
+import { companyData } from "../data/company-details";
 
 interface Props {
 	currentLang?: string;
@@ -13,6 +14,17 @@ const t = await getTranslations(currentLang as keyof typeof import("../utils/i18
 
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta charset="UTF-8" />
+
+<!-- SEO -->
+
+<meta name="description" content={t.common.description} />
+<meta property="og:title" content="ShamTek" />
+<meta
+	property="og:description"
+	content="Discover high-quality products at unbeatable prices. Your one-stop destination for advanced technology."
+/>
+<meta property="og:image" content={companyData.logo} />
+<meta property="og:url" content="https://sham-tek.com" />
 
 <link rel="icon" type="image/png" href="/logo.jpeg" />
 

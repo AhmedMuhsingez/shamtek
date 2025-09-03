@@ -6,6 +6,7 @@ import WhatsAppButton from "./WhatsAppButton.astro";
 import { getTranslations, useTranslatedPath } from "../utils/i18n";
 import ToggleTheme from "./ToggleTheme.astro";
 import NavbarProducts from "./custom/NavbarProducts";
+import { companyData } from "../data/company-details";
 
 interface Props {
 	currentLang?: string;
@@ -41,7 +42,8 @@ const data = await brands.json();
 					href={translatePath("/")}
 					><img
 						src={logo.src}
-						class="w-12 h-12 md:w-16 md:h-16 rounded-lg shadow-sm"
+						class="w-12 h-12 md:w-16 md:h-16 rounded-lg shadow-sm object-cover"
+						alt={`${companyData.name} logo`}
 					/></a
 				>
 				<a
