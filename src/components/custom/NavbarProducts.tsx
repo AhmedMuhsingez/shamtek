@@ -13,18 +13,18 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 
 	useEffect(() => {
 		const currentPath = window.location.pathname;
-		const isProductPage = categories.some((category) =>
-			currentPath.includes(category.name.toLowerCase())
+		const isCategoryPage = categories.some((category) =>
+			currentPath.includes(category.slug.toLowerCase())
 		);
-		setIsActive(isProductPage);
+		setIsActive(isCategoryPage);
 	}, [categories]);
 
-	const menu_item = categories.map((item, index) => {
+	const menu_item = categories.map((item) => {
 		return (
 			<MenuItem key={item.id}>
 				{({ focus, active }) => (
 					<a
-						href={`/ar/brand/${item.slug}`}
+						href={`/ar/category/${item.slug}`}
 						className={`group flex w-full items-center gap-2 rounded-lg px-1 py-2.5 transition-all duration-200 justify-between ${
 							focus || active
 								? "bg-primary/20 text-primary transform scale-[1.02]"
@@ -44,18 +44,22 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 			{({ open }) => (
 				<div>
 					<MenuButton
-						className={`navbar-link flex gap-2 justify-center items-center text-lg cursor-pointer focus:outline-none group px-3 py-2 rounded-lg transition-all duration-200 ${
+						className={`navbar-link flex gap-2 justify-center items-center text-lg cursor-pointer focus:outline-none group md:px-3 px-2 py-2 rounded-lg transition-all duration-200 ${
 							isActive
 								? "text-primary bg-primary/10 font-semibold"
 								: "hover:text-primary hover:bg-primary/5"
 						}`}
 					>
 						<span className="font-medium">
-							{lang === "ar" ? "الماركات" : lang === "en" ? "Brands" : "Markalar"}
+							{lang === "ar"
+								? "الأقسام"
+								: lang === "en"
+								? "Categories"
+								: "Kategoriler"}
 						</span>
 						<Chevron
 							className={`transition-transform duration-300 ${
-								open ? "rotate-180" : "rotate-90"
+								open ? "rotate-90" : "rotate-180"
 							}`}
 						/>
 					</MenuButton>

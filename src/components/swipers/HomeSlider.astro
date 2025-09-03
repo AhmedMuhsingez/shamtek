@@ -11,13 +11,15 @@ interface Props {
 	id: string;
 }
 
-const { title, image, slug, items_count = 1, alt, currentLang = "ar", id } = Astro.props;
+const { title, image, slug, items_count = 1, alt, currentLang = "ar" } = Astro.props;
 const t = await getTranslations(currentLang as keyof typeof import("../../utils/i18n").languages);
+
+const href = `brand/${slug}`;
 ---
 
 <div class="swiper-slide">
 	<div class="flex flex-col gap-3 text-center">
-		<a href={`category/${slug}`} class="transition-transform duration-300 hover:scale-105">
+		<a href={href} class="transition-transform duration-300 hover:scale-105">
 			<img
 				src={image}
 				alt={alt}
@@ -25,7 +27,7 @@ const t = await getTranslations(currentLang as keyof typeof import("../../utils/
 			/></a
 		>
 		<a
-			href={id}
+			href={href}
 			class="text-2xl font-bold text-center transition-colors duration-300 hover:text-primary"
 			>{title}</a
 		>

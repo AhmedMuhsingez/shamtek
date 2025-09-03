@@ -13,7 +13,7 @@ export const socialButtons = [
 	},
 	{
 		name: "WhatsApp",
-		url: "https://wa.me/00963947859074",
+		url: companyData.whatsapp,
 		icon: "icon-[mdi--whatsapp]",
 	},
 ];

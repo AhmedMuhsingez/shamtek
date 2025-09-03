@@ -50,6 +50,7 @@ export interface Brand {
 	name: string;
 	image: string[] | string | Blob;
 	products: Product[];
+	slug: string;
 
 	_count: {
 		products: number;
@@ -81,14 +82,14 @@ export interface Contact {
 	createdAt: string;
 	updatedAt: string;
 }
-export interface Brand {
-	id: number;
-	name: string;
-	image: string | Blob | string[];
-	products: Product[];
-	createdAt: string;
-	updatedAt: string;
-}
+// export interface Brand {
+// 	id: number;
+// 	name: string;
+// 	image: string | Blob | string[];
+// 	products: Product[];
+// 	createdAt: string;
+// 	updatedAt: string;
+// }
 
 export interface Auth {
 	email: string;
@@ -118,13 +119,13 @@ export interface LatestItems {
 
 export interface CompanyDetails {
 	name: string;
-	description: string;
-	phone: string;
+	logo: string;
 	address: string;
-	logo: string | Blob;
-	whatsapp: string;
+	phone: string;
+	email: string;
 	facebook: string;
 	instagram: string;
+	whatsapp: string;
 }
 
 export interface ProductsApiResponse {

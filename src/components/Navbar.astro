@@ -17,7 +17,7 @@ const translatePath = useTranslatedPath(
 	currentLang as keyof typeof import("../utils/i18n").languages
 );
 
-const brands = await fetch(`${import.meta.env.BASE_API}/brands`);
+const brands = await fetch(`${import.meta.env.BASE_API}/categories`);
 const data = await brands.json();
 ---
 
@@ -33,7 +33,7 @@ const data = await brands.json();
 	>
 		<div
 			id="container"
-			class="w-full max-w-7xl px-6 py-4 lg:px-0 lg:py-2 flex justify-between items-center"
+			class="w-full max-w-7xl p-3 lg:px-0 lg:py-2 flex justify-between items-center"
 		>
 			<div class="flex gap-2 md:gap-4 items-center">
 				<a
@@ -60,7 +60,6 @@ const data = await brands.json();
 				</div>
 
 				<div class="flex gap-3 md:hidden">
-					<!-- <ChangeLanguage client:load /> -->
 					<ToggleTheme />
 					<NavbarProducts client:load categories={data} />
 				</div>

@@ -1,15 +1,6 @@
 import type { CompanyDetails } from "../../types/types";
 
-let companyData: {
-	name: string;
-	logo: string;
-	address: string;
-	phone: string;
-	email: string;
-	facebook: string;
-	instagram: string;
-	whatsapp: string;
-};
+let companyData: CompanyDetails;
 
 try {
 	const company = await fetch(`${import.meta.env.PUBLIC_API_URL}/company`);
@@ -32,17 +23,5 @@ try {
 	};
 } catch (error) {
 	console.error("Error fetching company data:", error);
-	// Fallback data in case of API failure
-	companyData = {
-		name: "Shamtek",
-		logo: "",
-		address: "",
-		phone: "",
-		email: "shaamtek4@gmail.com",
-		facebook: "",
-		instagram: "",
-		whatsapp: "",
-	};
 }
-
 export { companyData };
