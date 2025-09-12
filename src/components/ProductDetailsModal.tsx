@@ -86,6 +86,59 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 		}
 	};
 
+	// Copy to clipboard functionality
+	const copyToClipboard = async (itemUrl: string): Promise<{ success: boolean; error?: string }> => {
+		try {
+			// Check if clipboard API is available
+			if (!navigator.clipboard) {
+				throw new Error('Clipboard API not supported');
+			}
+
+			await navigator.clipboard.writeText(itemUrl);
+			return { success: true };
+		} catch (error) {
+			console.error('Failed to copy to clipboard:', error);
+			
+			// Fallback method for older browsers
+			try {
+				const textArea = document.createElement('textarea');
+				textArea.value = itemUrl;
+				textArea.style.position = 'fixed';
+				textArea.style.opacity = '0';
+				document.body.appendChild(textArea);
+				textArea.select();
+				document.execCommand('copy');
+				document.body.removeChild(textArea);
+				return { success: true };
+			} catch (fallbackError) {
+				return { 
+					success: false, 
+					error: error instanceof Error ? error.message : 'Failed to copy to clipboard'
+				};
+			}
+		}
+	};
+
+	const handleCopyClick = async () => {
+		if (!displayProduct) return;
+
+		// Generate the product URL based on current language and routing structure
+		const currentPath = window.location.pathname;
+		const langMatch = currentPath.match(/^\/(ar|en|tr)/);
+		const currentLang = langMatch ? langMatch[1] : 'ar';
+		const productUrl = `${window.location.origin}/${currentLang}/product/${displayProduct.id}`;
+		
+		const result = await copyToClipboard(productUrl);
+		
+		if (result.success) {
+			// You can add a toast notification here if needed
+			console.log('Product URL copied to clipboard successfully');
+		} else {
+			console.error('Failed to copy URL:', result.error);
+			// You can show an error message to the user here
+		}
+	};
+
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -213,10 +266,10 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 
 									{/* WhatsApp Button */}
 									{whatsappAvailable && (
-										<div className="mt-4 md:mt-6">
+										<div className="mt-4 md:mt-6 flex justify-between">
 											<button
 												onClick={handleWhatsAppClick}
-												className="hover:cursor-pointer w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-3 md:py-3 md:px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
+												className="md:w-[85%] w-[80%] hover:cursor-pointer bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-3 md:py-3 md:px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
 												aria-label={getWhatsAppButtonText()}
 											>
 												<span className="icon-[ic--twotone-whatsapp] text-xl group-hover:scale-110 transition-transform duration-300"></span>
@@ -225,6 +278,14 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 												</span>
 												<span className="icon-[material-symbols--arrow-outward] text-xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></span>
 											</button>
+
+											<button
+								onClick={handleCopyClick}
+								className="cursor-pointer bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold py-2 px-3 md:py-3 md:px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
+								aria-label="Copy product link"
+							>
+								<span className="icon-[solar--copy-line-duotone] group-hover:scale-125 transition-transform duration-300"></span>
+							</button>
 										</div>
 									)}
 

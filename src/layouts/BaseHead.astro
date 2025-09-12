@@ -6,29 +6,55 @@ import { companyData } from "../data/company-details";
 
 interface Props {
 	currentLang?: string;
+	title?: string;
+	description?: string;
+	canonicalURL?: string;
+	openGraph?: {
+		title?: string;
+		description?: string;
+		image?: string;
+		url?: string;
+		type?: string;
+	};
 }
 
-const { currentLang = "ar" } = Astro.props;
+const { currentLang = "ar", title, description, canonicalURL, openGraph } = Astro.props;
 const t = await getTranslations(currentLang as keyof typeof import("../utils/i18n").languages);
+
+// Use provided values or fallback to defaults
+const pageTitle = title || t.common.brandName;
+const pageDescription = description || t.common.description;
+const ogTitle = openGraph?.title || pageTitle;
+const ogDescription = openGraph?.description || pageDescription;
+const ogImage = openGraph?.image || companyData.logo;
+const ogUrl = openGraph?.url || canonicalURL || "https://sham-tek.com";
+const ogType = openGraph?.type || "website";
 ---
 
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta charset="UTF-8" />
 
 <!-- SEO -->
+<meta name="description" content={pageDescription} />
+{canonicalURL && <link rel="canonical" href={canonicalURL} />}
 
-<meta name="description" content={t.common.description} />
-<meta property="og:title" content="ShamTek" />
-<meta
-	property="og:description"
-	content="Discover high-quality products at unbeatable prices. Your one-stop destination for advanced technology."
-/>
-<meta property="og:image" content={companyData.logo} />
-<meta property="og:url" content="https://sham-tek.com" />
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={ogUrl} />
+<meta property="og:title" content={ogTitle} />
+<meta property="og:description" content={ogDescription} />
+<meta property="og:image" content={ogImage} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={ogUrl} />
+<meta property="twitter:title" content={ogTitle} />
+<meta property="twitter:description" content={ogDescription} />
+<meta property="twitter:image" content={ogImage} />
 
 <link rel="icon" type="image/png" href="/logo.jpeg" />
 
-<title>{t.common.brandName}</title>
+<title>{pageTitle}</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
