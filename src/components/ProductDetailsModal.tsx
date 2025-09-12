@@ -213,10 +213,10 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 
 									{/* WhatsApp Button */}
 									{whatsappAvailable && (
-										<div className="mt-4 md:mt-6">
+										<div className="mt-4 md:mt-6 flex justify-between">
 											<button
 												onClick={handleWhatsAppClick}
-												className="hover:cursor-pointer w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-3 md:py-3 md:px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
+												className="md:w-[85%] w-[80%] hover:cursor-pointer bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-3 md:py-3 md:px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
 												aria-label={getWhatsAppButtonText()}
 											>
 												<span className="icon-[ic--twotone-whatsapp] text-xl group-hover:scale-110 transition-transform duration-300"></span>
@@ -224,6 +224,13 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 													{getWhatsAppButtonText()}
 												</span>
 												<span className="icon-[material-symbols--arrow-outward] text-xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></span>
+											</button>
+
+											<button
+												// onClick={}
+												className="cursor-pointer bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold py-2 px-3 md:py-3 md:px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 group"
+											>
+												<span className="icon-[solar--copy-line-duotone] group-hover:scale-125 transition-transform duration-300"></span>
 											</button>
 										</div>
 									)}
