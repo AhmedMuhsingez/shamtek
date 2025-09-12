@@ -9,6 +9,20 @@ import ClientRouter from "astro/components/ClientRouter.astro";
 import LoadingIndicator from "astro-loading-indicator/component";
 // import GlobalProductModal from "../components/GlobalProductModal";
 
+interface Props {
+	title?: string;
+	description?: string;
+	canonicalURL?: string;
+	openGraph?: {
+		title?: string;
+		description?: string;
+		image?: string;
+		url?: string;
+		type?: string;
+	};
+}
+
+const { title, description, canonicalURL, openGraph } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const direction = getDirection(lang);
 ---
@@ -16,7 +30,13 @@ const direction = getDirection(lang);
 <!doctype html>
 <html lang={lang} dir={direction} class="overflow-y-scroll smooth-scroll">
 	<head>
-		<BaseHead currentLang={lang} />
+		<BaseHead 
+			currentLang={lang} 
+			title={title}
+			description={description}
+			canonicalURL={canonicalURL}
+			openGraph={openGraph}
+		/>
 		<script>
 			// Prevent flash of unstyled content (FOUC) for theme
 			(function () {
