@@ -4,6 +4,7 @@ import FeaturedProducts from "../../components/sections/FeaturedProducts.astro";
 import HeroSection from "../../components/sections/HeroSection.astro";
 import Layout from "../../layouts/Layout.astro";
 import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
+import UserCollections from "../../components/UserCollections";
 import { getTranslations, useTranslatedPath, getStaticPathsForI18n } from "../../utils/i18n";
 import { cn } from "../../utils/utils";
 import { featuredProducts } from "../../data/dummy-data";
@@ -26,6 +27,8 @@ const hasFeaturedProducts = featuredProducts.length > 0;
 	<div class="animate-slideInRight">
 		<HeroSection />
 	</div>
+
+	<UserCollections client:only="react" lang={lang as "ar" | "en" | "tr"} />
 
 	<section class="py-16 animate-fadeInUp">
 		<div class="text-center mb-12">

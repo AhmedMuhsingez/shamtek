@@ -386,4 +386,24 @@ const canonicalUrl = `${Astro.site}${lang}/product/${productId}`;
 
 	<!-- Hidden product data for JavaScript -->
 	<script type="application/json" id="product-data" set:html={JSON.stringify(product)} />
+
+	<script>
+		// Persist this product view to the localStorage "recently viewed" list.
+		import { addRecentlyViewed } from "../../../utils/storage";
+
+		function recordView() {
+			try {
+				const raw = document.getElementById("product-data")?.textContent;
+				if (!raw) return;
+				const { id } = JSON.parse(raw);
+				if (id) addRecentlyViewed(String(id));
+			} catch (error) {
+				console.error("Failed to record recently viewed product:", error);
+			}
+		}
+
+		document.addEventListener("astro:page-load", recordView);
+		if (document.readyState !== "loading") recordView();
+		else document.addEventListener("DOMContentLoaded", recordView);
+	</script>
 </Layout>

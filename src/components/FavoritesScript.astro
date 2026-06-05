@@ -1,0 +1,42 @@
+---
+// Global handler that turns the heart buttons on product cards into a
+// localStorage-backed favorites toggle. Included once from the Layout.
+---
+
+<script>
+	import { toggleFavorite, getFavorites, FAVORITES_EVENT } from "../utils/storage";
+
+	function setBtnState(btn: Element, active: boolean) {
+		btn.setAttribute("aria-pressed", String(active));
+		btn.setAttribute("title", active ? "إزالة من المفضلة" : "إضافة إلى المفضلة");
+		const icon = btn.querySelector(".fav-icon");
+		if (icon) {
+			icon.classList.toggle("icon-[mdi--heart]", active);
+			icon.classList.toggle("icon-[mdi--heart-outline]", !active);
+			icon.classList.toggle("scale-110", active);
+		}
+	}
+
+	function syncAll() {
+		const favs = getFavorites();
+		document.querySelectorAll<HTMLElement>(".favorite-btn").forEach((btn) => {
+			setBtnState(btn, favs.includes(btn.getAttribute("data-fav-id") || ""));
+		});
+	}
+
+	document.addEventListener("click", (e) => {
+		const btn = (e.target as HTMLElement).closest(".favorite-btn");
+		if (!btn) return;
+		// Don't let the click bubble into the card (which opens the modal).
+		e.preventDefault();
+		e.stopPropagation();
+		const id = btn.getAttribute("data-fav-id");
+		if (!id) return;
+		setBtnState(btn, toggleFavorite(id));
+	});
+
+	window.addEventListener(FAVORITES_EVENT, syncAll);
+	document.addEventListener("astro:page-load", syncAll);
+	if (document.readyState !== "loading") syncAll();
+	else document.addEventListener("DOMContentLoaded", syncAll);
+</script>

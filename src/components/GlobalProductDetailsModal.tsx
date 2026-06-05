@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ProductDetailsModal from "./ProductDetailsModal";
 import type { Product } from "../../types/types";
 import { getProductById } from "../data/dummy-data";
+import { addRecentlyViewed } from "../utils/storage";
 
 function GlobalProductDetailsModal() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +22,7 @@ function GlobalProductDetailsModal() {
 			console.error(`Product not found: ${productId}`);
 			return;
 		}
+		addRecentlyViewed(product.id);
 		setCurrentProduct(product);
 		setIsModalOpen(true);
 	};
@@ -33,6 +35,8 @@ function GlobalProductDetailsModal() {
 	useEffect(() => {
 		const handleButtonClick = (e: Event) => {
 			const target = e.target as HTMLElement;
+			// Heart button lives inside the card — let the favorites handler own it.
+			if (target.closest(".favorite-btn")) return;
 			const productButton = target.closest("[data-product-id]") as HTMLElement;
 
 			if (
