@@ -23,6 +23,9 @@ export default defineConfig({
 		defaultLocale: "ar",
 		routing: {
 			prefixDefaultLocale: true,
+			// Don't let Astro emit its own slow (2s) `/` → `/ar/` redirect page;
+			// we provide an instant redirect in src/pages/index.astro instead.
+			redirectToDefaultLocale: false,
 		},
 	},
 

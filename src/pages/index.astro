@@ -1,16 +1,19 @@
 ---
-// Root index page — static redirect to the default locale (/ar).
+// Root index page — instant redirect to the default locale (/ar).
 ---
 
 <!doctype html>
 <html lang="ar">
 	<head>
 		<meta charset="utf-8" />
-		<meta http-equiv="refresh" content="0; url=/ar" />
-		<link rel="canonical" href="/ar" />
+		<meta http-equiv="refresh" content="0; url=/ar/" />
+		<link rel="canonical" href="/ar/" />
+		<script is:inline>
+			window.location.replace("/ar/");
+		</script>
 		<title>شام تِك</title>
 	</head>
 	<body>
-		<a href="/ar">المتابعة إلى الموقع</a>
+		<a href="/ar/">المتابعة إلى الموقع</a>
 	</body>
 </html>

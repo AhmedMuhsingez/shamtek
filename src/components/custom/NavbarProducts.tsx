@@ -15,7 +15,7 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 	useEffect(() => {
 		const currentPath = window.location.pathname;
 		const isCategoryPage = categories.some((category) =>
-			currentPath.includes(category.slug.toLowerCase())
+			currentPath.includes(category.slug.toLowerCase()),
 		);
 		setIsActive(isCategoryPage);
 	}, [categories]);
@@ -35,7 +35,6 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 						<span className="font-medium">
 							{localizeCategoryName(item.slug, item.name, lang)}
 						</span>
-						<span className="icon-[mdi-light--chevron-left] text-2xl"></span>
 					</a>
 				)}
 			</MenuItem>
@@ -57,8 +56,8 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 							{lang === "ar"
 								? "الأقسام"
 								: lang === "en"
-								? "Categories"
-								: "Kategoriler"}
+									? "Categories"
+									: "Kategoriler"}
 						</span>
 						<Chevron
 							className={`transition-transform duration-300 ${

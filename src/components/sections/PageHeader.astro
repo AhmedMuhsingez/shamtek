@@ -14,6 +14,15 @@ const {
 ---
 
 <div class="relative animate-fadeInUp w-full flex justify-center items-center my-6">
+	<a
+		href={`/${lang}`}
+		class="absolute cursor-pointer right-0 top-1/2 transform -translate-y-1/2 group flex items-center justify-center w-8 h-8 md:w-12 md:h-12 bg-gradient-primary hover:bg-gradient-secondary rounded-full shadow-vibrant hover:shadow-vibrant-lg hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+	>
+		<span
+			class={`icon-[maki--arrow] text-white dark:text-text text-xl md:text-2xl ${lang !== "ar" ? "rotate-180" : ""}`}
+		></span>
+	</a>
+
 	<button
 		id="filters-button"
 		type="button"
@@ -35,15 +44,6 @@ const {
 			</h1>
 		</div>
 	</div>
-
-	<a
-		href={`/${lang}`}
-		class="absolute cursor-pointer right-0 top-1/2 transform -translate-y-1/2 group flex items-center justify-center w-8 h-8 md:w-12 md:h-12 bg-gradient-primary hover:bg-gradient-secondary rounded-full shadow-vibrant hover:shadow-vibrant-lg hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
-	>
-		<span
-			class={`icon-[maki--arrow] text-white dark:text-text text-xl md:text-2xl ${lang !== "ar" ? "rotate-180" : ""}`}
-		></span>
-	</a>
 </div>
 {description && <p class="text-xl text-center mb-6">{description}</p>}
 
