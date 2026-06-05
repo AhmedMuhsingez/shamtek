@@ -1,78 +1,41 @@
 ---
-import type { Brand, Product, ProductResponse } from "../../../../types/types";
 import GlobalProductDetailsModal from "../../../components/GlobalProductDetailsModal";
-import NoItemsAvailable from "../../../components/NoItemsAvailable.astro";
-import ProductCard from "../../../components/ProductCard.astro";
+import ProductsView from "../../../components/ProductsView.astro";
 import PageHeader from "../../../components/sections/PageHeader.astro";
-import Pagination from "../../../components/sections/Pagination.astro";
 import Layout from "../../../layouts/Layout.astro";
-import { getTranslations } from "../../../utils/i18n";
+import { getTranslations, languages } from "../../../utils/i18n";
+import { brands, getBrandBySlug, products, localizeProducts, type Lang } from "../../../data/dummy-data";
+
+export function getStaticPaths() {
+	return Object.keys(languages).flatMap((lang) =>
+		brands.map((brand) => ({ params: { lang, brand: brand.slug } }))
+	);
+}
 
 const { brand } = Astro.params;
 const { lang } = Astro.params as { lang: string };
 const t = await getTranslations(lang as keyof typeof import("../../../utils/i18n").languages);
 
-if (!brand) {
-	return Astro.redirect("/404");
-}
-
-const getBrand = fetch(`${import.meta.env.BASE_API}/single-brand/${brand}`).then((res) =>
-	res.json()
-);
-const brandData: Brand = await getBrand;
+const brandData = getBrandBySlug(brand);
 
 if (!brandData) {
 	return Astro.redirect("/404");
 }
 
-const page = Astro.url.searchParams.get("page") ?? 1;
-const category = Astro.url.searchParams.get("categoryId") ?? "";
-
-let status: "loading" | "success" | "error" = "loading";
-let filteredProducts: ProductResponse | null = null;
-
-try {
-	const response = await fetch(
-		`${import.meta.env.BASE_API}/items?brand=${brandData.name}&categoryId=${category}&page=${page}`
-	);
-
-	if (response.status === 200) {
-		filteredProducts = await response.json();
-		status = "success";
-	} else {
-		status = "error";
-	}
-} catch (error) {
-	console.error("Error fetching products:", error);
-	status = "error";
-}
+const brandProducts = localizeProducts(
+	products.filter((p) => p.brandId === brandData.id),
+	lang as Lang
+);
 ---
 
 <Layout>
 	<PageHeader name={brandData.name} isBrand />
 
-	{
-		status === "success" ? (
-			<>
-				<div class="container mx-auto py-10">
-					<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
-						{filteredProducts!.data.map((product) => (
-							<div class="w-full h-full">
-								<ProductCard product={product} />
-							</div>
-						))}
-					</div>
-				</div>
-
-				<Pagination totalItems={filteredProducts!.meta.totalPages} subPage />
-			</>
-		) : (
-			<NoItemsAvailable
-				title={t.brands.noItemsTitle}
-				descriptions={t.brands.noItemsDescription}
-			/>
-		)
-	}
+	<ProductsView
+		products={brandProducts}
+		noItemsTitle={t.brands.noItemsTitle}
+		noItemsDescription={t.brands.noItemsDescription}
+	/>
 
 	<GlobalProductDetailsModal client:load />
 </Layout>

@@ -1,59 +1,28 @@
 ---
-import type { Product, ProductResponse } from "../../../types/types";
-import ProductCard from "../../components/ProductCard.astro";
+import ProductsView from "../../components/ProductsView.astro";
 import PageHeader from "../../components/sections/PageHeader.astro";
 import Layout from "../../layouts/Layout.astro";
 import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
-import Pagination from "../../components/sections/Pagination.astro";
-import NoItemsAvailable from "../../components/NoItemsAvailable.astro";
+import { getStaticPathsForI18n, getTranslations } from "../../utils/i18n";
+import { products, localizeProducts, type Lang } from "../../data/dummy-data";
 
-const page = Astro.url.searchParams.get("page") ?? 1;
-const brand = Astro.url.searchParams.get("brandId") ?? "";
-const category = Astro.url.searchParams.get("categoryId") ?? "";
-
-let status: "loading" | "success" | "error" = "loading";
-let products: ProductResponse | null = null;
-
-try {
-	const response = await fetch(
-		`${import.meta.env.BASE_API}/items?page=${page}&brandId=${brand}&categoryId=${category}`
-	);
-
-	if (response.status === 200) {
-		products = await response.json();
-		status = "success";
-	} else {
-		status = "error";
-	}
-} catch (error) {
-	console.error("Error fetching products:", error);
-	status = "error";
+export function getStaticPaths() {
+	return getStaticPathsForI18n();
 }
+
+const { lang } = Astro.params;
+const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
+const localizedProducts = localizeProducts(products, lang as Lang);
 ---
 
 <Layout>
 	<PageHeader />
 
-	{
-		status === "success" ? (
-			<>
-				<div class="container mx-auto py-10">
-					<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
-						{products!.data.map((product) => (
-							<div class="w-full h-full">
-								<ProductCard product={product} />
-							</div>
-						))}
-					</div>
-				</div>
-				<Pagination totalItems={products!.meta.totalPages} />
-			</>
-		) : (
-			<div class="w-full h-full">
-				<NoItemsAvailable title="لا يوجد منتجات" descriptions="لا يوجد منتجات بعد!" />
-			</div>
-		)
-	}
+	<ProductsView
+		products={localizedProducts}
+		noItemsTitle={t.brands.noItemsTitle}
+		noItemsDescription={t.brands.noItemsDescription}
+	/>
 
 	<GlobalProductDetailsModal client:load />
 </Layout>

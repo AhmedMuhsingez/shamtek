@@ -1,13 +1,19 @@
 ---
 import type { Product } from "../../../../types/types";
 import Layout from "../../../layouts/Layout.astro";
-import { useTranslatedPath } from "../../../utils/i18n";
+import { useTranslatedPath, languages } from "../../../utils/i18n";
 import { cn } from "../../../utils/utils";
 import MarkdownViewer from "../../../components/MarkdownViewer";
-import { generateWhatsAppMessage, isWhatsAppAvailable } from "../../../utils/whatsapp";
+import { isWhatsAppAvailable } from "../../../utils/whatsapp";
+import { products, getProductById, localizeProduct, type Lang } from "../../../data/dummy-data";
+
+export function getStaticPaths() {
+	return Object.keys(languages).flatMap((lang) =>
+		products.map((p) => ({ params: { lang, product: p.id } }))
+	);
+}
 
 const { product: productId } = Astro.params;
-// console.log(productId);
 
 const { lang } = Astro.params as { lang: string };
 const translatePath = useTranslatedPath(
@@ -15,30 +21,13 @@ const translatePath = useTranslatedPath(
 );
 const isRTL = lang === "ar";
 
-if (!productId) {
+const rawProduct: Product | null = getProductById(productId);
+
+if (!rawProduct) {
 	return Astro.redirect("/404");
 }
 
-let product: Product | null = null;
-let status: "loading" | "success" | "error" = "loading";
-
-try {
-	const response = await fetch(`${import.meta.env.BASE_API}/single-item/${productId}`);
-
-	if (response.status === 200) {
-		product = await response.json();
-		status = "success";
-	} else {
-		status = "error";
-	}
-} catch (error) {
-	console.error("Error fetching product:", error);
-	status = "error";
-}
-
-if (!product) {
-	return Astro.redirect("/404");
-}
+const product: Product = localizeProduct(rawProduct, lang as Lang);
 
 const stockState = product?.stock_state?.toLowerCase();
 const isInStock = stockState === "in_stock";
@@ -399,4 +388,24 @@ const canonicalUrl = `${Astro.site}${lang}/product/${productId}`;
 
 	<!-- Hidden product data for JavaScript -->
 	<script type="application/json" id="product-data" set:html={JSON.stringify(product)} />
+
+	<script>
+		// Persist this product view to the localStorage "recently viewed" list.
+		import { addRecentlyViewed } from "../../../utils/storage";
+
+		function recordView() {
+			try {
+				const raw = document.getElementById("product-data")?.textContent;
+				if (!raw) return;
+				const { id } = JSON.parse(raw);
+				if (id) addRecentlyViewed(String(id));
+			} catch (error) {
+				console.error("Failed to record recently viewed product:", error);
+			}
+		}
+
+		document.addEventListener("astro:page-load", recordView);
+		if (document.readyState !== "loading") recordView();
+		else document.addEventListener("DOMContentLoaded", recordView);
+	</script>
 </Layout>

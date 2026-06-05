@@ -4,7 +4,6 @@ import { defineConfig } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
-import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,10 +11,8 @@ export default defineConfig({
 		plugins: [tailwindcss()],
 	},
 
-	output: "server",
-	adapter: node({
-		mode: "standalone",
-	}),
+	// Fully static demo build (no backend) — deployable as static files on Vercel.
+	output: "static",
 
 	i18n: {
 		locales: [

@@ -4,6 +4,7 @@ import ToggleTheme from "./ToggleTheme.astro";
 import navbar from "../data/navbar.json";
 import NavbarProducts from "../components/custom/NavbarProducts.tsx";
 import { getLangFromUrl, getTranslations, useTranslatedPath } from "../utils/i18n";
+import { categories as data } from "../data/dummy-data";
 
 interface Props {
 	currentLang?: string;
@@ -13,9 +14,6 @@ const { currentLang } = Astro.props;
 const lang = currentLang || getLangFromUrl(Astro.url);
 const t = await getTranslations(lang as keyof typeof import("../utils/i18n").languages);
 const translatePath = useTranslatedPath(lang as keyof typeof import("../utils/i18n").languages);
-
-const brands = await fetch(`${import.meta.env.BASE_API}/categories`);
-const data = await brands.json();
 
 const currentPath = Astro.url.pathname;
 ---

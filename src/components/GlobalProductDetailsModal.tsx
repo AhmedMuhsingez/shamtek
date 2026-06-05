@@ -1,35 +1,29 @@
 import { useState, useEffect } from "react";
 import ProductDetailsModal from "./ProductDetailsModal";
 import type { Product } from "../../types/types";
+import { getProductById, localizeProduct, type Lang } from "../data/dummy-data";
+import { addRecentlyViewed } from "../utils/storage";
 
 function GlobalProductDetailsModal() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
 
-	// Detect current language from URL
-	const getCurrentLanguage = (): "ar" | "en" | "tr" => {
-		// const path = window.location.pathname;
-		// if (path.includes("/en/")) return "en";
-		// if (path.includes("/tr/")) return "tr";
-		return "ar"; // default
+	// Detect current language from the URL prefix (/ar, /en, ...).
+	const getCurrentLanguage = (): Lang => {
+		if (typeof window === "undefined") return "ar";
+		const match = window.location.pathname.match(/^\/(ar|en|tr)/);
+		return (match?.[1] as Lang) || "ar";
 	};
 
-	const openModal = async (productId: string) => {
-		try {
-			const response = await fetch(
-				`${import.meta.env.PUBLIC_API_URL}/single-item/${productId}`
-			);
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-
-			const product: Product = await response.json();
-			setCurrentProduct(product);
-			setIsModalOpen(true);
-		} catch (error) {
-			console.error("Error fetching data:", error);
+	const openModal = (productId: string) => {
+		const product = getProductById(productId);
+		if (!product) {
+			console.error(`Product not found: ${productId}`);
+			return;
 		}
+		addRecentlyViewed(product.id);
+		setCurrentProduct(localizeProduct(product, getCurrentLanguage()));
+		setIsModalOpen(true);
 	};
 
 	const closeModal = () => {
@@ -40,6 +34,8 @@ function GlobalProductDetailsModal() {
 	useEffect(() => {
 		const handleButtonClick = (e: Event) => {
 			const target = e.target as HTMLElement;
+			// Heart button lives inside the card — let the favorites handler own it.
+			if (target.closest(".favorite-btn")) return;
 			const productButton = target.closest("[data-product-id]") as HTMLElement;
 
 			if (

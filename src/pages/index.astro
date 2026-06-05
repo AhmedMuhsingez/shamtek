@@ -1,5 +1,16 @@
 ---
-// Root index page for Astro i18n routing
-// This will automatically redirect to /ar (default locale)
-return Astro.redirect('/ar');
+// Root index page — static redirect to the default locale (/ar).
 ---
+
+<!doctype html>
+<html lang="ar">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="refresh" content="0; url=/ar" />
+		<link rel="canonical" href="/ar" />
+		<title>شام تِك</title>
+	</head>
+	<body>
+		<a href="/ar">المتابعة إلى الموقع</a>
+	</body>
+</html>

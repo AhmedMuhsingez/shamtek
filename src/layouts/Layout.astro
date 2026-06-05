@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar.astro";
 import BaseHead from "./BaseHead.astro";
 import "../styles/global.css";
 import SizeIndicator from "../components/custom/SizeIndicator.astro";
+import FavoritesScript from "../components/FavoritesScript.astro";
 import Footer from "../components/sections/Footer.astro";
 import { getLangFromUrl, getDirection } from "../utils/i18n";
 import ClientRouter from "astro/components/ClientRouter.astro";
@@ -60,6 +61,7 @@ const direction = getDirection(lang);
 			<slot />
 		</div>
 		<Footer currentLang={lang} />
+		<FavoritesScript />
 		<!-- <GlobalProductModal client:load /> -->
 		<ClientRouter />
 	</body>

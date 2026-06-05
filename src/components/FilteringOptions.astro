@@ -1,18 +1,13 @@
 ---
 import type { Brand, Category } from "../../types/types";
 import { getTranslations } from "../utils/i18n";
+import { brands, categories, localizeCategoryName, type Lang } from "../data/dummy-data";
 
 const { isBrand, isCategory } = Astro.props;
 const { lang } = Astro.params;
 
 const currentBrand = Astro.url.searchParams.get("brandId") || "";
 const currentCategory = Astro.url.searchParams.get("categoryId") || "";
-
-const getBrands = await fetch(`${import.meta.env.BASE_API}/brands`);
-const brands = await getBrands.json();
-
-const getCategories = await fetch(`${import.meta.env.BASE_API}/categories`);
-const categories = await getCategories.json();
 
 const t = await getTranslations(lang as "ar");
 ---
@@ -40,7 +35,7 @@ const t = await getTranslations(lang as "ar");
 								value={category.id}
 								selected={currentCategory === category.name}
 							>
-								{category.name}
+								{localizeCategoryName(category.slug, category.name, lang as Lang)}
 							</option>
 						))}
 					</select>

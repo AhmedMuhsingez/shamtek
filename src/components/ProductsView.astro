@@ -1,0 +1,171 @@
+---
+import type { Product } from "../../types/types";
+import ProductCard from "./ProductCard.astro";
+import NoItemsAvailable from "./NoItemsAvailable.astro";
+
+interface Props {
+	products: Product[];
+	pageSize?: number;
+	noItemsTitle?: string;
+	noItemsDescription?: string;
+}
+
+const {
+	products,
+	pageSize = 8,
+	noItemsTitle = "لا توجد منتجات متاحة حالياً",
+	noItemsDescription = "سنقوم بإضافة منتجات جديدة قريباً",
+} = Astro.props;
+---
+
+<div class="container mx-auto py-10">
+	<div
+		id="products-grid"
+		data-page-size={pageSize}
+		class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr"
+	>
+		{
+			products.map((product) => (
+				<div
+					class="w-full h-full"
+					data-product-card
+					data-brand-id={String(product.brandId)}
+					data-category-id={String(product.categoryId)}
+				>
+					<ProductCard product={product} />
+				</div>
+			))
+		}
+	</div>
+
+	<div id="no-items" class="hidden">
+		<NoItemsAvailable title={noItemsTitle} descriptions={noItemsDescription} />
+	</div>
+
+	<nav id="pagination-container" class="w-full justify-items-center mt-4 hidden"></nav>
+</div>
+
+<script>
+	// Client-side filtering + pagination for the static demo. The page renders the
+	// full product set once; this script reads `brandId`, `categoryId` and `page`
+	// from the URL and shows the matching slice.
+	function setupProductsView() {
+		const grid = document.getElementById("products-grid");
+		const pagination = document.getElementById("pagination-container");
+		const noItems = document.getElementById("no-items");
+		if (!grid || !pagination || !noItems) return;
+
+		const pageSize = Number(grid.getAttribute("data-page-size")) || 8;
+		const cards = Array.from(
+			grid.querySelectorAll<HTMLElement>("[data-product-card]")
+		);
+
+		function getParams() {
+			const p = new URLSearchParams(window.location.search);
+			return {
+				brandId: p.get("brandId") || "",
+				categoryId: p.get("categoryId") || "",
+				page: Number(p.get("page")) || 1,
+			};
+		}
+
+		function buildUrl(page: number) {
+			const p = new URLSearchParams(window.location.search);
+			if (page <= 1) p.delete("page");
+			else p.set("page", String(page));
+			const qs = p.toString();
+			return `${window.location.pathname}${qs ? "?" + qs : ""}`;
+		}
+
+		function renderPagination(current: number, totalPages: number) {
+			pagination!.innerHTML = "";
+			if (totalPages <= 1) {
+				pagination!.classList.add("hidden");
+				return;
+			}
+			pagination!.classList.remove("hidden");
+
+			const ul = document.createElement("ul");
+			ul.className =
+				"flex max-w-5xl justify-between w-full items-center border-t border-black dark:border-white py-4";
+
+			const makeArrow = (target: number, enabled: boolean, rotate: boolean) => {
+				const li = document.createElement("li");
+				const a = document.createElement("a");
+				a.href = buildUrl(target);
+				a.innerHTML = `<span class="icon-[carbon--next-outline] text-4xl! ${rotate ? "rotate-180" : ""} ${enabled ? "" : "opacity-50"}"></span>`;
+				if (!enabled) {
+					a.removeAttribute("href");
+					a.style.pointerEvents = "none";
+				}
+				li.appendChild(a);
+				return li;
+			};
+
+			ul.appendChild(makeArrow(current - 1, current > 1, false));
+
+			const numbers = document.createElement("div");
+			numbers.className = "flex gap-2 items-center";
+			for (let i = 1; i <= totalPages; i++) {
+				const li = document.createElement("li");
+				li.className = "text-xl font-semibold";
+				const a = document.createElement("a");
+				a.href = buildUrl(i);
+				a.textContent = String(i);
+				a.className =
+					i === current ? "text-2xl opacity-100" : "opacity-50";
+				li.appendChild(a);
+				numbers.appendChild(li);
+			}
+			ul.appendChild(numbers);
+
+			ul.appendChild(makeArrow(current + 1, current < totalPages, true));
+			pagination!.appendChild(ul);
+
+			pagination!.querySelectorAll("a[href]").forEach((link) => {
+				link.addEventListener("click", (e) => {
+					e.preventDefault();
+					const href = (link as HTMLAnchorElement).getAttribute("href");
+					if (href) {
+						window.history.pushState({}, "", href);
+						apply();
+						window.scrollTo({ top: 0, behavior: "smooth" });
+					}
+				});
+			});
+		}
+
+		function apply() {
+			const { brandId, categoryId, page } = getParams();
+			const matched = cards.filter(
+				(c) =>
+					(!brandId || c.dataset.brandId === brandId) &&
+					(!categoryId || c.dataset.categoryId === categoryId)
+			);
+
+			cards.forEach((c) => (c.style.display = "none"));
+
+			if (matched.length === 0) {
+				noItems!.classList.remove("hidden");
+				pagination!.classList.add("hidden");
+				return;
+			}
+			noItems!.classList.add("hidden");
+
+			const totalPages = Math.max(1, Math.ceil(matched.length / pageSize));
+			const current = Math.min(Math.max(1, page), totalPages);
+			matched
+				.slice((current - 1) * pageSize, current * pageSize)
+				.forEach((c) => (c.style.display = ""));
+
+			renderPagination(current, totalPages);
+		}
+
+		apply();
+		window.addEventListener("popstate", apply);
+	}
+
+	document.addEventListener("astro:page-load", setupProductsView);
+	if (document.readyState !== "loading") setupProductsView();
+	else document.addEventListener("DOMContentLoaded", setupProductsView);
+</script>
