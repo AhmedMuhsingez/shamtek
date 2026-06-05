@@ -2,6 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import Chevron from "../Icons/Chevron";
 import type { Category } from "../../../types/types";
+import { localizeCategoryName } from "../../data/dummy-data";
 
 type Props = {
 	categories: Category[];
@@ -24,14 +25,16 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 			<MenuItem key={item.id}>
 				{({ focus, active }) => (
 					<a
-						href={`/ar/category/${item.slug}`}
+						href={`/${lang}/category/${item.slug}`}
 						className={`group flex w-full items-center gap-2 rounded-lg px-1 py-2.5 transition-all duration-200 justify-between ${
 							focus || active
 								? "bg-primary/20 text-primary transform scale-[1.02]"
 								: "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
 						}`}
 					>
-						<span className="font-medium">{item.name}</span>
+						<span className="font-medium">
+							{localizeCategoryName(item.slug, item.name, lang)}
+						</span>
 						<span className="icon-[mdi-light--chevron-left] text-2xl"></span>
 					</a>
 				)}

@@ -39,12 +39,20 @@ function resolve(ids: string[]): Product[] {
 	return ids.map((id) => getProductById(id)).filter((p): p is Product => Boolean(p));
 }
 
-function MiniCard({ product, onRemove }: { product: Product; onRemove?: (id: string) => void }) {
+function MiniCard({
+	product,
+	lang,
+	onRemove,
+}: {
+	product: Product;
+	lang: Lang;
+	onRemove?: (id: string) => void;
+}) {
 	const image = Array.isArray(product.image) ? product.image[0] : (product.image as string);
 	return (
 		<div className="group relative flex-shrink-0 w-32">
 			<a
-				href={`/ar/product/${product.id}`}
+				href={`/${lang}/product/${product.id}`}
 				className="block rounded-xl overflow-hidden bg-white/60 dark:bg-surface/60 border border-white/30 dark:border-white/10 shadow-soft hover:shadow-vibrant transition-all duration-300 hover:-translate-y-1"
 			>
 				<img src={image} alt={product.name} className="w-full h-24 object-cover" loading="lazy" />
@@ -72,6 +80,7 @@ function Column({
 	count,
 	hint,
 	products,
+	lang,
 	onRemove,
 }: {
 	icon: string;
@@ -79,6 +88,7 @@ function Column({
 	count: number;
 	hint: string;
 	products: Product[];
+	lang: Lang;
 	onRemove?: (id: string) => void;
 }) {
 	return (
@@ -95,7 +105,7 @@ function Column({
 			) : (
 				<div className="flex gap-3 overflow-x-auto pb-3 scroll-smooth">
 					{products.map((p) => (
-						<MiniCard key={p.id} product={p} onRemove={onRemove} />
+						<MiniCard key={p.id} product={p} lang={lang} onRemove={onRemove} />
 					))}
 				</div>
 			)}
@@ -143,6 +153,7 @@ function UserCollections({ lang = "ar" }: { lang?: Lang }) {
 						count={favorites.length}
 						hint={t.favHint}
 						products={favorites}
+						lang={lang}
 						onRemove={removeFavorite}
 					/>
 					<div className="hidden md:block w-px bg-white/20 dark:bg-white/10"></div>
@@ -152,6 +163,7 @@ function UserCollections({ lang = "ar" }: { lang?: Lang }) {
 						count={recent.length}
 						hint={t.recentHint}
 						products={recent}
+						lang={lang}
 					/>
 				</div>
 			</div>

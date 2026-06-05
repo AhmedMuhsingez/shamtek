@@ -1,7 +1,7 @@
 ---
 import type { Brand, Category } from "../../types/types";
 import { getTranslations } from "../utils/i18n";
-import { brands, categories } from "../data/dummy-data";
+import { brands, categories, localizeCategoryName, type Lang } from "../data/dummy-data";
 
 const { isBrand, isCategory } = Astro.props;
 const { lang } = Astro.params;
@@ -35,7 +35,7 @@ const t = await getTranslations(lang as "ar");
 								value={category.id}
 								selected={currentCategory === category.name}
 							>
-								{category.name}
+								{localizeCategoryName(category.slug, category.name, lang as Lang)}
 							</option>
 						))}
 					</select>

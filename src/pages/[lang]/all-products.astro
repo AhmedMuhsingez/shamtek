@@ -3,18 +3,26 @@ import ProductsView from "../../components/ProductsView.astro";
 import PageHeader from "../../components/sections/PageHeader.astro";
 import Layout from "../../layouts/Layout.astro";
 import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModal";
-import { getStaticPathsForI18n } from "../../utils/i18n";
-import { products } from "../../data/dummy-data";
+import { getStaticPathsForI18n, getTranslations } from "../../utils/i18n";
+import { products, localizeProducts, type Lang } from "../../data/dummy-data";
 
 export function getStaticPaths() {
 	return getStaticPathsForI18n();
 }
+
+const { lang } = Astro.params;
+const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
+const localizedProducts = localizeProducts(products, lang as Lang);
 ---
 
 <Layout>
 	<PageHeader />
 
-	<ProductsView products={products} />
+	<ProductsView
+		products={localizedProducts}
+		noItemsTitle={t.brands.noItemsTitle}
+		noItemsDescription={t.brands.noItemsDescription}
+	/>
 
 	<GlobalProductDetailsModal client:load />
 </Layout>

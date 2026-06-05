@@ -61,7 +61,11 @@ const translatePath = useTranslatedPath(
 
 				<div class="flex gap-3 md:hidden">
 					<ToggleTheme />
-					<NavbarProducts client:load categories={data} />
+					<NavbarProducts
+						client:load
+						categories={data}
+						lang={currentLang as "ar" | "en" | "tr"}
+					/>
 				</div>
 			</div>
 		</div>

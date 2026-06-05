@@ -7,7 +7,7 @@ import GlobalProductDetailsModal from "../../components/GlobalProductDetailsModa
 import UserCollections from "../../components/UserCollections";
 import { getTranslations, useTranslatedPath, getStaticPathsForI18n } from "../../utils/i18n";
 import { cn } from "../../utils/utils";
-import { featuredProducts } from "../../data/dummy-data";
+import { featuredProducts, localizeProducts, type Lang } from "../../data/dummy-data";
 
 export function getStaticPaths() {
 	return getStaticPathsForI18n();
@@ -20,7 +20,8 @@ const translatePath = useTranslatedPath(
 );
 const isRTL = lang as "ar";
 
-const hasFeaturedProducts = featuredProducts.length > 0;
+const localizedFeatured = localizeProducts(featuredProducts, lang as Lang);
+const hasFeaturedProducts = localizedFeatured.length > 0;
 ---
 
 <Layout>
@@ -99,7 +100,7 @@ const hasFeaturedProducts = featuredProducts.length > 0;
 	{
 		hasFeaturedProducts && (
 			<div class="animate-fadeInUp">
-				<FeaturedProducts data={featuredProducts} />
+				<FeaturedProducts data={localizedFeatured} />
 			</div>
 		)
 	}

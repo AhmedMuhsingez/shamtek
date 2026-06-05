@@ -4,7 +4,7 @@ import ProductsView from "../../../components/ProductsView.astro";
 import PageHeader from "../../../components/sections/PageHeader.astro";
 import Layout from "../../../layouts/Layout.astro";
 import { getTranslations, languages } from "../../../utils/i18n";
-import { brands, getBrandBySlug, products } from "../../../data/dummy-data";
+import { brands, getBrandBySlug, products, localizeProducts, type Lang } from "../../../data/dummy-data";
 
 export function getStaticPaths() {
 	return Object.keys(languages).flatMap((lang) =>
@@ -22,7 +22,10 @@ if (!brandData) {
 	return Astro.redirect("/404");
 }
 
-const brandProducts = products.filter((p) => p.brandId === brandData.id);
+const brandProducts = localizeProducts(
+	products.filter((p) => p.brandId === brandData.id),
+	lang as Lang
+);
 ---
 
 <Layout>

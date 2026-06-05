@@ -1,7 +1,7 @@
 // Supported languages
 export const languages = {
 	ar: "العربية",
-	// en: 'English',
+	en: "English",
 	// tr: 'Türkçe',
 };
 

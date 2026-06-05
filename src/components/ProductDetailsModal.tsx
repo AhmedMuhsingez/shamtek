@@ -44,10 +44,44 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 	const isInStock = stockState === "in_stock";
 	const isOutOfStock = stockState === "out_of_stock";
 
+	const LABELS = {
+		ar: {
+			brand: "العلامة التجارية",
+			category: "القسم",
+			status: "الحالة",
+			code: "رقم المنتج",
+			added: "تاريخ الإضافة",
+			inStock: "متوفر",
+			outOfStock: "غير متوفر",
+			comingSoon: "قادم قريباً",
+		},
+		en: {
+			brand: "Brand",
+			category: "Category",
+			status: "Status",
+			code: "Product Code",
+			added: "Added on",
+			inStock: "In Stock",
+			outOfStock: "Out of Stock",
+			comingSoon: "Coming Soon",
+		},
+		tr: {
+			brand: "Marka",
+			category: "Kategori",
+			status: "Durum",
+			code: "Ürün Kodu",
+			added: "Eklenme Tarihi",
+			inStock: "Stokta",
+			outOfStock: "Stokta Yok",
+			comingSoon: "Yakında",
+		},
+	} as const;
+	const L = LABELS[language] ?? LABELS.ar;
+
 	const getStockLabel = () => {
-		if (isInStock) return "متوفر";
-		if (isOutOfStock) return "غير متوفر";
-		return "قادم قريباً";
+		if (isInStock) return L.inStock;
+		if (isOutOfStock) return L.outOfStock;
+		return L.comingSoon;
 	};
 
 	const getStockColor = () => {
@@ -212,7 +246,7 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50 items-center">
 											<div className="flex items-center justify-between">
 												<span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-													{"العلامة التجارية"}
+													{L.brand}
 												</span>
 												<span className="text-base font-semibold text-primary dark:text-accent bg-primary/10 dark:bg-accent/10 px-3 py-1 rounded-full">
 													{displayProduct?.brand?.name}
@@ -224,7 +258,7 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50 items-center">
 											<div className="flex items-center justify-between">
 												<span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-													{"القسم"}
+													{L.category}
 												</span>
 												<span className="text-base font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/50 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-600">
 													{displayProduct?.category?.name || "N/A"}
@@ -236,7 +270,7 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 										<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50 items-center content-center">
 											<div className="flex items-center justify-between">
 												<span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-													{"الحالة"}
+													{L.status}
 												</span>
 												<span
 													className={cn(
@@ -254,7 +288,7 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 											<div className="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700/50 items-center">
 												<div className="flex items-center justify-between">
 													<span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-														{"رقم المنتج"}
+														{L.code}
 													</span>
 													<span className="text-base font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/50 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-600 font-mono">
 														{displayProduct.code_name}
@@ -293,7 +327,7 @@ function ProductDetailsModal({ product, isOpen, onClose, language = "ar" }: Prod
 									<div className="mt-4 md:mt-6">
 										<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
 											<span>
-												تاريخ الإضافة:{" "}
+												{L.added}:{" "}
 												{displayProduct?.createdAt
 													? new Date(
 															displayProduct.createdAt

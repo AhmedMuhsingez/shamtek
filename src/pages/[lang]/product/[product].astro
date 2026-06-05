@@ -5,7 +5,7 @@ import { useTranslatedPath, languages } from "../../../utils/i18n";
 import { cn } from "../../../utils/utils";
 import MarkdownViewer from "../../../components/MarkdownViewer";
 import { isWhatsAppAvailable } from "../../../utils/whatsapp";
-import { products, getProductById } from "../../../data/dummy-data";
+import { products, getProductById, localizeProduct, type Lang } from "../../../data/dummy-data";
 
 export function getStaticPaths() {
 	return Object.keys(languages).flatMap((lang) =>
@@ -21,11 +21,13 @@ const translatePath = useTranslatedPath(
 );
 const isRTL = lang === "ar";
 
-const product: Product | null = getProductById(productId);
+const rawProduct: Product | null = getProductById(productId);
 
-if (!product) {
+if (!rawProduct) {
 	return Astro.redirect("/404");
 }
+
+const product: Product = localizeProduct(rawProduct, lang as Lang);
 
 const stockState = product?.stock_state?.toLowerCase();
 const isInStock = stockState === "in_stock";

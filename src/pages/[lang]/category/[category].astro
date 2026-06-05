@@ -5,7 +5,15 @@ import PageHeader from "../../../components/sections/PageHeader.astro";
 import Layout from "../../../layouts/Layout.astro";
 import { getTranslations } from "../../../utils/i18n";
 import { languages } from "../../../utils/i18n";
-import { categories, getCategoryBySlug, products } from "../../../data/dummy-data";
+import {
+	categories,
+	getCategoryBySlug,
+	products,
+	localizeProducts,
+	localizeCategoryName,
+	localizeCategoryDescription,
+	type Lang,
+} from "../../../data/dummy-data";
 
 export function getStaticPaths() {
 	return Object.keys(languages).flatMap((lang) =>
@@ -23,11 +31,20 @@ if (!categoryData) {
 	return Astro.redirect("/404");
 }
 
-const categoryProducts = products.filter((p) => p.categoryId === categoryData.id);
+const categoryName = localizeCategoryName(categoryData.slug, categoryData.name, lang as Lang);
+const categoryDescription = localizeCategoryDescription(
+	categoryData.slug,
+	categoryData.description,
+	lang as Lang
+);
+const categoryProducts = localizeProducts(
+	products.filter((p) => p.categoryId === categoryData.id),
+	lang as Lang
+);
 ---
 
 <Layout>
-	<PageHeader name={categoryData.name} description={categoryData.description} isCategory />
+	<PageHeader name={categoryName} description={categoryDescription} isCategory />
 
 	<ProductsView
 		products={categoryProducts}

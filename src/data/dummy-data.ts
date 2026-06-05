@@ -134,3 +134,78 @@ export function getProducts(opts: { brandId?: number; categoryId?: number; featu
 		meta: { page: 1, pageSize: data.length, totalCount: data.length, totalPages: 1 },
 	};
 }
+
+// --- Localization ---------------------------------------------------------
+// Product and brand names are already English-friendly; category names and
+// product descriptions are authored in Arabic, so we provide English variants
+// here and localize at the point of use (where the active language is known).
+export type Lang = "ar" | "en" | "tr";
+
+const CATEGORY_NAMES_EN: Record<string, string> = {
+	smartphones: "Smartphones",
+	laptops: "Laptops",
+	accessories: "Accessories",
+	audio: "Audio",
+};
+
+const CATEGORY_DESC_EN: Record<string, string> = {
+	smartphones: "The latest smartphones from top brands",
+	laptops: "High-performance laptops for all your needs",
+	accessories: "Tech accessories that complete your devices",
+	audio: "High-quality headphones and speakers",
+};
+
+const DESCRIPTIONS_EN: Record<string, string> = {
+	IP15P: "The **iPhone 15 Pro** with the A17 Pro chip, a pro-grade camera system and a titanium design.",
+	SGS24U: "Dynamic AMOLED 2X display with the built-in S Pen and a 200 MP camera.",
+	IP14: "Powerful performance and long-lasting battery at a great price.",
+	GA55: "A mid-range phone with excellent specifications.",
+	MBP16: "The **MacBook Pro** with the M3 Pro chip and a Liquid Retina XDR display.",
+	DXPS15: "A slim laptop with professional performance for designers and developers.",
+	MBA13: "Light and thin with all-day battery life.",
+	DIN14: "A practical choice for everyday use and studying.",
+	APP2: "**AirPods Pro** with active noise cancellation and spatial audio.",
+	WH1000XM5: "The best noise-cancelling headphones with exceptional sound quality.",
+	WFC700N: "Compact wireless earbuds with noise cancellation.",
+	APC26800: "A high-capacity power bank to charge your devices anytime.",
+	AHUB7: "A seven-port USB-C hub to expand your laptop's capabilities.",
+	AMSC: "A fast magnetic wireless charger for iPhone.",
+	S45W: "A super-fast 45-watt charger.",
+	SBSB: "A Dolby Atmos soundbar for a cinematic experience at home.",
+};
+
+const slugByCategoryId = (id: number) => categories.find((c) => c.id === id)?.slug ?? "";
+
+/** Localizes a category name by slug, falling back to the (Arabic) original. */
+export function localizeCategoryName(slug: string, fallback: string, lang: Lang = "ar"): string {
+	if (lang === "en") return CATEGORY_NAMES_EN[slug] ?? fallback;
+	return fallback;
+}
+
+/** Localizes a category description by slug, falling back to the original. */
+export function localizeCategoryDescription(
+	slug: string,
+	fallback: string | null | undefined,
+	lang: Lang = "ar"
+): string | null | undefined {
+	if (lang === "en") return CATEGORY_DESC_EN[slug] ?? fallback;
+	return fallback;
+}
+
+/** Returns a copy of the product with localized description + category name. */
+export function localizeProduct(product: Product, lang: Lang = "ar"): Product {
+	if (lang !== "en") return product;
+	const slug = slugByCategoryId(product.categoryId);
+	return {
+		...product,
+		description: (product.code_name && DESCRIPTIONS_EN[product.code_name]) || product.description,
+		category: {
+			...product.category,
+			name: localizeCategoryName(slug, product.category.name, lang),
+		},
+	};
+}
+
+export function localizeProducts(list: Product[], lang: Lang = "ar"): Product[] {
+	return lang === "en" ? list.map((p) => localizeProduct(p, lang)) : list;
+}

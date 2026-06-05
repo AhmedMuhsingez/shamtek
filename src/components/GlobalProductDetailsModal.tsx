@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
 import ProductDetailsModal from "./ProductDetailsModal";
 import type { Product } from "../../types/types";
-import { getProductById } from "../data/dummy-data";
+import { getProductById, localizeProduct, type Lang } from "../data/dummy-data";
 import { addRecentlyViewed } from "../utils/storage";
 
 function GlobalProductDetailsModal() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
 
-	// Detect current language from URL
-	const getCurrentLanguage = (): "ar" | "en" | "tr" => {
-		// const path = window.location.pathname;
-		// if (path.includes("/en/")) return "en";
-		// if (path.includes("/tr/")) return "tr";
-		return "ar"; // default
+	// Detect current language from the URL prefix (/ar, /en, ...).
+	const getCurrentLanguage = (): Lang => {
+		if (typeof window === "undefined") return "ar";
+		const match = window.location.pathname.match(/^\/(ar|en|tr)/);
+		return (match?.[1] as Lang) || "ar";
 	};
 
 	const openModal = (productId: string) => {
@@ -23,7 +22,7 @@ function GlobalProductDetailsModal() {
 			return;
 		}
 		addRecentlyViewed(product.id);
-		setCurrentProduct(product);
+		setCurrentProduct(localizeProduct(product, getCurrentLanguage()));
 		setIsModalOpen(true);
 	};
 
