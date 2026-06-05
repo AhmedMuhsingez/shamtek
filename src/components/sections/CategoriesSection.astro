@@ -1,6 +1,7 @@
 ---
-import type { Brand, Category } from "../../../types/types";
+import type { Brand } from "../../../types/types";
 import { getLangFromUrl, getTranslations } from "../../utils/i18n";
+import { brands as data } from "../../data/dummy-data";
 import HomeSlider from "../swipers/HomeSlider.astro";
 
 interface Props {
@@ -12,9 +13,6 @@ const lang = currentLang || getLangFromUrl(Astro.url);
 const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);
 
 const brandDescription = "";
-
-const brands = await fetch(`${import.meta.env.BASE_API}/brands`);
-const data = await brands.json();
 ---
 
 <div class="mt-10 md:mt-20 mb-10">

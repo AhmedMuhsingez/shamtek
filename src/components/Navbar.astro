@@ -7,6 +7,7 @@ import { getTranslations, useTranslatedPath } from "../utils/i18n";
 import ToggleTheme from "./ToggleTheme.astro";
 import NavbarProducts from "./custom/NavbarProducts";
 import { companyData } from "../data/company-details";
+import { categories as data } from "../data/dummy-data";
 
 interface Props {
 	currentLang?: string;
@@ -17,9 +18,6 @@ const t = await getTranslations(currentLang as keyof typeof import("../utils/i18
 const translatePath = useTranslatedPath(
 	currentLang as keyof typeof import("../utils/i18n").languages
 );
-
-const brands = await fetch(`${import.meta.env.BASE_API}/categories`);
-const data = await brands.json();
 ---
 
 <div

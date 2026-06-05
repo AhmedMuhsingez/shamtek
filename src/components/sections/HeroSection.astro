@@ -1,10 +1,6 @@
 ---
-import type { CompanyDetails } from "../../../types/types";
-import { baseAPI } from "../../api/endpoints";
+import { company as data } from "../../data/dummy-data";
 import { getTranslations, useTranslatedPath } from "../../utils/i18n";
-
-const company = await fetch(`${baseAPI}/company`);
-const data: CompanyDetails = await company.json();
 
 const { lang } = Astro.params;
 const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").languages);

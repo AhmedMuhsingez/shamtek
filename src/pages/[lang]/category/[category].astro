@@ -1,80 +1,39 @@
 ---
-import type { Product, Category, ProductResponse } from "../../../../types/types";
 import GlobalProductDetailsModal from "../../../components/GlobalProductDetailsModal";
-import NoItemsAvailable from "../../../components/NoItemsAvailable.astro";
-import ProductCard from "../../../components/ProductCard.astro";
+import ProductsView from "../../../components/ProductsView.astro";
 import PageHeader from "../../../components/sections/PageHeader.astro";
-import Pagination from "../../../components/sections/Pagination.astro";
 import Layout from "../../../layouts/Layout.astro";
 import { getTranslations } from "../../../utils/i18n";
+import { languages } from "../../../utils/i18n";
+import { categories, getCategoryBySlug, products } from "../../../data/dummy-data";
+
+export function getStaticPaths() {
+	return Object.keys(languages).flatMap((lang) =>
+		categories.map((category) => ({ params: { lang, category: category.slug } }))
+	);
+}
 
 const { category } = Astro.params;
 const { lang } = Astro.params as { lang: string };
 const t = await getTranslations(lang as keyof typeof import("../../../utils/i18n").languages);
-const page = Astro.url.searchParams.get("page") ?? 1;
 
-if (!category) {
-	return Astro.redirect("/404");
-}
-
-const getCategoryData = fetch(`${import.meta.env.BASE_API}/single-category/${category}`).then(
-	(res) => res.json()
-);
-const categoryData: Category = await getCategoryData;
+const categoryData = getCategoryBySlug(category);
 
 if (!categoryData) {
 	return Astro.redirect("/404");
 }
 
-const categoryName = categoryData.name;
-const categoryDescription = categoryData.description;
-
-let status: "loading" | "success" | "error" = "loading";
-let categoryProducts: ProductResponse | null = null;
-
-const brand = Astro.url.searchParams.get("brandId") ?? "";
-
-try {
-	const response = await fetch(
-		`${import.meta.env.BASE_API}/items?category=${categoryData.name}&brandId=${brand}&page=${page}`
-	);
-
-	if (response.status === 200) {
-		categoryProducts = await response.json();
-		status = "success";
-	} else {
-		status = "error";
-	}
-} catch (error) {
-	console.error("Error fetching products:", error);
-	status = "error";
-}
+const categoryProducts = products.filter((p) => p.categoryId === categoryData.id);
 ---
 
 <Layout>
-	<PageHeader name={categoryName} description={categoryDescription} isCategory />
+	<PageHeader name={categoryData.name} description={categoryData.description} isCategory />
 
-	{
-		status === "success" ? (
-			<>
-				<div class="container mx-auto py-10">
-					<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
-						{categoryProducts!.data.map((product) => (
-							<div class="w-full h-full">
-								<ProductCard product={product} />
-							</div>
-						))}
-					</div>
-				</div>
-				<Pagination totalItems={categoryProducts!.meta.totalPages} subPage />
-			</>
-		) : (
-			<NoItemsAvailable
-				title={t.brands.noItemsTitle}
-				descriptions={t.brands.noItemsDescription}
-			/>
-		)
-	}
+	<ProductsView
+		products={categoryProducts}
+		noItemsTitle={t.brands.noItemsTitle}
+		noItemsDescription={t.brands.noItemsDescription}
+	/>
 
 	<GlobalProductDetailsModal client:load />
 </Layout>
