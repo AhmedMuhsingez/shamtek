@@ -62,7 +62,7 @@ function NavbarProducts({ categories, lang = "ar" }: Props) {
 						</span>
 						<Chevron
 							className={`transition-transform duration-300 ${
-								open ? "rotate-90" : "rotate-180"
+								open ? "rotate-90" : lang === "ar" ? "rotate-180" : "rotate-0"
 							}`}
 						/>
 					</MenuButton>

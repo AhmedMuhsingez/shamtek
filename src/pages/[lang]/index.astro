@@ -18,7 +18,7 @@ const t = await getTranslations(lang as keyof typeof import("../../utils/i18n").
 const translatePath = useTranslatedPath(
 	lang as keyof typeof import("../../utils/i18n").languages
 );
-const isRTL = lang as "ar";
+const isRTL = lang === "ar";
 
 const localizedFeatured = localizeProducts(featuredProducts, lang as Lang);
 const hasFeaturedProducts = localizedFeatured.length > 0;

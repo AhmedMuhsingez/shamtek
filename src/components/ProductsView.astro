@@ -85,6 +85,10 @@ const {
 			}
 			pagination!.classList.remove("hidden");
 
+			// In RTL the "previous" arrow points right and "next" points left;
+			// in LTR (e.g. English) both are mirrored.
+			const isRtl = document.documentElement.dir === "rtl";
+
 			const ul = document.createElement("ul");
 			ul.className =
 				"flex max-w-5xl justify-between w-full items-center border-t border-black dark:border-white py-4";
@@ -102,7 +106,7 @@ const {
 				return li;
 			};
 
-			ul.appendChild(makeArrow(current - 1, current > 1, false));
+			ul.appendChild(makeArrow(current - 1, current > 1, !isRtl));
 
 			const numbers = document.createElement("div");
 			numbers.className = "flex gap-2 items-center";
@@ -119,7 +123,7 @@ const {
 			}
 			ul.appendChild(numbers);
 
-			ul.appendChild(makeArrow(current + 1, current < totalPages, true));
+			ul.appendChild(makeArrow(current + 1, current < totalPages, isRtl));
 			pagination!.appendChild(ul);
 
 			pagination!.querySelectorAll("a[href]").forEach((link) => {
