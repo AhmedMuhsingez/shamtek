@@ -1,46 +1,40 @@
-# Astro Starter Kit: Basics
+# Shamtek
 
-```sh
-yarn create astro@latest -- --template basics
-```
+A multilingual product catalog / storefront built with [Astro](https://astro.build) and React. Customers browse products by category and brand, save favorites, and order directly over WhatsApp — there's no backend, so the whole site builds to static files and deploys to Vercel.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## ✨ Features
 
-## 🚀 Project Structure
+- **Product catalog** — categories, brands, featured products, filtering, and pagination
+- **Multilingual** — Arabic (default, RTL), English, and Turkish via Astro i18n
+- **WhatsApp ordering** — no checkout or backend; orders go straight to chat
+- **Favorites & recently viewed** — persisted in `localStorage`, no account needed
+- **Light / dark theme** and responsive mobile navigation
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🧰 Tech Stack
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+Astro 5 · React 19 · Tailwind CSS 4 · Swiper · TypeScript
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+Run from the project root:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `yarn install`             | Installs dependencies                            |
-| `yarn dev`             | Starts local dev server at `localhost:4321`      |
-| `yarn build`           | Build your production site to `./dist/`          |
-| `yarn preview`         | Preview your build locally, before deploying     |
-| `yarn astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `yarn astro -- --help` | Get help using the Astro CLI                     |
+| Command         | Action                                       |
+| :-------------- | :------------------------------------------- |
+| `yarn install`  | Install dependencies                         |
+| `yarn dev`      | Start the dev server at `localhost:4321`     |
+| `yarn build`    | Build the static site to `./dist/`           |
+| `yarn preview`  | Preview the production build locally          |
 
-## 👀 Want to learn more?
+## 📁 Structure
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```text
+src/
+├── components/   UI components (.astro + React)
+├── data/         static product & company data
+├── i18n/         ar / en / tr translations
+├── layouts/      page layouts
+├── pages/        routes (localized under [lang]/)
+└── utils/        i18n, storage, WhatsApp helpers
+```
+
+Localized routes live under `src/pages/[lang]/`; the root `/` redirects to the default locale (`/ar`).
